@@ -1,0 +1,13 @@
+Z:\Visual Studio\TrackerHelper\TrackerHelper\TrackerHelper\bin\Debug\TrackerHelper.exe.config
+Z:\Visual Studio\TrackerHelper\TrackerHelper\TrackerHelper\obj\Debug\TrackerHelper.csprojResolveAssemblyReference.cache
+Z:\Visual Studio\TrackerHelper\TrackerHelper\TrackerHelper\obj\Debug\TrackerHelper.Properties.Resources.resources
+Z:\Visual Studio\TrackerHelper\TrackerHelper\TrackerHelper\obj\Debug\TrackerHelper.csproj.GenerateResource.Cache
+Z:\Visual Studio\TrackerHelper\TrackerHelper\TrackerHelper\bin\Debug\TrackerHelper.exe
+Z:\Visual Studio\TrackerHelper\TrackerHelper\TrackerHelper\bin\Debug\TrackerHelper.pdb
+Z:\Visual Studio\TrackerHelper\TrackerHelper\TrackerHelper\obj\Debug\TrackerHelper.exe
+Z:\Visual Studio\TrackerHelper\TrackerHelper\TrackerHelper\obj\Debug\TrackerHelper.pdb
+Z:\Visual Studio\TrackerHelper\TrackerHelper\TrackerHelper\obj\Debug\TrackerHelper.SetForm.resources
+Z:\Visual Studio\TrackerHelper\TrackerHelper\TrackerHelper\obj\Debug\TrackerHelper.MainForm.resources
+D:\GoogleDrive\Programming\c#\TrackerHelper\TrackerHelper\TrackerHelper\bin\Debug\TrackerHelper.exe.config
+D:\GoogleDrive\Programming\c#\TrackerHelper\TrackerHelper\TrackerHelper\obj\Debug\TrackerHelper.exe
+D:\GoogleDrive\Programming\c#\TrackerHelper\TrackerHelper\TrackerHelper\obj\Debug\TrackerHelper.pdb
