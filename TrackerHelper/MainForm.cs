@@ -11,10 +11,13 @@ using System.Windows.Forms;
 namespace TrackerHelper
 {
     public partial class MainForm : Form
-    {              
+    {
+        private StickyWindow stickyWindow;
+
         public MainForm()
         {
             InitializeComponent();
+            stickyWindow = new StickyWindow(this);
         }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)

@@ -84,7 +84,9 @@
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
     <Compile Include="SQLiteClass.cs" />
+    <Compile Include="StickyWindow.cs" />
     <Compile Include="Test.cs" />
+    <Compile Include="TreeViewMethods.cs" />
     <Compile Include="User.cs" />
     <Compile Include="WorkForm.cs">
       <SubType>Form</SubType>

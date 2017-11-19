@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -30,7 +31,7 @@ namespace TrackerHelper
 
           //  BindingList<Time_entry> data = new BindingList<Time_entry>();
 //data = te.time_entry_list;
-            dataGridView1.DataSource = te.time_entry_list;
+           // dataGridView1.DataSource = te.time_entry_list;
 
             SQLiteClass.CreateTETable();
             if (SQLiteClass.Exist("TimeEntries"))
@@ -41,7 +42,7 @@ namespace TrackerHelper
         }
 
         private void btn_GetIssues_Click(object sender, EventArgs e)
-        {
+        {            
             ResultModel model = new ResultModel();
             Issues issues = new Issues();
             string URL = @"http://tracker.ucs.ru/issues.xml?limit=100&key=1287ca3310be20d6992a764b57f9c8bcfbb05664";// &assigned_to_id=me";//&status_id=9";
@@ -55,7 +56,28 @@ namespace TrackerHelper
             {
                 SQLiteClass.InsertIssue(issues);
             }
-            
+
+            if (issues.issue.Count > 0)
+                TreeViewMethods.populateTreeView(issues.issue, treeView_Issues);
+        }
+
+        private void treeView_Issues_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            ResultModel model = new ResultModel();
+            Issue issue = new Issue();
+            string URL = @"http://tracker.ucs.ru/issues/122937.xml?include=journals&key=1287ca3310be20d6992a764b57f9c8bcfbb05664";
+            model = Http.Get(URL);
+
+            //issue.id = 69403.ToString();
+            //SQLiteClass.GetIssue(issue);
+
+            if (model.IsSuccess)
+                issue = XML.Deserialize<Issue>(model.Results);
+        }
+
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

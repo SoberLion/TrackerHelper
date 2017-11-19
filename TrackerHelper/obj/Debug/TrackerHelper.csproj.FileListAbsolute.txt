@@ -23,3 +23,26 @@ D:\Downloads\c#\TrackerHelper\TrackerHelper\bin\Debug\LiveCharts.Wpf.pdb
 D:\Downloads\c#\TrackerHelper\TrackerHelper\bin\Debug\LiveCharts.Wpf.xml
 D:\Downloads\c#\TrackerHelper\TrackerHelper\obj\Debug\TrackerHelper.PieChartEx.resources
 D:\Downloads\c#\TrackerHelper\TrackerHelper\obj\Debug\TrackerHelper.csprojResolveAssemblyReference.cache
+z:\Visual Studio\TrackerHelper\TrackerHelper\bin\Debug\TrackerHelper.exe.config
+z:\Visual Studio\TrackerHelper\TrackerHelper\obj\Debug\TrackerHelper.exe
+z:\Visual Studio\TrackerHelper\TrackerHelper\obj\Debug\TrackerHelper.pdb
+z:\Visual Studio\TrackerHelper\TrackerHelper\obj\Debug\TrackerHelper.csprojResolveAssemblyReference.cache
+z:\Visual Studio\TrackerHelper\TrackerHelper\obj\Debug\TrackerHelper.MainForm.resources
+z:\Visual Studio\TrackerHelper\TrackerHelper\obj\Debug\TrackerHelper.PieChartEx.resources
+z:\Visual Studio\TrackerHelper\TrackerHelper\obj\Debug\TrackerHelper.Properties.Resources.resources
+z:\Visual Studio\TrackerHelper\TrackerHelper\obj\Debug\TrackerHelper.Settings.resources
+z:\Visual Studio\TrackerHelper\TrackerHelper\obj\Debug\TrackerHelper.WorkForm.resources
+z:\Visual Studio\TrackerHelper\TrackerHelper\obj\Debug\TrackerHelper.csproj.GenerateResource.Cache
+z:\Visual Studio\TrackerHelper\TrackerHelper\bin\Debug\TrackerHelper.exe
+z:\Visual Studio\TrackerHelper\TrackerHelper\bin\Debug\TrackerHelper.pdb
+z:\Visual Studio\TrackerHelper\TrackerHelper\bin\Debug\LiveCharts.dll
+z:\Visual Studio\TrackerHelper\TrackerHelper\bin\Debug\LiveCharts.WinForms.dll
+z:\Visual Studio\TrackerHelper\TrackerHelper\bin\Debug\LiveCharts.Wpf.dll
+z:\Visual Studio\TrackerHelper\TrackerHelper\bin\Debug\System.Data.SQLite.dll
+z:\Visual Studio\TrackerHelper\TrackerHelper\bin\Debug\LiveCharts.pdb
+z:\Visual Studio\TrackerHelper\TrackerHelper\bin\Debug\LiveCharts.xml
+z:\Visual Studio\TrackerHelper\TrackerHelper\bin\Debug\LiveCharts.WinForms.pdb
+z:\Visual Studio\TrackerHelper\TrackerHelper\bin\Debug\LiveCharts.WinForms.xml
+z:\Visual Studio\TrackerHelper\TrackerHelper\bin\Debug\LiveCharts.Wpf.pdb
+z:\Visual Studio\TrackerHelper\TrackerHelper\bin\Debug\LiveCharts.Wpf.xml
+z:\Visual Studio\TrackerHelper\TrackerHelper\bin\Debug\System.Data.SQLite.xml

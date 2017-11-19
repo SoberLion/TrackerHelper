@@ -308,7 +308,8 @@ namespace TrackerHelper
             get { return startDateField; }
             set
             {
-                if (DateTime.TryParse(value, out DateTime dt))
+                DateTime dt;
+                if (DateTime.TryParse(value, out dt))
                 {
                     startDateField = dt.ToString("yyyy-MM-dd hh:mm:00.000");
                 }
@@ -323,7 +324,8 @@ namespace TrackerHelper
             get { return dueDateField; }
             set
             {
-                if (DateTime.TryParse(value, out DateTime dt))
+                DateTime dt;
+                if (DateTime.TryParse(value, out dt))
                 {
                     dueDateField = dt.ToString("yyyy-MM-dd hh:mm:00.000");
                 }
@@ -367,7 +369,8 @@ namespace TrackerHelper
             get { return createdOnField; }
             set
             {
-                if (DateTime.TryParse(value, out DateTime dt))
+                DateTime dt;
+                if (DateTime.TryParse(value, out dt))
                 {
                     createdOnField = dt.ToString("yyyy-MM-dd hh:mm:00.000");
                 }
@@ -382,7 +385,8 @@ namespace TrackerHelper
             get { return updatedOnField; }
             set
             {
-                if (DateTime.TryParse(value, out DateTime dt))
+                DateTime dt;
+                if (DateTime.TryParse(value, out dt))
                 {
                     updatedOnField = dt.ToString("yyyy-MM-dd hh:mm:00.000");
                 }
@@ -397,7 +401,8 @@ namespace TrackerHelper
             get { return closedOnField; }
             set
             {
-                if (DateTime.TryParse(value, out DateTime dt))
+                DateTime dt;
+                if (DateTime.TryParse(value, out dt))
                 {
                     closedOnField = dt.ToString("yyyy-MM-dd hh:mm:00.000");
                 }
@@ -491,6 +496,11 @@ namespace TrackerHelper
                 public Value() { }
             }
         }
+
+      /*  public class IssueJournal
+        {
+            private List<IssueJournalItem> journals
+        } */
 
         public class IssueJournalItem
         {

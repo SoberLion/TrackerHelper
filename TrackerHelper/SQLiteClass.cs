@@ -308,6 +308,65 @@ namespace TrackerHelper
             }
         }
 
+        public static void GetIssue(Issue issue)
+        {
+            SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;");
+            string str = "";
+            try
+            {
+                conn.Open();
+            }
+            catch (SQLiteException sqlex)
+            {
+                MessageDel?.Invoke($"Error: {sqlex.Message}");
+            }
+
+            if (conn.State == ConnectionState.Open)
+            {
+                SQLiteCommand cmd = conn.CreateCommand();
+                cmd.CommandText = "select * from Issues where IssueId = @IssueId";
+                cmd.Parameters.AddWithValue("@IssueId", issue.id);
+
+                try
+                {
+                    SQLiteDataReader r = cmd.ExecuteReader();
+                    while (r.Read())
+                    {                                                 
+                        issue.project.id = int.Parse(r["ProjectId"].ToString());
+                        issue.project.name = r["ProjectName"].ToString();
+                        issue.tracker.id = int.Parse(r["TrackerId"].ToString());
+                        issue.tracker.name = r["TrackerName"].ToString();
+                        issue.status.id = int.Parse(r["StatusId"].ToString());
+                        issue.status.name = r["StatusName"].ToString();
+                        issue.priority.id = int.Parse(r["PriorityId"].ToString());
+                        issue.priority.name = r["PriorityName"].ToString();
+                        issue.author.id = int.Parse(r["AuthorId"].ToString());
+                        issue.author.name = r["AuthorName"].ToString();
+                        issue.assigned_to.id = int.Parse(r["AssignedToId"].ToString());
+                        issue.assigned_to.name = r["AssignedToName"].ToString();
+                        issue.category.id = int.Parse(r["CategoryId"].ToString());
+                        issue.category.name = r["CategoryName"].ToString();
+                        issue.subject = r["Subject"].ToString();
+                        issue.description = r["Description"].ToString();
+                        issue.startDate = r["StartDate"].ToString();
+                        issue.dueDate = r["DueDate"].ToString();
+                        issue.doneRatio = r["DoneRatio"].ToString();
+                        issue.IsPrivate = int.Parse(r["IsPrivate"].ToString()) == 0 ? false : true;
+                        issue.estimatedHours = r["EstimatedHours"].ToString();
+                        issue.createdOn = r["CreatedOn"].ToString();
+                        issue.updatedOn = r["UpdatedOn"].ToString();
+                        issue.closedOn = r["ClosedOn"].ToString();
+                    }
+                    r.Close();
+                }
+                catch (SQLiteException sqlex)
+                {
+                    MessageDel?.Invoke($"Error: {sqlex.Message}");
+                }
+                cmd.Dispose();
+                conn.Dispose();
+            }
+        }
 
         /// Get min or max date for user existed in DB,
         /// <param name="UserId">string, UserID</param>
