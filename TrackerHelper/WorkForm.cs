@@ -67,9 +67,6 @@ namespace TrackerHelper
             string URL = @"http://tracker.ucs.ru/issues/" + e.Node.Text + ".xml?include=journals&key=1287ca3310be20d6992a764b57f9c8bcfbb05664";
             model = Http.Get(URL);
 
-            //issue.id = 69403.ToString();
-            //SQLiteClass.GetIssue(issue);
-
             if (model.IsSuccess)
                 issue = XML.Deserialize<Issue>(model.Results);
 

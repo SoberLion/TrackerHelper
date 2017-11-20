@@ -431,7 +431,7 @@ namespace TrackerHelper
                 conn.Dispose();
             }
         }
-        public static void InsertJournals(Issue issue)
+        private static void InsertJournals(Issue issue)
         {
             SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;");
 
@@ -479,7 +479,7 @@ namespace TrackerHelper
                 conn.Dispose();
             }
         }
-        public static void InsertDetails(Issue issue)
+        private static void InsertDetails(Issue issue)
         {
             SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;");
 
