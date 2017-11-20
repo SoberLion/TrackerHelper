@@ -421,26 +421,6 @@ namespace TrackerHelper
          }
 
 
-        /*   public override string ToString()
-           {
-
-               return String.Format("ID = {0}, \nProject = {1}:{2}, \nSubject = {3}, \nStatus = {4}:{5}, \nPriority = {6}:{7}, \nAssigned = {8}:{9}, \nCategory = {10}:{11}, \nStartDate = {12}, \nRating = {13}\n\n",
-                                     IssueID, 
-                                     IssueProjectId, 
-                                     IssueProjectName, 
-                                     IssueSubject, 
-                                     IssueStatusId, 
-                                     IssueStatusName, 
-                                     IssuePriorityId, 
-                                     IssuePriorityName, 
-                                     IssueAssignedId,
-                                     IssueAssignedName,
-                                     IssueCategoryId, 
-                                     IssueCategoryName, 
-                                     IssueStartDate, 
-                                     IssueRating);
-            }*/
-
         public class custom_field
         {
             public custom_field() { }
@@ -499,23 +479,21 @@ namespace TrackerHelper
             }
         }
 
-       /* public class IssueJournal
-        {
-            [XmlArray("journals"), XmlArrayItem("journal", Type = typeof(IssueJournalItem))]
-            private List<IssueJournalItem> journals = new List<IssueJournalItem>();
-        }*/
-
         public class IssueJournalItem
         {
             private string IdField = string.Empty;
             private IdName UserField = null;
             private string NotesField = string.Empty;
             private string CreatedOnField = string.Empty;
-
+            private List<Detail> DetailsField = new List<Detail>();
 
             [XmlArray("details")]
             [XmlArrayItem("detail")]
-            public List<Detail> Details { get; set; }
+            public List<Detail> Details
+            {
+                get { return DetailsField; }
+                set { DetailsField = value; }
+            }
 
             [XmlAttribute("id")]
             public string Id
@@ -544,9 +522,13 @@ namespace TrackerHelper
                 get { return CreatedOnField; }
                 set
                 {
-                    value = value.Substring(0, 19);
-                    value = value.Replace("T", " ");
-                    CreatedOnField = value;
+                    DateTime dt;
+                    if (DateTime.TryParse(value, out dt))
+                    {
+                        CreatedOnField = dt.ToString("yyyy-MM-dd hh:mm:00.000");
+                    }
+                    else
+                        CreatedOnField = string.Empty;
                 }
             }
 

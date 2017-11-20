@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data;
 using System.Data.SQLite;
 
@@ -12,6 +8,12 @@ namespace TrackerHelper
     public class SQLiteClass
     {
         private static string DbName = "TrackerHelper.db";
+
+        public static void SetDbName(string dbName)
+        {
+            DbName = dbName;
+        }
+
 
         static MessageDelegate MessageDel;
 
@@ -24,19 +26,56 @@ namespace TrackerHelper
             MessageDel -= del;
         }
 
-
-        // create time entry table
-        public static void CreateTETable()
+        // check if table exist
+        public static bool Exist(string TableName)
         {
             SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;");
+            Object obj = null;
+
+            conn.Open();
+
+            if (conn.State == ConnectionState.Open)
+            {
+                SQLiteCommand cmd = conn.CreateCommand();
+                cmd.CommandText = "SELECT name FROM sqlite_master WHERE type = 'table' AND name = '" + TableName + "';";
+
+                try
+                {
+                    obj = cmd.ExecuteScalar();
+                }
+                catch (SQLiteException sqlex)
+                {
+                    MessageDel?.Invoke($"Error: {sqlex.Message}");
+                    return false;
+                }
+                cmd.Dispose();
+                conn.Dispose();
+            }
+            return obj == null ? false : true;
+        }
+
+        #region ---------------------Create database/tables-------------------------
+        public static bool CreateDatabase()
+        {
             try
             {
-                conn.Open();
+                CreateIssuesTable();
+                CreateTETable();
+                CreateJournalsTable();
+                CreateJournalDetailsTable();
+                return true;
             }
-            catch (SQLiteException sqlex)
+            catch (Exception sqlex)
             {
                 MessageDel?.Invoke($"Error: {sqlex.Message}");
+                return false;
             }
+        }
+        private static void CreateTETable()
+        {
+            SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;");
+
+            conn.Open();
 
             if (conn.State == ConnectionState.Open)
             {
@@ -65,18 +104,11 @@ namespace TrackerHelper
                 conn.Dispose();
             }
         }
-
-        public static void CreateIssuesTable()
+        private static void CreateIssuesTable()
         {
             SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;");
-            try
-            {
-                conn.Open();
-            }
-            catch (SQLiteException sqlex)
-            {
-                MessageDel?.Invoke($"Error: {sqlex.Message}");
-            }
+
+            conn.Open();
 
             if (conn.State == ConnectionState.Open)
             {
@@ -119,55 +151,71 @@ namespace TrackerHelper
                 conn.Dispose();
             }
         }
-
-        // check for table exist
-        public static bool Exist(string TableName)
+        private static void CreateJournalsTable()
         {
             SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;");
-            Object obj = null;
-            try
-            {
-                conn.Open();
-            }
-            catch (Exception sqlex)
-            {
-                MessageDel?.Invoke($"Error: {sqlex.Message}");
-                return false;
-            }
+
+            conn.Open();
 
             if (conn.State == ConnectionState.Open)
             {
                 SQLiteCommand cmd = conn.CreateCommand();
-                cmd.CommandText = "SELECT name FROM sqlite_master WHERE type = 'table' AND name = '"+TableName+"';";
-                
+                cmd.CommandText = string.Format("CREATE TABLE IF NOT EXISTS Journals({0},{1},{2},{3},{4},{5});",
+                                     "Id INTEGER PRIMARY KEY",
+                                     "UserId INTEGER",
+                                     "UserName TEXT",
+                                     "IssueId INTEGER",
+                                     "Notes TEXT",
+                                     "CreatedOn TEXT");
                 try
                 {
-                    obj = cmd.ExecuteScalar();
+                    cmd.ExecuteNonQuery();
                 }
                 catch (SQLiteException sqlex)
                 {
                     MessageDel?.Invoke($"Error: {sqlex.Message}");
-                    return false;
                 }
                 cmd.Dispose();
                 conn.Dispose();
             }
-            return obj == null ? false : true;
         }
+        private static void CreateJournalDetailsTable()
+        {
+            SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;");
 
+            conn.Open();
+
+            if (conn.State == ConnectionState.Open)
+            {
+                SQLiteCommand cmd = conn.CreateCommand();
+                cmd.CommandText = string.Format("CREATE TABLE IF NOT EXISTS JournalDetails({0},{1},{2},{3},{4},{5});",
+                                     "id INTEGER PRIMARY KEY AUTOINCREMENT",
+                                     "Property TEXT",
+                                     "Name TEXT",
+                                     "OldValue TEXT",
+                                     "NewValue TEXT",
+                                     "JournalId INTEGER");
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (SQLiteException sqlex)
+                {
+                    MessageDel?.Invoke($"Error: {sqlex.Message}");
+                }
+                cmd.Dispose();
+                conn.Dispose();
+            }
+        }
+        #endregion
+
+        #region ------------------------- Insert methods ---------------------------
         // insert time entry to table
         public static void InsertTE(Time_entries TE)
         {
             SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;");
 
-            try
-            {
-                conn.Open();
-            }
-            catch (SQLiteException sqlex)
-            {
-                MessageDel?.Invoke($"Error: {sqlex.Message}");
-            }
+            conn.Open();
 
             // if connection established create sqlite command and begin transaction
             if (conn.State == ConnectionState.Open)
@@ -217,19 +265,11 @@ namespace TrackerHelper
                 conn.Dispose();
             }
         }
-
-        public static void InsertIssue(Issues issues)
+        public static void InsertIssues(Issues issues)
         {
             SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;");
 
-            try
-            {
-                conn.Open();
-            }
-            catch (SQLiteException sqlex)
-            {
-                MessageDel?.Invoke($"Error: {sqlex.Message}");
-            }
+            conn.Open();
 
             // if connection established create sqlite command and begin transaction
             if (conn.State == ConnectionState.Open)
@@ -307,26 +347,197 @@ namespace TrackerHelper
                 conn.Dispose();
             }
         }
+        public static void InsertIssue(Issue issue)
+        {
+            SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;");
 
+            if (issue.JournalList.Count > 0)
+            {
+                InsertJournals(issue);
+            }
+
+            conn.Open();
+
+            // if connection established create sqlite command and begin transaction
+            if (conn.State == ConnectionState.Open)
+            {
+                SQLiteCommand cmd = conn.CreateCommand();
+                SQLiteTransaction transaction = conn.BeginTransaction();
+
+                cmd.CommandText = "INSERT OR REPLACE INTO Issues(IssueId,ProjectId,ProjectName,TrackerId,TrackerName,StatusId,StatusName,PriorityId,PriorityName,AuthorId,AuthorName,AssignedToId,AssignedToName,CategoryId,CategoryName,Subject,Description,StartDate,DueDate,DoneRatio,IsPrivate,EstimatedHours,CreatedOn,UpdatedOn,ClosedOn) "
+                                   + "VALUES (@IssueId, @ProjectId, @ProjectName, @TrackerId, @TrackerName, @StatusId, @StatusName, @PriorityId, @PriorityName, @AuthorId, @AuthorName, @AssignedToId, @AssignedToName, @CategoryId, @CategoryName, @Subject, @Description, @StartDate, @DueDate, @DoneRatio, @IsPrivate, @EstimatedHours, @CreatedOn, @UpdatedOn, @ClosedOn)";
+                // create command parameters
+                cmd.Parameters.AddWithValue("@IssueId", "");
+                cmd.Parameters.AddWithValue("@ProjectId", "");
+                cmd.Parameters.AddWithValue("@ProjectName", "");
+                cmd.Parameters.AddWithValue("@TrackerId", "");
+                cmd.Parameters.AddWithValue("@TrackerName", "");
+                cmd.Parameters.AddWithValue("@StatusId", "");
+                cmd.Parameters.AddWithValue("@StatusName", "");
+                cmd.Parameters.AddWithValue("@PriorityId", "");
+                cmd.Parameters.AddWithValue("@PriorityName", "");
+                cmd.Parameters.AddWithValue("@AuthorId", "");
+                cmd.Parameters.AddWithValue("@AuthorName", "");
+                cmd.Parameters.AddWithValue("@AssignedToId", "");
+                cmd.Parameters.AddWithValue("@AssignedToName", "");
+                cmd.Parameters.AddWithValue("@CategoryId", "");
+                cmd.Parameters.AddWithValue("@CategoryName", "");
+                cmd.Parameters.AddWithValue("@Subject", "");
+                cmd.Parameters.AddWithValue("@Description", "");
+                cmd.Parameters.AddWithValue("@StartDate", "");
+                cmd.Parameters.AddWithValue("@DueDate", "");
+                cmd.Parameters.AddWithValue("@DoneRatio", "");
+                cmd.Parameters.AddWithValue("@IsPrivate", "");
+                cmd.Parameters.AddWithValue("@EstimatedHours", "");
+                cmd.Parameters.AddWithValue("@CreatedOn", "");
+                cmd.Parameters.AddWithValue("@UpdatedOn", "");
+                cmd.Parameters.AddWithValue("@ClosedOn", "");
+
+                try
+                {   // cycle writing data in table
+                    cmd.Parameters["@IssueId"].Value = issue.id;
+                    cmd.Parameters["@ProjectId"].Value = issue.project.id;
+                    cmd.Parameters["@ProjectName"].Value = issue.project.name;
+                    cmd.Parameters["@TrackerId"].Value = issue.tracker.id;
+                    cmd.Parameters["@TrackerName"].Value = issue.tracker.name;
+                    cmd.Parameters["@StatusId"].Value = issue.status.id;
+                    cmd.Parameters["@StatusName"].Value = issue.status.name;
+                    cmd.Parameters["@PriorityId"].Value = issue.priority.id;
+                    cmd.Parameters["@PriorityName"].Value = issue.priority.name;
+                    cmd.Parameters["@AuthorId"].Value = issue.author.id;
+                    cmd.Parameters["@AuthorName"].Value = issue.author.name;
+                    cmd.Parameters["@AssignedToId"].Value = issue.assigned_to.id;
+                    cmd.Parameters["@AssignedToName"].Value = issue.assigned_to.name;
+                    cmd.Parameters["@CategoryId"].Value = issue.category.id;
+                    cmd.Parameters["@CategoryName"].Value = issue.category.name;
+                    cmd.Parameters["@Subject"].Value = issue.subject;
+                    cmd.Parameters["@Description"].Value = issue.description;
+                    cmd.Parameters["@StartDate"].Value = issue.startDate;
+                    cmd.Parameters["@DueDate"].Value = issue.dueDate;
+                    cmd.Parameters["@DoneRatio"].Value = issue.doneRatio;
+                    cmd.Parameters["@IsPrivate"].Value = issue.IsPrivate == true ? 1 : 0;
+                    cmd.Parameters["@EstimatedHours"].Value = issue.estimatedHours;
+                    cmd.Parameters["@CreatedOn"].Value = issue.createdOn;
+                    cmd.Parameters["@UpdatedOn"].Value = issue.updatedOn;
+                    cmd.Parameters["@ClosedOn"].Value = issue.closedOn;
+                    cmd.ExecuteNonQuery();
+                }
+                catch (SQLiteException sqlex)
+                {
+                    MessageDel?.Invoke($"Error: {sqlex.Message}");
+                }
+                transaction.Commit();
+                cmd.Dispose();
+                conn.Dispose();
+            }
+        }
+        public static void InsertJournals(Issue issue)
+        {
+            SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;");
+
+            if (issue.JournalList.Count > 0)
+            {
+                InsertDetails(issue);
+            }
+
+            conn.Open();
+
+            // if connection established create sqlite command and begin transaction
+            if (conn.State == ConnectionState.Open)
+            {
+                SQLiteCommand cmd = conn.CreateCommand();
+                SQLiteTransaction transaction = conn.BeginTransaction();
+
+                cmd.CommandText = "INSERT OR IGNORE INTO Journals(Id, IssueId, UserId, UserName, CreatedOn, Notes) "
+                                   + "VALUES (@Id, @IssueId, @UserId, @UserName, @CreatedOn, @Notes)";
+                // create command parameters
+                cmd.Parameters.AddWithValue("@Id", "");
+                cmd.Parameters.AddWithValue("@IssueId", "");
+                cmd.Parameters.AddWithValue("@UserId", "");
+                cmd.Parameters.AddWithValue("@UserName", "");
+                cmd.Parameters.AddWithValue("@CreatedOn", "");
+                cmd.Parameters.AddWithValue("@Notes", "");
+                try
+                {   // cycle writing data in table
+                    foreach (Issue.IssueJournalItem Item in issue.JournalList)
+                    {
+                        cmd.Parameters["@id"].Value = Item.Id;
+                        cmd.Parameters["@IssueId"].Value = issue.id;
+                        cmd.Parameters["@UserId"].Value = Item.User.id;
+                        cmd.Parameters["@UserName"].Value = Item.User.name;
+                        cmd.Parameters["@Notes"].Value = Item.Notes;
+                        cmd.Parameters["@CreatedOn"].Value = Item.CreatedOn;
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                catch (SQLiteException sqlex)
+                {
+                    MessageDel?.Invoke($"Error: {sqlex.Message}");
+                }
+                transaction.Commit();
+                cmd.Dispose();
+                conn.Dispose();
+            }
+        }
+        public static void InsertDetails(Issue issue)
+        {
+            SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;");
+
+            conn.Open();
+
+            // if connection established create sqlite command and begin transaction
+            if (conn.State == ConnectionState.Open)
+            {
+                SQLiteCommand cmd = conn.CreateCommand();
+                SQLiteTransaction transaction = conn.BeginTransaction();
+
+                cmd.CommandText = "INSERT OR IGNORE INTO JournalDetails(JournalId, Property, Name, OldValue, NewValue) "
+                                   + "VALUES (@JournalId, @Property, @Name, @OldValue, @NewValue)";
+                // create command parameters
+                cmd.Parameters.AddWithValue("@JournalId", "");
+                cmd.Parameters.AddWithValue("@Property", "");
+                cmd.Parameters.AddWithValue("@Name", "");
+                cmd.Parameters.AddWithValue("@OldValue", "");
+                cmd.Parameters.AddWithValue("@NewValue", "");
+
+                try
+                {   // cycle writing data in table
+                    foreach (Issue.IssueJournalItem JournalItem in issue.JournalList)
+                    {
+                        foreach (Issue.IssueJournalItem.Detail DetailItem in JournalItem.Details)
+                        {
+                            cmd.Parameters["@JournalId"].Value = JournalItem.Id;
+                            cmd.Parameters["@Property"].Value = DetailItem.Property;
+                            cmd.Parameters["@Name"].Value = DetailItem.Name;
+                            cmd.Parameters["@OldValue"].Value = DetailItem.OldValue;
+                            cmd.Parameters["@NewValue"].Value = DetailItem.NewValue;
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+                catch (SQLiteException sqlex)
+                {
+                    MessageDel?.Invoke($"Error: {sqlex.Message}");
+                }
+                transaction.Commit();
+                cmd.Dispose();
+                conn.Dispose();
+            }
+        }
+        #endregion
+
+        #region ------------------------ get/calc methods---------------------------
         public static void GetIssue(Issue issue)
         {
             SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;");
-            string str = "";
-            try
-            {
-                conn.Open();
-            }
-            catch (SQLiteException sqlex)
-            {
-                MessageDel?.Invoke($"Error: {sqlex.Message}");
-            }
+
+            conn.Open();
 
             if (conn.State == ConnectionState.Open)
             {
                 SQLiteCommand cmd = conn.CreateCommand();
                 cmd.CommandText = "select * from Issues where IssueId = @IssueId";
                 cmd.Parameters.AddWithValue("@IssueId", issue.id);
-
                 try
                 {
                     SQLiteDataReader r = cmd.ExecuteReader();
@@ -373,42 +584,35 @@ namespace TrackerHelper
         /// <param name="isMIN">true if needed min, false if max</param>
         public static string GetDate(string UserId, bool isMIN)
         {
+
+            SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;");
+            Object obj = "";
+
+            conn.Open();
+
+            if (conn.State == ConnectionState.Open)
             {
-                SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;");
-                Object obj = "";
+                SQLiteCommand cmd = conn.CreateCommand();
+                if (isMIN == true)
+                    cmd.CommandText = "SELECT MIN(SpentOn) FROM TimeEntries where UserId = @UserId";
+                else
+                    cmd.CommandText = "SELECT MAX(SpentOn) FROM TimeEntries where UserId = @UserId";
+
+                cmd.Parameters.AddWithValue("@UserId", UserId);
                 try
                 {
-                    conn.Open();
+                    obj = cmd.ExecuteScalar();
                 }
                 catch (SQLiteException sqlex)
                 {
                     MessageDel?.Invoke($"Error: {sqlex.Message}");
                     return null;
                 }
-
-                if (conn.State == ConnectionState.Open)
-                {
-                    SQLiteCommand cmd = conn.CreateCommand();
-                    if (isMIN == true)
-                        cmd.CommandText = "SELECT MIN(SpentOn) FROM TimeEntries where UserId = @UserId";
-                    else 
-                        cmd.CommandText = "SELECT MAX(SpentOn) FROM TimeEntries where UserId = @UserId";
-
-                    cmd.Parameters.AddWithValue("@UserId", UserId);
-                    try
-                    {
-                        obj = cmd.ExecuteScalar();
-                    }
-                    catch (SQLiteException sqlex)
-                    {
-                        MessageDel?.Invoke($"Error: {sqlex.Message}");
-                        return null;
-                    }
-                    cmd.Dispose();
-                    conn.Dispose();
-                }
-                return (obj.ToString() != "") ? obj.ToString() : "1970-01-01";
+                cmd.Dispose();
+                conn.Dispose();
             }
+            return (obj.ToString() != "") ? obj.ToString() : "1970-01-01";
+
         }
 
         // calc time for user
@@ -416,15 +620,8 @@ namespace TrackerHelper
         {
             SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;");
             Object obj = "";
-            try
-            {
-                conn.Open();
-            }
-            catch (SQLiteException sqlex)
-            {
-                MessageDel?.Invoke($"Error: {sqlex.Message}");
-                return "0,00";
-            }
+
+            conn.Open();
 
             if (conn.State == ConnectionState.Open)
             {
@@ -454,15 +651,8 @@ namespace TrackerHelper
         {
             SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;");
             string str = "";
-            try
-            {
-                conn.Open();
-            }
-            catch (SQLiteException sqlex)
-            {
-                MessageDel?.Invoke($"Error: {sqlex.Message}");
-                return "error";
-            }
+
+            conn.Open();
 
             if (conn.State == ConnectionState.Open)
             {
@@ -495,14 +685,8 @@ namespace TrackerHelper
         {
             SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;");
             int obj = 0;
-            try
-            {
-                conn.Open();
-            }
-            catch (SQLiteException sqlex)
-            {
-                MessageDel?.Invoke($"Error: {sqlex.Message}");
-            }
+
+            conn.Open();
 
             if (conn.State == ConnectionState.Open)
             {
@@ -531,14 +715,8 @@ namespace TrackerHelper
         {
             SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;");
             string str = "";
-            try
-            {
-                conn.Open();
-            }
-            catch (SQLiteException sqlex)
-            {
-                MessageDel?.Invoke($"Error: {sqlex.Message}");
-            }
+
+            conn.Open();
 
             if (conn.State == ConnectionState.Open)
             {
@@ -564,5 +742,6 @@ namespace TrackerHelper
             }
             return (str != "") ? str : "0";
         }
+        #endregion
     }
 }

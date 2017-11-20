@@ -17,6 +17,7 @@ namespace TrackerHelper
         public WorkForm()
         {
             InitializeComponent();
+            SQLiteClass.CreateDatabase();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -33,7 +34,6 @@ namespace TrackerHelper
 //data = te.time_entry_list;
            // dataGridView1.DataSource = te.time_entry_list;
 
-            SQLiteClass.CreateTETable();
             if (SQLiteClass.Exist("TimeEntries"))
             {
                 SQLiteClass.InsertTE(te);
@@ -51,10 +51,9 @@ namespace TrackerHelper
             if (model.IsSuccess)
                 issues = XML.Deserialize<Issues>(model.Results);
 
-            SQLiteClass.CreateIssuesTable();
             if (SQLiteClass.Exist("Issues"))
             {
-                SQLiteClass.InsertIssue(issues);
+                SQLiteClass.InsertIssues(issues);
             }
 
             if (issues.issue.Count > 0)
@@ -65,7 +64,7 @@ namespace TrackerHelper
         {
             ResultModel model = new ResultModel();
             Issue issue = new Issue();
-            string URL = @"http://tracker.ucs.ru/issues/122937.xml?include=journals&key=1287ca3310be20d6992a764b57f9c8bcfbb05664";
+            string URL = @"http://tracker.ucs.ru/issues/" + e.Node.Text + ".xml?include=journals&key=1287ca3310be20d6992a764b57f9c8bcfbb05664";
             model = Http.Get(URL);
 
             //issue.id = 69403.ToString();
@@ -73,11 +72,18 @@ namespace TrackerHelper
 
             if (model.IsSuccess)
                 issue = XML.Deserialize<Issue>(model.Results);
-        }
 
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
-        {
+            SQLiteClass.InsertIssue(issue);
 
+            tControl.SelectTab(1);
+
+            foreach (Issue.IssueJournalItem item in issue.JournalList)
+            {
+                if (item.Notes != string.Empty)
+                {
+                    listbox_IssueJournal.Items.Add(item.User.name + ": " + item.Notes);
+                }
+            }                
         }
     }
 }
