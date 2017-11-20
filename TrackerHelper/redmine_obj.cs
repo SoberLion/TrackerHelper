@@ -215,6 +215,7 @@ namespace TrackerHelper
     #endregion
 
     #region -------------------------------------- Issue ----------------------------------------
+    [XmlRoot("issue")]
     public class Issue
     {
         private IdName projectField = new IdName();
@@ -409,14 +410,15 @@ namespace TrackerHelper
                 else
                     closedOnField = string.Empty;
             }
-        
+
         }
 
-        public List<IssueJournalItem> JournalList
-        {
-            get { return IssueJournalList; }
-            set { IssueJournalList = value; }
-        }
+         [XmlArray("journals"), XmlArrayItem(ElementName = "journal", Type = typeof(IssueJournalItem))]
+         public List<IssueJournalItem> JournalList
+         {
+             get { return IssueJournalList; }
+             set { IssueJournalList = value; }
+         }
 
 
         /*   public override string ToString()
@@ -497,10 +499,11 @@ namespace TrackerHelper
             }
         }
 
-      /*  public class IssueJournal
+       /* public class IssueJournal
         {
-            private List<IssueJournalItem> journals
-        } */
+            [XmlArray("journals"), XmlArrayItem("journal", Type = typeof(IssueJournalItem))]
+            private List<IssueJournalItem> journals = new List<IssueJournalItem>();
+        }*/
 
         public class IssueJournalItem
         {
