@@ -34,13 +34,15 @@
             this.pnl_TreeView = new System.Windows.Forms.Panel();
             this.treeView_Issues = new System.Windows.Forms.TreeView();
             this.pnl_buttons = new System.Windows.Forms.Panel();
-            this.btn_GetIssues = new System.Windows.Forms.Button();
+            this.dtPicker_IssuesTo = new System.Windows.Forms.DateTimePicker();
+            this.dtPicker_IssuesFrom = new System.Windows.Forms.DateTimePicker();
+            this.btn_GetAllIssues = new System.Windows.Forms.Button();
             this.tp_IssueJournal = new System.Windows.Forms.TabPage();
             this.pnl_listbox = new System.Windows.Forms.Panel();
             this.listbox_IssueJournal = new System.Windows.Forms.ListBox();
             this.pnl_tools = new System.Windows.Forms.Panel();
-            this.dtPicker_IssuesFrom = new System.Windows.Forms.DateTimePicker();
-            this.dtPicker_IssuesTo = new System.Windows.Forms.DateTimePicker();
+            this.btn_UpdateIssues = new System.Windows.Forms.Button();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.tControl.SuspendLayout();
             this.tP_IssueList.SuspendLayout();
             this.pnl_TreeView.SuspendLayout();
@@ -104,24 +106,46 @@
             // 
             // pnl_buttons
             // 
+            this.pnl_buttons.Controls.Add(this.checkBox1);
+            this.pnl_buttons.Controls.Add(this.btn_UpdateIssues);
             this.pnl_buttons.Controls.Add(this.dtPicker_IssuesTo);
             this.pnl_buttons.Controls.Add(this.dtPicker_IssuesFrom);
-            this.pnl_buttons.Controls.Add(this.btn_GetIssues);
+            this.pnl_buttons.Controls.Add(this.btn_GetAllIssues);
             this.pnl_buttons.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnl_buttons.Location = new System.Drawing.Point(3, 3);
             this.pnl_buttons.Name = "pnl_buttons";
             this.pnl_buttons.Size = new System.Drawing.Size(291, 31);
             this.pnl_buttons.TabIndex = 1;
             // 
-            // btn_GetIssues
+            // dtPicker_IssuesTo
             // 
-            this.btn_GetIssues.Location = new System.Drawing.Point(3, 3);
-            this.btn_GetIssues.Name = "btn_GetIssues";
-            this.btn_GetIssues.Size = new System.Drawing.Size(84, 23);
-            this.btn_GetIssues.TabIndex = 0;
-            this.btn_GetIssues.Text = "GetIssues";
-            this.btn_GetIssues.UseVisualStyleBackColor = true;
-            this.btn_GetIssues.Click += new System.EventHandler(this.btn_GetIssues_Click);
+            this.dtPicker_IssuesTo.Font = new System.Drawing.Font("Roboto", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.dtPicker_IssuesTo.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtPicker_IssuesTo.Location = new System.Drawing.Point(194, 5);
+            this.dtPicker_IssuesTo.MinDate = new System.DateTime(2015, 1, 1, 0, 0, 0, 0);
+            this.dtPicker_IssuesTo.Name = "dtPicker_IssuesTo";
+            this.dtPicker_IssuesTo.Size = new System.Drawing.Size(89, 22);
+            this.dtPicker_IssuesTo.TabIndex = 2;
+            // 
+            // dtPicker_IssuesFrom
+            // 
+            this.dtPicker_IssuesFrom.Font = new System.Drawing.Font("Roboto", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.dtPicker_IssuesFrom.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtPicker_IssuesFrom.Location = new System.Drawing.Point(99, 5);
+            this.dtPicker_IssuesFrom.MinDate = new System.DateTime(2015, 1, 1, 0, 0, 0, 0);
+            this.dtPicker_IssuesFrom.Name = "dtPicker_IssuesFrom";
+            this.dtPicker_IssuesFrom.Size = new System.Drawing.Size(89, 22);
+            this.dtPicker_IssuesFrom.TabIndex = 1;
+            // 
+            // btn_GetAllIssues
+            // 
+            this.btn_GetAllIssues.Location = new System.Drawing.Point(3, 3);
+            this.btn_GetAllIssues.Name = "btn_GetAllIssues";
+            this.btn_GetAllIssues.Size = new System.Drawing.Size(32, 24);
+            this.btn_GetAllIssues.TabIndex = 0;
+            this.btn_GetAllIssues.Text = "GetIssues";
+            this.btn_GetAllIssues.UseVisualStyleBackColor = true;
+            this.btn_GetAllIssues.Click += new System.EventHandler(this.btn_GetIssues_Click);
             // 
             // tp_IssueJournal
             // 
@@ -162,25 +186,24 @@
             this.pnl_tools.Size = new System.Drawing.Size(291, 30);
             this.pnl_tools.TabIndex = 1;
             // 
-            // dtPicker_IssuesFrom
+            // btn_UpdateIssues
             // 
-            this.dtPicker_IssuesFrom.Font = new System.Drawing.Font("Roboto", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.dtPicker_IssuesFrom.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtPicker_IssuesFrom.Location = new System.Drawing.Point(93, 5);
-            this.dtPicker_IssuesFrom.MinDate = new System.DateTime(2015, 1, 1, 0, 0, 0, 0);
-            this.dtPicker_IssuesFrom.Name = "dtPicker_IssuesFrom";
-            this.dtPicker_IssuesFrom.Size = new System.Drawing.Size(89, 22);
-            this.dtPicker_IssuesFrom.TabIndex = 1;
+            this.btn_UpdateIssues.Location = new System.Drawing.Point(39, 3);
+            this.btn_UpdateIssues.Name = "btn_UpdateIssues";
+            this.btn_UpdateIssues.Size = new System.Drawing.Size(32, 24);
+            this.btn_UpdateIssues.TabIndex = 3;
+            this.btn_UpdateIssues.Text = "GetIssues";
+            this.btn_UpdateIssues.UseVisualStyleBackColor = true;
+            this.btn_UpdateIssues.Click += new System.EventHandler(this.btn_UpdateIssues_Click);
             // 
-            // dtPicker_IssuesTo
+            // checkBox1
             // 
-            this.dtPicker_IssuesTo.Font = new System.Drawing.Font("Roboto", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.dtPicker_IssuesTo.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtPicker_IssuesTo.Location = new System.Drawing.Point(188, 5);
-            this.dtPicker_IssuesTo.MinDate = new System.DateTime(2015, 1, 1, 0, 0, 0, 0);
-            this.dtPicker_IssuesTo.Name = "dtPicker_IssuesTo";
-            this.dtPicker_IssuesTo.Size = new System.Drawing.Size(89, 22);
-            this.dtPicker_IssuesTo.TabIndex = 2;
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(77, 9);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(15, 14);
+            this.checkBox1.TabIndex = 4;
+            this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // WorkForm
             // 
@@ -195,6 +218,7 @@
             this.tP_IssueList.ResumeLayout(false);
             this.pnl_TreeView.ResumeLayout(false);
             this.pnl_buttons.ResumeLayout(false);
+            this.pnl_buttons.PerformLayout();
             this.tp_IssueJournal.ResumeLayout(false);
             this.pnl_listbox.ResumeLayout(false);
             this.pnl_tools.ResumeLayout(false);
@@ -208,7 +232,7 @@
         private System.Windows.Forms.TabControl tControl;
         private System.Windows.Forms.TabPage tp_IssueJournal;
         private System.Windows.Forms.TabPage tP_IssueList;
-        private System.Windows.Forms.Button btn_GetIssues;
+        private System.Windows.Forms.Button btn_GetAllIssues;
         private System.Windows.Forms.Panel pnl_TreeView;
         private System.Windows.Forms.TreeView treeView_Issues;
         private System.Windows.Forms.Panel pnl_buttons;
@@ -217,5 +241,7 @@
         private System.Windows.Forms.ListBox listbox_IssueJournal;
         private System.Windows.Forms.DateTimePicker dtPicker_IssuesTo;
         private System.Windows.Forms.DateTimePicker dtPicker_IssuesFrom;
+        private System.Windows.Forms.Button btn_UpdateIssues;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }

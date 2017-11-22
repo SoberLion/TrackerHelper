@@ -277,7 +277,7 @@ namespace TrackerHelper
                         cmd.Parameters["@Position"].Value = user.Position;
                         cmd.Parameters["@Telephone"].Value = user.Telephone;
                         cmd.Parameters["@InternalPhone"].Value = user.InternalPhone;
-                        cmd.Parameters["@Language"].Value = user.Language;
+                        //cmd.Parameters["@Language"].Value = user.Language;
                         cmd.Parameters["@BaseAddress"].Value = user.BaseAddress;
                         cmd.Parameters["@APiKey"].Value = user.ApiKey;
                         cmd.ExecuteNonQuery();
@@ -620,8 +620,6 @@ namespace TrackerHelper
                 cmd.CommandText = "SELECT * FROM Users WHERE Id = @UserId LIMIT 1";
                 cmd.Parameters.AddWithValue("@UserId", UserId);
 
-
-                /*@id, @Name, @CompanyName, @Position, @Telephone, @InternalPhone, @Language, @BaseAddress, @ApiKey*/
                 try
                 {
                     SQLiteDataReader r = cmd.ExecuteReader();
@@ -633,7 +631,7 @@ namespace TrackerHelper
                         user.Position = r["Position"].ToString();
                         user.Telephone = r["Telephone"].ToString();
                         user.InternalPhone = r["InternalPhone"].ToString();
-                        user.Language = (Language)r["Language"];
+                    //    user.Language = (Language)r["Language"].ToString();
                         user.BaseAddress = r["BaseAddress"].ToString();
                         user.ApiKey = r["ApiKey"].ToString();
                     }

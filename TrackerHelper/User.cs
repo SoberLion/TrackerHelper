@@ -16,11 +16,6 @@ namespace TrackerHelper
     {
     }
 
-    public enum Language
-    {
-        Русский,
-        English
-    }
     public class User
     {
         public delegate void Update(string message);
@@ -43,8 +38,8 @@ namespace TrackerHelper
         private string _Telephone = string.Empty;
         private string _InternalPhone = string.Empty;
         private List<Vacation> _Vacations = new List<Vacation>();
-        private Language _Language = Language.Русский;
-        private string _BaseAddress = @"http://test-tracker.ucs.ru/";
+        //private Language _Language = new Language;
+        private string _BaseAddress = @"http://tracker.ucs.ru/";
         private Issues _Issues = new Issues();
         private string _ApiKey = "1287ca3310be20d6992a764b57f9c8bcfbb05664";
 
@@ -89,11 +84,11 @@ namespace TrackerHelper
             get { return _Vacations; }
             set { _Vacations = value; }
         }
-        public Language Language
+      /*  public Language Language
         {
             get { return _Language; }
             set { _Language = value; }
-        }
+        }*/
         public string BaseAddress
         {
             get { return _BaseAddress; }
@@ -117,5 +112,95 @@ namespace TrackerHelper
                 _ApiKey = value;
             }
         }
+
+        public void GetIssues()
+        {
+            string url = $@"{_BaseAddress}issues.xml?utf8=%E2%9C%93&set_filter=1&f[]=assigned_to_id&op[assigned_to_id]=%3D&v[assigned_to_id][]=me&f[]=&c[]=project&c[]=tracker&c[]=status&c[]=priority&c[]=author&c[]=subject&c[]=assigned_to&c[]=updated_on&c[]=category&group_by=&t[]=&key={_ApiKey}";
+
+            var resultModel = new ResultModel();
+
+            resultModel = Http.Get(url);
+
+            if (resultModel.IsSuccess)
+            {
+                try
+                {
+                    _Issues = XML.Deserialize<Issues>(resultModel.Results);
+                }
+                catch (Exception ex)
+                {
+                }
+
+                // счётчик - redmine возвращает максимум 100 элементов, если кол-во total_count больше, необходимо сделать повторные запросы со смещением
+                int cnt = int.Parse(_Issues.total_count) / 100;
+                if (cnt > 0)
+                {
+                    for (int i = 1; i <= cnt; i++)
+                    {
+                        resultModel = Http.Get(url + "&offset=" + (i * 100).ToString());
+                        if (resultModel.IsSuccess)
+                        {
+                            try
+                            {
+                                // Десериализуем следующие записи и добавим их к существующим.
+                                XML.Deserialize<Issues>(resultModel.Results).issue.ForEach(p => _Issues.issue.Add(p));
+                            }
+                            catch (Exception ex)
+                            {
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+            }
+        }
+
+        public void GetUpdatedIssues()
+        {
+            string url = $@"{_BaseAddress}issues?utf8=%E2%9C%93&set_filter=1&f%5B%5D=assigned_to_id&op%5Bassigned_to_id%5D=%3D&v%5Bassigned_to_id%5D%5B%5D=me&f%5B%5D=updated_on&op%5Bupdated_on%5D=t&f%5B%5D=&c%5B%5D=project&c%5B%5D=tracker&c%5B%5D=status&c%5B%5D=priority&c%5B%5D=author&c%5B%5D=subject&c%5B%5D=assigned_to&c%5B%5D=updated_on&c%5B%5D=category&group_by=&t%5B%5D=%key={ApiKey}";
+
+            var resultModel = new ResultModel();
+
+            resultModel = Http.Get(url);
+
+            if (resultModel.IsSuccess)
+            {
+                try
+                {
+                    _Issues = XML.Deserialize<Issues>(resultModel.Results);
+                }
+                catch (Exception ex)
+                {
+                }
+
+                // счётчик - redmine возвращает максимум 100 элементов, если кол-во total_count больше, необходимо сделать повторные запросы со смещением
+                int cnt = int.Parse(_Issues.total_count) / 100;
+                if (cnt > 0)
+                {
+                    for (int i = 1; i <= cnt; i++)
+                    {
+                        resultModel = Http.Get(url + "&offset=" + (i * 100).ToString());
+                        if (resultModel.IsSuccess)
+                        {
+                            try
+                            {
+                                // Десериализуем следующие записи и добавим их к существующим.
+                                XML.Deserialize<Issues>(resultModel.Results).issue.ForEach(p => _Issues.issue.Add(p));
+                            }
+                            catch (Exception ex)
+                            {
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+            }
+        }
+
+
     }
 }

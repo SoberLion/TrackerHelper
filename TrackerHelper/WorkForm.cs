@@ -1,14 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.IO;
-using System.Xml.Serialization;
 using System.Windows.Forms;
-using System.Data.SQLite;
 
 namespace TrackerHelper
 {
@@ -37,22 +28,39 @@ namespace TrackerHelper
         }
 
         private void btn_GetIssues_Click(object sender, EventArgs e)
-        {            
-            ResultModel model = new ResultModel();
-            Issues issues = new Issues();
-            string URL = @"http://tracker.ucs.ru/issues.xml?limit=100&key=1287ca3310be20d6992a764b57f9c8bcfbb05664";// &assigned_to_id=me";//&status_id=9";
-            model = Http.Get(URL);
+        {
+            User user = new User
+            {
+                Id = "751",
+                ApiKey = "1287ca3310be20d6992a764b57f9c8bcfbb05664"
+            };
 
-            if (model.IsSuccess)
-                issues = XML.Deserialize<Issues>(model.Results);
+           // user.GetIssues();
+            RedmineRequests.GetUserIssueList(user);
 
             if (SQLiteClass.Exist("Issues"))
             {
-                SQLiteClass.InsertIssues(issues);
+                SQLiteClass.InsertIssues(user.Issues);
             }
 
-            if (issues.issue.Count > 0)
-                TreeViewMethods.populateTreeView(issues.issue, treeView_Issues);
+            if (user.Issues.issue.Count > 0)
+                TreeViewMethods.populateTreeView(user.Issues.issue, treeView_Issues);
+
+            /* ResultModel model = new ResultModel();
+             Issues issues = new Issues();
+             string URL = @"http://tracker.ucs.ru/issues.xml?limit=100&key=1287ca3310be20d6992a764b57f9c8bcfbb05664";// &assigned_to_id=me";//&status_id=9";
+             model = Http.Get(URL);
+
+             if (model.IsSuccess)
+                 issues = XML.Deserialize<Issues>(model.Results);
+
+             if (SQLiteClass.Exist("Issues"))
+             {
+                 SQLiteClass.InsertIssues(issues);
+             }
+
+             if (issues.issue.Count > 0)
+                 TreeViewMethods.populateTreeView(issues.issue, treeView_Issues);*/
         }
 
         private void treeView_Issues_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -76,6 +84,11 @@ namespace TrackerHelper
                     listbox_IssueJournal.Items.Add(item.User.name + ": " + item.Notes);
                 }
             }                
+        }
+
+        private void btn_UpdateIssues_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

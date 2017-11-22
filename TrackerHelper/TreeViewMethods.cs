@@ -9,7 +9,7 @@ namespace TrackerHelper
 {
     public class TreeViewMethods
     {
-        #region TreeView functions
+        #region TreeView methods
 
         // Очищаем Treeview, Создаём узлы, раскрываем
         public static void populateTreeView(List<Issue> issues, TreeView treeView)
@@ -17,7 +17,7 @@ namespace TrackerHelper
             treeView.BeginUpdate();
             treeView.Nodes.Clear();
             addTreeNodes(issues, treeView);
-            treeView.ExpandAll();
+            treeView.CollapseAll();
             treeView.EndUpdate();
         }
 

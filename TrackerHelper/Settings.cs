@@ -49,12 +49,12 @@ namespace TrackerHelper
                 tb_BaseAddress.Text = user.BaseAddress;
                 tb_Phone.Text = user.Telephone;
                 tb_Position.Text = user.Position;
-                tb_ApiKey.Text = (user.ApiKey != string.Empty) ? "Exist" : "Empty";
+                tb_ApiKey.Text = user.ApiKey;
             }
             else
             {
                 user = new User();
-                RedmineRequests.GetUserIssueList(1.ToString(), user);
+                RedmineRequests.GetUserIssueList(user);
                 if (user.Issues.issue.Count > 0)
                 {
                     tb_Name.Text = user.Issues.issue[0].assigned_to.name.ToString();
