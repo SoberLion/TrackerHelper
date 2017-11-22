@@ -16,8 +16,7 @@ namespace TrackerHelper
     {
         public WorkForm()
         {
-            InitializeComponent();
-            SQLiteClass.CreateDatabase();
+            InitializeComponent();                  
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -29,10 +28,6 @@ namespace TrackerHelper
 
             if (model.IsSuccess)
                 te = XML.Deserialize<Time_entries>(model.Results);
-
-          //  BindingList<Time_entry> data = new BindingList<Time_entry>();
-//data = te.time_entry_list;
-           // dataGridView1.DataSource = te.time_entry_list;
 
             if (SQLiteClass.Exist("TimeEntries"))
             {

@@ -39,6 +39,8 @@
             this.pnl_listbox = new System.Windows.Forms.Panel();
             this.listbox_IssueJournal = new System.Windows.Forms.ListBox();
             this.pnl_tools = new System.Windows.Forms.Panel();
+            this.dtPicker_IssuesFrom = new System.Windows.Forms.DateTimePicker();
+            this.dtPicker_IssuesTo = new System.Windows.Forms.DateTimePicker();
             this.tControl.SuspendLayout();
             this.tP_IssueList.SuspendLayout();
             this.pnl_TreeView.SuspendLayout();
@@ -102,6 +104,8 @@
             // 
             // pnl_buttons
             // 
+            this.pnl_buttons.Controls.Add(this.dtPicker_IssuesTo);
+            this.pnl_buttons.Controls.Add(this.dtPicker_IssuesFrom);
             this.pnl_buttons.Controls.Add(this.btn_GetIssues);
             this.pnl_buttons.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnl_buttons.Location = new System.Drawing.Point(3, 3);
@@ -113,7 +117,7 @@
             // 
             this.btn_GetIssues.Location = new System.Drawing.Point(3, 3);
             this.btn_GetIssues.Name = "btn_GetIssues";
-            this.btn_GetIssues.Size = new System.Drawing.Size(75, 23);
+            this.btn_GetIssues.Size = new System.Drawing.Size(84, 23);
             this.btn_GetIssues.TabIndex = 0;
             this.btn_GetIssues.Text = "GetIssues";
             this.btn_GetIssues.UseVisualStyleBackColor = true;
@@ -158,12 +162,33 @@
             this.pnl_tools.Size = new System.Drawing.Size(291, 30);
             this.pnl_tools.TabIndex = 1;
             // 
+            // dtPicker_IssuesFrom
+            // 
+            this.dtPicker_IssuesFrom.Font = new System.Drawing.Font("Roboto", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.dtPicker_IssuesFrom.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtPicker_IssuesFrom.Location = new System.Drawing.Point(93, 5);
+            this.dtPicker_IssuesFrom.MinDate = new System.DateTime(2015, 1, 1, 0, 0, 0, 0);
+            this.dtPicker_IssuesFrom.Name = "dtPicker_IssuesFrom";
+            this.dtPicker_IssuesFrom.Size = new System.Drawing.Size(89, 22);
+            this.dtPicker_IssuesFrom.TabIndex = 1;
+            // 
+            // dtPicker_IssuesTo
+            // 
+            this.dtPicker_IssuesTo.Font = new System.Drawing.Font("Roboto", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.dtPicker_IssuesTo.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtPicker_IssuesTo.Location = new System.Drawing.Point(188, 5);
+            this.dtPicker_IssuesTo.MinDate = new System.DateTime(2015, 1, 1, 0, 0, 0, 0);
+            this.dtPicker_IssuesTo.Name = "dtPicker_IssuesTo";
+            this.dtPicker_IssuesTo.Size = new System.Drawing.Size(89, 22);
+            this.dtPicker_IssuesTo.TabIndex = 2;
+            // 
             // WorkForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(305, 420);
             this.Controls.Add(this.tControl);
+            this.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Name = "WorkForm";
             this.Text = "WorkForm";
             this.tControl.ResumeLayout(false);
@@ -190,5 +215,7 @@
         private System.Windows.Forms.Panel pnl_listbox;
         private System.Windows.Forms.Panel pnl_tools;
         private System.Windows.Forms.ListBox listbox_IssueJournal;
+        private System.Windows.Forms.DateTimePicker dtPicker_IssuesTo;
+        private System.Windows.Forms.DateTimePicker dtPicker_IssuesFrom;
     }
 }

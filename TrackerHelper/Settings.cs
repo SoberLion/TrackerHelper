@@ -12,6 +12,7 @@ namespace TrackerHelper
 {
     public partial class Settings : Form
     {
+        User user = new User();
         public Settings()
         {
             InitializeComponent();
@@ -19,14 +20,47 @@ namespace TrackerHelper
 
         private void Settings_Load(object sender, EventArgs e)
         {
-            tb_Name.Text = Test.Name;
-            tb_Surname.Text = Test.Surname;
         }
 
         private void Save_Click(object sender, EventArgs e)
         {
-            Test.Name = tb_Name.Text;
-            Test.Surname = tb_Surname.Text;
+            if (int.TryParse(tb_Id.Text, out int id))
+            {
+                user.Id = tb_Id.Text;
+                user.InternalPhone = tb_internalPhone.Text;
+                user.Name = tb_Name.Text;
+                user.CompanyName = tb_CompanyName.Text;
+                user.BaseAddress = tb_BaseAddress.Text;
+                user.Telephone = tb_Phone.Text;
+                user.Position = tb_Position.Text;
+                user.ApiKey = tb_ApiKey.Text;
+                SQLiteClass.InsertUser(user);
+            }
+        }
+
+        private void btn_Check_Click(object sender, EventArgs e)
+        {
+            if (int.TryParse(tb_Id.Text, out int id))
+            {
+                user = SQLiteClass.GetUserById(tb_Id.Text);
+                tb_internalPhone.Text = user.InternalPhone;
+                tb_Name.Text = user.Name;
+                tb_CompanyName.Text = user.CompanyName;
+                tb_BaseAddress.Text = user.BaseAddress;
+                tb_Phone.Text = user.Telephone;
+                tb_Position.Text = user.Position;
+                tb_ApiKey.Text = (user.ApiKey != string.Empty) ? "Exist" : "Empty";
+            }
+            else
+            {
+                user = new User();
+                RedmineRequests.GetUserIssueList(1.ToString(), user);
+                if (user.Issues.issue.Count > 0)
+                {
+                    tb_Name.Text = user.Issues.issue[0].assigned_to.name.ToString();
+                    tb_Id.Text = user.Issues.issue[0].assigned_to.id.ToString();
+                }
+            }
         }
     }
 }

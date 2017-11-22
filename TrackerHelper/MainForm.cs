@@ -18,6 +18,7 @@ namespace TrackerHelper
         {
             InitializeComponent();
             stickyWindow = new StickyWindow(this);
+            SQLiteClass.CreateDatabase();
         }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)

@@ -14,7 +14,6 @@ namespace TrackerHelper
             DbName = dbName;
         }
 
-
         static MessageDelegate MessageDel;
 
         public void RegisterDelegate(MessageDelegate del)
@@ -63,6 +62,7 @@ namespace TrackerHelper
                 CreateTETable();
                 CreateJournalsTable();
                 CreateJournalDetailsTable();
+                CreateUsersTable();
                 return true;
             }
             catch (Exception sqlex)
@@ -207,10 +207,90 @@ namespace TrackerHelper
                 conn.Dispose();
             }
         }
+        private static void CreateUsersTable()
+        {
+            SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;");
+
+            conn.Open();
+
+            if (conn.State == ConnectionState.Open)
+            {
+                SQLiteCommand cmd = conn.CreateCommand();
+                cmd.CommandText = string.Format("CREATE TABLE IF NOT EXISTS Users({0},{1},{2},{3},{4},{5},{6},{7},{8});",
+                                     "Id INTEGER PRIMARY KEY",
+                                     "Name TEXT",
+                                     "CompanyName TEXT",
+                                     "Position TEXT",
+                                     "Telephone TEXT",
+                                     "InternalPhone INTEGER",
+                                     "Language INTEGER",
+                                     "BaseAddress TEXT",
+                                     "ApiKey TEXT");
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (SQLiteException sqlex)
+                {
+                    MessageDel?.Invoke($"Error: {sqlex.Message}");
+                }
+                cmd.Dispose();
+                conn.Dispose();
+            }
+        }
         #endregion
 
         #region ------------------------- Insert methods ---------------------------
         // insert time entry to table
+        public static void InsertUser(User user)
+        {
+            SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;");
+
+            conn.Open();
+
+            // if connection established create sqlite command and begin transaction
+            if (conn.State == ConnectionState.Open)
+            {
+                SQLiteCommand cmd = conn.CreateCommand();
+                SQLiteTransaction transaction = conn.BeginTransaction();
+
+                cmd.CommandText = "INSERT OR IGNORE INTO Users(id, Name, CompanyName, Position, Telephone, InternalPhone, Language, BaseAddress, APiKey) "
+                                   + "VALUES (@Id, @Name, @CompanyName, @Position, @Telephone, @InternalPhone, @Language, @BaseAddress, @ApiKey)";
+
+
+                // create command parameters
+                cmd.Parameters.AddWithValue("@Id", "");
+                cmd.Parameters.AddWithValue("@Name", "");
+                cmd.Parameters.AddWithValue("@CompanyName", "");
+                cmd.Parameters.AddWithValue("@Position", "");
+                cmd.Parameters.AddWithValue("@Telephone", "");
+                cmd.Parameters.AddWithValue("@InternalPhone", "");
+                cmd.Parameters.AddWithValue("@Language", "");
+                cmd.Parameters.AddWithValue("@BaseAddress", "");
+                cmd.Parameters.AddWithValue("@APiKey", "");
+
+                try
+                {   // cycle writing data in table
+                        cmd.Parameters["@Id"].Value = user.Id;
+                        cmd.Parameters["@Name"].Value = user.Name;
+                        cmd.Parameters["@CompanyName"].Value = user.CompanyName;
+                        cmd.Parameters["@Position"].Value = user.Position;
+                        cmd.Parameters["@Telephone"].Value = user.Telephone;
+                        cmd.Parameters["@InternalPhone"].Value = user.InternalPhone;
+                        cmd.Parameters["@Language"].Value = user.Language;
+                        cmd.Parameters["@BaseAddress"].Value = user.BaseAddress;
+                        cmd.Parameters["@APiKey"].Value = user.ApiKey;
+                        cmd.ExecuteNonQuery();
+                }
+                catch (SQLiteException sqlex)
+                {
+                    MessageDel?.Invoke($"Error: {sqlex.Message}");
+                }
+                transaction.Commit();
+                cmd.Dispose();
+                conn.Dispose();
+            }
+        }
         public static void InsertTE(Time_entries TE)
         {
             SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;");
@@ -527,6 +607,47 @@ namespace TrackerHelper
         #endregion
 
         #region ------------------------ get/calc methods---------------------------
+        public static User GetUserById(string UserId)
+        {
+            User user = new User();
+            SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;");
+
+            conn.Open();
+
+            if (conn.State == ConnectionState.Open)
+            {
+                SQLiteCommand cmd = conn.CreateCommand();
+                cmd.CommandText = "SELECT * FROM Users WHERE Id = @UserId LIMIT 1";
+                cmd.Parameters.AddWithValue("@UserId", UserId);
+
+
+                /*@id, @Name, @CompanyName, @Position, @Telephone, @InternalPhone, @Language, @BaseAddress, @ApiKey*/
+                try
+                {
+                    SQLiteDataReader r = cmd.ExecuteReader();
+                    while (r.Read())
+                    {
+                        user.Id = r["Id"].ToString();
+                        user.Name = r["Name"].ToString();
+                        user.CompanyName = r["CompanyName"].ToString();
+                        user.Position = r["Position"].ToString();
+                        user.Telephone = r["Telephone"].ToString();
+                        user.InternalPhone = r["InternalPhone"].ToString();
+                        user.Language = (Language)r["Language"];
+                        user.BaseAddress = r["BaseAddress"].ToString();
+                        user.ApiKey = r["ApiKey"].ToString();
+                    }
+                    r.Close();
+                }
+                catch (SQLiteException sqlex)
+                {
+                    MessageDel?.Invoke($"Error: {sqlex.Message}");
+                }
+                cmd.Dispose();
+                conn.Dispose();
+            }
+            return (user.Name != string.Empty) ? user : null;
+        }
         public static void GetIssue(Issue issue)
         {
             SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;");
