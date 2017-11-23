@@ -45,6 +45,9 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="redmine-net452-api, Version=2.0.12.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\redmine-api.2.0.12\lib\net452\redmine-net452-api.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SQLite, Version=1.0.105.2, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
@@ -75,7 +78,7 @@
     <Compile Include="PieChart.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RedmineRequests.cs" />
+    <Compile Include="Redmine.cs" />
     <Compile Include="redmine_obj.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -87,7 +90,6 @@
     </Compile>
     <Compile Include="SQLiteClass.cs" />
     <Compile Include="StickyWindow.cs" />
-    <Compile Include="Test.cs" />
     <Compile Include="TreeViewMethods.cs" />
     <Compile Include="User.cs" />
     <Compile Include="WorkForm.cs">

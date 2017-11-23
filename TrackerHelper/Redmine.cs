@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+
+
 namespace TrackerHelper
 {
     public class Filter
@@ -11,8 +13,10 @@ namespace TrackerHelper
         public List<int> _AuthorId { get; set; } = new List<int>();
         public List<int> _ProjectId { get; set; } = new List<int>();
     }
-    public class RedmineRequests
-    {
+    public class Redmines
+    {   
+
+
         public static void GetUserIssueList(User user)
         {
             /* string url = string.Format("{0}issues.xml?assigned_to_id=2232&limit=100&key={1}",

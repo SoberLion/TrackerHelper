@@ -54,7 +54,7 @@ namespace TrackerHelper
             else
             {
                 user = new User();
-                RedmineRequests.GetUserIssueList(user);
+  //              Redmine.GetUserIssueList(user);
                 if (user.Issues.issue.Count > 0)
                 {
                     tb_Name.Text = user.Issues.issue[0].assigned_to.name.ToString();

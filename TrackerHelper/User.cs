@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Redmine.Net.Api;
+using Redmine.Net.Api.Types;
+using System.Collections.Specialized;
 
 namespace TrackerHelper
 {
@@ -39,7 +39,7 @@ namespace TrackerHelper
         private string _InternalPhone = string.Empty;
         private List<Vacation> _Vacations = new List<Vacation>();
         //private Language _Language = new Language;
-        private string _BaseAddress = @"http://tracker.ucs.ru/";
+        private string _BaseAddress = @"http://test-tracker.ucs.ru/";
         private Issues _Issues = new Issues();
         private string _ApiKey = "1287ca3310be20d6992a764b57f9c8bcfbb05664";
 
@@ -115,6 +115,28 @@ namespace TrackerHelper
 
         public void GetIssues()
         {
+            RedmineManager redmineManager = new RedmineManager(_BaseAddress, _ApiKey);
+            redmineManager.PageSize = 100;
+            //parameter - get all issues
+//            var parameters = new NameValueCollection { { RedmineKeys.STATUS_ID, RedmineKeys.ALL } };
+             var parameters = new NameValueCollection { { RedmineKeys.STATUS_ID, RedmineKeys.ALL } };
+
+            //parameter - fetch issues for a date range
+
+            parameters.Add(RedmineKeys.PROJECT, "153");
+            //var parameters = new NameValueCollection();
+
+          //  var issue = redmineManager.GetObject<Redmine.Net.Api.Types.Issue>("111111", parameters);
+            try
+            {
+                List<Redmine.Net.Api.Types.Issue> IssueList = redmineManager.GetObjects<Redmine.Net.Api.Types.Issue>(parameters);
+            }
+            catch (Exception ex)
+            {
+            }
+
+            /*
+
             string url = $@"{_BaseAddress}issues.xml?utf8=%E2%9C%93&set_filter=1&f[]=assigned_to_id&op[assigned_to_id]=%3D&v[assigned_to_id][]=me&f[]=&c[]=project&c[]=tracker&c[]=status&c[]=priority&c[]=author&c[]=subject&c[]=assigned_to&c[]=updated_on&c[]=category&group_by=&t[]=&key={_ApiKey}";
 
             var resultModel = new ResultModel();
@@ -154,7 +176,7 @@ namespace TrackerHelper
             }
             else
             {
-            }
+            }*/
         }
 
         public void GetUpdatedIssues()

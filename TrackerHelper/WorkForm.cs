@@ -35,16 +35,18 @@ namespace TrackerHelper
                 ApiKey = "1287ca3310be20d6992a764b57f9c8bcfbb05664"
             };
 
-           // user.GetIssues();
-            RedmineRequests.GetUserIssueList(user);
+            user.GetIssues();
+           // Redmine.GetUserIssueList(user);
+
+
 
             if (SQLiteClass.Exist("Issues"))
             {
-                SQLiteClass.InsertIssues(user.Issues);
+           //     SQLiteClass.InsertIssues(user.Issues);
             }
 
-            if (user.Issues.issue.Count > 0)
-                TreeViewMethods.populateTreeView(user.Issues.issue, treeView_Issues);
+            //if (user.Issues.issue.Count > 0)
+        //        TreeViewMethods.populateTreeView(user.Issues.issue, treeView_Issues);
 
             /* ResultModel model = new ResultModel();
              Issues issues = new Issues();
