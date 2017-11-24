@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Redmine.Net.Api;
-using Redmine.Net.Api.Types;
 using System.Collections.Specialized;
 
 namespace TrackerHelper

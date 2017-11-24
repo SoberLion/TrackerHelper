@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SQLite;
+using System.Collections.Generic;
 
 namespace TrackerHelper
 {
@@ -15,6 +16,8 @@ namespace TrackerHelper
         }
 
         static MessageDelegate MessageDel;
+
+        public static event MessageDelegate onError;
 
         public void RegisterDelegate(MessageDelegate del)
         {
@@ -697,7 +700,7 @@ namespace TrackerHelper
                 conn.Dispose();
             }
         }
-
+        
         /// Get min or max date for user existed in DB,
         /// <param name="UserId">string, UserID</param>
         /// <param name="isMIN">true if needed min, false if max</param>
@@ -733,7 +736,6 @@ namespace TrackerHelper
             return (obj.ToString() != "") ? obj.ToString() : "1970-01-01";
 
         }
-
         // calc time for user
         public static string CalcTime(string UserId, string DateFrom, string DateTo)
         {
@@ -764,7 +766,6 @@ namespace TrackerHelper
             }
             return (obj.ToString() == "") ? "0,00" : Math.Round(double.Parse(obj.ToString()),2).ToString();
         }
-
         // GetName
         public static string GetName(string UserId)
         {
@@ -798,7 +799,6 @@ namespace TrackerHelper
             }
             return (str != "") ? str : "John Doe";
         }
-
         // count records for UserId for time period
         public static int CountRecs(string UserId, string DateFrom, string DateTo)
         {
@@ -828,7 +828,6 @@ namespace TrackerHelper
             }
             return obj;
         }
-
         // get UserId with UserName
         public static string GetUserId(string UserName)
         {
@@ -860,6 +859,43 @@ namespace TrackerHelper
                 conn.Dispose();
             }
             return (str != "") ? str : "0";
+        }
+
+
+        /// <summary>
+        /// Получить справочные данные
+        /// </summary>
+        /// <param name="id">id in collection like ProjectId, StatusId, etc...</param>
+        /// <param name="name">name in collection ProjectName, StatusName, etc...</param>
+        public static Dictionary<int, string> GetDict(string id, string name)
+        {
+            Dictionary<int, string> dict = new Dictionary<int, string>();
+            SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;");
+
+            conn.Open();
+
+            if (conn.State == ConnectionState.Open)
+            {
+                SQLiteCommand cmd = conn.CreateCommand();
+                cmd.CommandText = $"SELECT DISTINCT {id}, {name} FROM Issues order by {id}";
+
+                try
+                {
+                    SQLiteDataReader r = cmd.ExecuteReader();
+                    while (r.Read())
+                    {                      
+                        dict.Add(int.Parse(r[id].ToString()), r[name].ToString());
+                    }
+                    r.Close();
+                }
+                catch (SQLiteException sqlex)
+                {
+                    onError?.Invoke($"Error: {sqlex.Message}");
+                }
+                cmd.Dispose();
+                conn.Dispose();
+            }
+            return dict.Count > 0 ? dict : null;
         }
         #endregion
     }

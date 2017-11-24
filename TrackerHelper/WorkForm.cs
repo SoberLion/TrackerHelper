@@ -79,17 +79,19 @@ namespace TrackerHelper
 
         private void btn_UpdateIssues_Click(object sender, EventArgs e)
         {
-            if (user != null)
-            {
-                user.GetUpdatedIssues(1, 50);
-                if (SQLiteClass.Exist("Issues"))
-                {
-                    SQLiteClass.InsertIssues(user.Issues);
-                }
+            /*  if (user != null)
+              {
+                  user.GetUpdatedIssues(1, 50);
+                  if (SQLiteClass.Exist("Issues"))
+                  {
+                      SQLiteClass.InsertIssues(user.Issues);
+                  }
 
-                if (user.Issues.issue.Count > 0)
-                    TreeViewMethods.populateTreeView(user.Issues.issue, treeView_Issues);
-            }
+                  if (user.Issues.issue.Count > 0)
+                      TreeViewMethods.populateTreeView(user.Issues.issue, treeView_Issues);
+              }*/
+
+            SQLiteClass.GetDict("StatusId", "StatusName");
         }
         public void ShowMessage(string message)
         {
