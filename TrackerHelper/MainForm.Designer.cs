@@ -45,7 +45,7 @@
             this.reportsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(284, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(334, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -60,7 +60,7 @@
             // tasksToolStripMenuItem
             // 
             this.tasksToolStripMenuItem.Name = "tasksToolStripMenuItem";
-            this.tasksToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.tasksToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.tasksToolStripMenuItem.Text = "Tasks";
             this.tasksToolStripMenuItem.Click += new System.EventHandler(this.tasksToolStripMenuItem_Click);
             // 
@@ -82,7 +82,7 @@
             // techSupportToolStripMenuItem
             // 
             this.techSupportToolStripMenuItem.Name = "techSupportToolStripMenuItem";
-            this.techSupportToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.techSupportToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.techSupportToolStripMenuItem.Text = "Tech support";
             this.techSupportToolStripMenuItem.Click += new System.EventHandler(this.techSupportToolStripMenuItem_Click);
             // 
@@ -90,8 +90,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 462);
+            this.ClientSize = new System.Drawing.Size(334, 616);
             this.Controls.Add(this.menuStrip1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";

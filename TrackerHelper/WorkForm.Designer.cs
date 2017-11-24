@@ -34,6 +34,8 @@
             this.pnl_TreeView = new System.Windows.Forms.Panel();
             this.treeView_Issues = new System.Windows.Forms.TreeView();
             this.pnl_buttons = new System.Windows.Forms.Panel();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.btn_UpdateIssues = new System.Windows.Forms.Button();
             this.dtPicker_IssuesTo = new System.Windows.Forms.DateTimePicker();
             this.dtPicker_IssuesFrom = new System.Windows.Forms.DateTimePicker();
             this.btn_GetAllIssues = new System.Windows.Forms.Button();
@@ -41,8 +43,6 @@
             this.pnl_listbox = new System.Windows.Forms.Panel();
             this.listbox_IssueJournal = new System.Windows.Forms.ListBox();
             this.pnl_tools = new System.Windows.Forms.Panel();
-            this.btn_UpdateIssues = new System.Windows.Forms.Button();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.tControl.SuspendLayout();
             this.tP_IssueList.SuspendLayout();
             this.pnl_TreeView.SuspendLayout();
@@ -71,7 +71,7 @@
             this.tControl.Location = new System.Drawing.Point(0, 0);
             this.tControl.Name = "tControl";
             this.tControl.SelectedIndex = 0;
-            this.tControl.Size = new System.Drawing.Size(305, 420);
+            this.tControl.Size = new System.Drawing.Size(334, 612);
             this.tControl.TabIndex = 1;
             // 
             // tP_IssueList
@@ -81,7 +81,7 @@
             this.tP_IssueList.Location = new System.Drawing.Point(4, 25);
             this.tP_IssueList.Name = "tP_IssueList";
             this.tP_IssueList.Padding = new System.Windows.Forms.Padding(3);
-            this.tP_IssueList.Size = new System.Drawing.Size(297, 391);
+            this.tP_IssueList.Size = new System.Drawing.Size(326, 583);
             this.tP_IssueList.TabIndex = 1;
             this.tP_IssueList.Text = "Issues";
             this.tP_IssueList.UseVisualStyleBackColor = true;
@@ -92,7 +92,7 @@
             this.pnl_TreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnl_TreeView.Location = new System.Drawing.Point(3, 34);
             this.pnl_TreeView.Name = "pnl_TreeView";
-            this.pnl_TreeView.Size = new System.Drawing.Size(291, 354);
+            this.pnl_TreeView.Size = new System.Drawing.Size(320, 546);
             this.pnl_TreeView.TabIndex = 2;
             // 
             // treeView_Issues
@@ -100,7 +100,7 @@
             this.treeView_Issues.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView_Issues.Location = new System.Drawing.Point(0, 0);
             this.treeView_Issues.Name = "treeView_Issues";
-            this.treeView_Issues.Size = new System.Drawing.Size(291, 354);
+            this.treeView_Issues.Size = new System.Drawing.Size(320, 546);
             this.treeView_Issues.TabIndex = 0;
             this.treeView_Issues.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView_Issues_NodeMouseDoubleClick);
             // 
@@ -114,8 +114,27 @@
             this.pnl_buttons.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnl_buttons.Location = new System.Drawing.Point(3, 3);
             this.pnl_buttons.Name = "pnl_buttons";
-            this.pnl_buttons.Size = new System.Drawing.Size(291, 31);
+            this.pnl_buttons.Size = new System.Drawing.Size(320, 31);
             this.pnl_buttons.TabIndex = 1;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(77, 9);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(15, 14);
+            this.checkBox1.TabIndex = 4;
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // btn_UpdateIssues
+            // 
+            this.btn_UpdateIssues.Location = new System.Drawing.Point(39, 3);
+            this.btn_UpdateIssues.Name = "btn_UpdateIssues";
+            this.btn_UpdateIssues.Size = new System.Drawing.Size(32, 24);
+            this.btn_UpdateIssues.TabIndex = 3;
+            this.btn_UpdateIssues.Text = "GetIssues";
+            this.btn_UpdateIssues.UseVisualStyleBackColor = true;
+            this.btn_UpdateIssues.Click += new System.EventHandler(this.btn_UpdateIssues_Click);
             // 
             // dtPicker_IssuesTo
             // 
@@ -186,30 +205,11 @@
             this.pnl_tools.Size = new System.Drawing.Size(291, 30);
             this.pnl_tools.TabIndex = 1;
             // 
-            // btn_UpdateIssues
-            // 
-            this.btn_UpdateIssues.Location = new System.Drawing.Point(39, 3);
-            this.btn_UpdateIssues.Name = "btn_UpdateIssues";
-            this.btn_UpdateIssues.Size = new System.Drawing.Size(32, 24);
-            this.btn_UpdateIssues.TabIndex = 3;
-            this.btn_UpdateIssues.Text = "GetIssues";
-            this.btn_UpdateIssues.UseVisualStyleBackColor = true;
-            this.btn_UpdateIssues.Click += new System.EventHandler(this.btn_UpdateIssues_Click);
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(77, 9);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(15, 14);
-            this.checkBox1.TabIndex = 4;
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
             // WorkForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(305, 420);
+            this.ClientSize = new System.Drawing.Size(334, 612);
             this.Controls.Add(this.tControl);
             this.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Name = "WorkForm";

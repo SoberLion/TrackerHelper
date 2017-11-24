@@ -170,38 +170,38 @@ namespace TrackerHelper
     [XmlRoot("issues", IsNullable = false)]
     public class Issues
     {
-        private string total_countField = string.Empty;
-        private string offsetField = string.Empty;
-        private string limitField = string.Empty;
-        private string typeField = string.Empty;
+        private string _total_count = "0";
+        private string _offset = "0";
+        private string _limit = "100";
+        private string _type = string.Empty;
         private List<Issue> issueField = new List<Issue>();
 
         [XmlAttribute]
         public string total_count
         {
-            get { return total_countField; }
-            set { total_countField = value; }
+            get { return _total_count; }
+            set { _total_count = value; }
         }
 
         [XmlAttribute]
         public string offset
         {
-            get { return offsetField; }
-            set { offsetField = value; }
+            get { return _offset; }
+            set { _offset = value; }
         }
 
         [XmlAttribute]
         public string limit
         {
-            get { return limitField; }
-            set { limitField = value; }
+            get { return _limit; }
+            set { _limit = value; }
         }
 
         [XmlAttribute]
         public string type
         {
-            get { return typeField; }
-            set { typeField = value; }
+            get { return _type; }
+            set { _type = value; }
         }
 
         [XmlElement(IsNullable = false)]
@@ -209,6 +209,11 @@ namespace TrackerHelper
         {
             get { return issueField; }
             set { issueField = value; }
+        }
+
+        public void IncOffset()
+        {
+            _offset = (int.Parse(_offset) + int.Parse(_limit)).ToString();
         }
     }
 

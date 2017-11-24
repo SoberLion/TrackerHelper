@@ -18,14 +18,17 @@ namespace TrackerHelper
 
     public class User
     {
-        public delegate void Update(string message);
-        public Update MessageDel;
+        public delegate void Message(string message);
+        public Message MessageDel;
 
-        public void RegisterDelegate(Update del)
+        public event Message onError;
+
+
+        public void RegisterDelegate(Message del)
         {
             MessageDel += del;
         }
-        public void UnregisterDelegate(Update del)
+        public void UnregisterDelegate(Message del)
         {
             MessageDel -= del;
         }
@@ -113,115 +116,64 @@ namespace TrackerHelper
             }
         }
 
-        public void GetIssues()
+        public void GetIssues(int Retries)
         {
-            RedmineManager redmineManager = new RedmineManager(_BaseAddress, _ApiKey);
-            redmineManager.PageSize = 100;
-            //parameter - get all issues
-//            var parameters = new NameValueCollection { { RedmineKeys.STATUS_ID, RedmineKeys.ALL } };
-             var parameters = new NameValueCollection { { RedmineKeys.STATUS_ID, RedmineKeys.ALL } };
-
-            //parameter - fetch issues for a date range
-
-            parameters.Add(RedmineKeys.PROJECT, "153");
-            //var parameters = new NameValueCollection();
-
-          //  var issue = redmineManager.GetObject<Redmine.Net.Api.Types.Issue>("111111", parameters);
-            try
-            {
-                List<Redmine.Net.Api.Types.Issue> IssueList = redmineManager.GetObjects<Redmine.Net.Api.Types.Issue>(parameters);
-            }
-            catch (Exception ex)
-            {
-            }
-
-            /*
-
-            string url = $@"{_BaseAddress}issues.xml?utf8=%E2%9C%93&set_filter=1&f[]=assigned_to_id&op[assigned_to_id]=%3D&v[assigned_to_id][]=me&f[]=&c[]=project&c[]=tracker&c[]=status&c[]=priority&c[]=author&c[]=subject&c[]=assigned_to&c[]=updated_on&c[]=category&group_by=&t[]=&key={_ApiKey}";
-
-            var resultModel = new ResultModel();
-
-            resultModel = Http.Get(url);
-
-            if (resultModel.IsSuccess)
-            {
-                try
-                {
-                    _Issues = XML.Deserialize<Issues>(resultModel.Results);
-                }
-                catch (Exception ex)
-                {
-                }
-
-                // счётчик - redmine возвращает максимум 100 элементов, если кол-во total_count больше, необходимо сделать повторные запросы со смещением
-                int cnt = int.Parse(_Issues.total_count) / 100;
-                if (cnt > 0)
-                {
-                    for (int i = 1; i <= cnt; i++)
-                    {
-                        resultModel = Http.Get(url + "&offset=" + (i * 100).ToString());
-                        if (resultModel.IsSuccess)
-                        {
-                            try
-                            {
-                                // Десериализуем следующие записи и добавим их к существующим.
-                                XML.Deserialize<Issues>(resultModel.Results).issue.ForEach(p => _Issues.issue.Add(p));
-                            }
-                            catch (Exception ex)
-                            {
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-            }*/
+            string filter = @"set_filter=1&f[]=assigned_to_id&op[assigned_to_id]=%3D&v[assigned_to_id][]=me";
+            GetIssuesFiltered(Retries, filter);
         }
 
-        public void GetUpdatedIssues()
+
+
+        public void GetIssuesFiltered(int Retries, string filter)
         {
-            string url = $@"{_BaseAddress}issues?utf8=%E2%9C%93&set_filter=1&f%5B%5D=assigned_to_id&op%5Bassigned_to_id%5D=%3D&v%5Bassigned_to_id%5D%5B%5D=me&f%5B%5D=updated_on&op%5Bupdated_on%5D=t&f%5B%5D=&c%5B%5D=project&c%5B%5D=tracker&c%5B%5D=status&c%5B%5D=priority&c%5B%5D=author&c%5B%5D=subject&c%5B%5D=assigned_to&c%5B%5D=updated_on&c%5B%5D=category&group_by=&t%5B%5D=%key={ApiKey}";
-
-            var resultModel = new ResultModel();
-
-            resultModel = Http.Get(url);
-
-            if (resultModel.IsSuccess)
+            ResultModel resultModel = new ResultModel();
+            int retries = 0;
+            do
             {
-                try
-                {
-                    _Issues = XML.Deserialize<Issues>(resultModel.Results);
-                }
-                catch (Exception ex)
-                {
-                }
+                string url = $@"{_BaseAddress}issues.xml?utf8=%E2%9C%93&limit={_Issues.limit}&offset={_Issues.offset}&key={_ApiKey}&{filter}";
+                resultModel.IsSuccess = false;
 
-                // счётчик - redmine возвращает максимум 100 элементов, если кол-во total_count больше, необходимо сделать повторные запросы со смещением
-                int cnt = int.Parse(_Issues.total_count) / 100;
-                if (cnt > 0)
+                resultModel = Http.Get(url);
+                if (resultModel.IsSuccess)
                 {
-                    for (int i = 1; i <= cnt; i++)
+                    if (_Issues.issue.Count > 0)
                     {
-                        resultModel = Http.Get(url + "&offset=" + (i * 100).ToString());
-                        if (resultModel.IsSuccess)
-                        {
-                            try
-                            {
-                                // Десериализуем следующие записи и добавим их к существующим.
-                                XML.Deserialize<Issues>(resultModel.Results).issue.ForEach(p => _Issues.issue.Add(p));
-                            }
-                            catch (Exception ex)
-                            {
-                            }
-                        }
+                        XML.Deserialize<Issues>(resultModel.Results).issue.ForEach(p => _Issues.issue.Add(p));
+                        retries = 0;
+                    }
+                    else
+                    {
+                        _Issues = XML.Deserialize<Issues>(resultModel.Results);
+                    } // IncOffset увеличивает offset на величину limit при каждом вызове.
+                    _Issues.IncOffset();
+                }
+                else
+                {// в случае если запрос к redmine не был успешным сделать повторный запрос с теми же параметрами
+                    retries++;
+                    if (retries == Retries)
+                    {
+                        onError?.Invoke($"No reply from host. Fetched {_Issues.issue.Count} issues");
+                        break;
                     }
                 }
-            }
-            else
-            {
-            }
+            }// счётчик - tracker.ucs.ru возвращает максимум 100 элементов, если кол-во total_count больше, необходимо сделать повторные запросы со смещением
+            while (int.Parse(_Issues.offset) < int.Parse(_Issues.total_count));
         }
+
+        public void GetUpdatedIssues(int Retries, int NumofDaysSinceLastUpdate)
+        {
+            string filter = $@"set_filter=1&f[]=assigned_to_id&op[assigned_to_id]=%3D&v[assigned_to_id][]=me&f[]=status_id&op[status_id]=o&f[]=updated_on&op[updated_on]=%3Et-&v[updated_on][]={NumofDaysSinceLastUpdate}";
+
+            GetIssuesFiltered(Retries, filter);
+        }
+
+        public void GetAllIssues(int Retries)
+        {
+            string filter = @"set_filter=1&f[]=&c[]=project&c[]=tracker&c[]=status&c[]=priority&c[]=author&c[]=subject&c[]=assigned_to&c[]=updated_on&c[]=category&group_by=&t[]=";
+
+            GetIssuesFiltered(Retries, filter);
+        }
+
 
 
     }
