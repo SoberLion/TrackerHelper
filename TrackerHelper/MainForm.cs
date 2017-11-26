@@ -1,17 +1,19 @@
-﻿using System;
+﻿using LiveCharts;
+using LiveCharts.WinForms;
+using LiveCharts.Wpf;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using System.Windows.Forms;
 
 namespace TrackerHelper
 {
     public partial class MainForm : Form
     {
+
+        Form repform;
         private StickyWindow stickyWindow;
 
         public MainForm()
@@ -37,54 +39,97 @@ namespace TrackerHelper
             workForm.Show();
         }
 
+
+       
         private void techSupportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form repform = new PieChartEx
+            Func<ChartPoint, string> labelPoint = chartPoint =>
+                string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
+            repform = new Form
             {
-                MdiParent = this,
-                WindowState = FormWindowState.Normal
+                //MdiParent = this,
+                WindowState = FormWindowState.Maximized,
+                AutoScaleDimensions = new SizeF(6F, 13F),
+                Name = "Charts",
+                Text = "Charts"
             };
-            /*DateTimePicker dtpFrom = new DateTimePicker
+            Panel pnlChart = new Panel
             {
                 Parent = repform,
-                Top = 10,
-                Left = 10,
-                Width = repform.Size.Width - 35,
-                MinDate = DateTime.Parse("01-01-2015"),
-                Anchor = (AnchorStyles)13
+                Dock = DockStyle.Fill,
             };
-            DateTimePicker dtpTo = new DateTimePicker
+            Panel pnlFilter = new Panel
             {
                 Parent = repform,
-                Top = 40,
-                Left = 10,
-                Width = repform.Size.Width - 35,
-                MinDate = DateTime.Parse("01-01-2015"),
-                Anchor = (AnchorStyles)13
+                Dock = DockStyle.Right,
+                Width = 200
             };
-            Button btnOk = new Button
+            var pieChart = new LiveCharts.WinForms.PieChart
             {
-                Parent = repform,
-                Left = repform.Size.Width / 2 - 60,
-                Top = repform.Size.Height - 80,
-                Text = "OK",
-                Width = 100,
-                Height = 20
-            };*/
-            
+                Parent = pnlChart,
+                Dock = DockStyle.Fill,
+                LegendLocation = LegendLocation.Bottom,
+
+            };
+
+            Dictionary<string, int> Dict = SQLiteClass.GetGroupedData("StatusId", "StatusName");
+            int others = 0;
+            SeriesCollection seriesColection = new SeriesCollection();
+            foreach (var item in Dict)
+            {
+                if (item.Value < 15)
+                {
+                    others += item.Value;
+                    continue;
+                }
+
+                Panel pnl = new Panel
+                {
+                    Parent = pnlFilter,
+                    Name = item.Key,
+                    Dock = DockStyle.Top,
+                    Height = 25
+                };
+                CheckBox checkBox = new CheckBox
+                {
+                    Parent = pnl,
+                    Dock = DockStyle.Fill,
+                    Name = item.Key,
+                    Text = item.Key,
+                    Tag = item
+                };
+                //checkBox.CheckedChanged += CheckBox_CheckedChanged;
+
+                PieSeries pieSeries = new PieSeries()
+                {
+                    DataLabels = true,
+                    Values = new ChartValues<int>() { item.Value },
+                    LabelPoint = labelPoint,
+                    Title = item.Key
+
+                };
+                pieChart.Series.Add(pieSeries);
+            }
+            PieSeries OthersSeries = new PieSeries()
+            {
+                DataLabels = true,
+                Values = new ChartValues<int>() { others },
+                LabelPoint = labelPoint,
+                Title = "Другие"
+            };
+            pieChart.Series.Add(OthersSeries);
 
             repform.Show();
         }
 
         private void settingsToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-
             Form repform = new Form
             {
                 MdiParent = this,
                 WindowState = FormWindowState.Maximized
             };
-
         }
+
     }
 }

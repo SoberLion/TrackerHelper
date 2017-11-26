@@ -40,8 +40,9 @@ namespace TrackerHelper
         private string _InternalPhone = string.Empty;
         private List<Vacation> _Vacations = new List<Vacation>();
         //private Language _Language = new Language;
-        private string _BaseAddress = @"http://test-tracker.ucs.ru/";
+        private string _BaseAddress = @"http://tracker.ucs.ru/";
         private Issues _Issues = new Issues();
+        private Issues _IssuesUpdated = new Issues();
         private string _ApiKey = "1287ca3310be20d6992a764b57f9c8bcfbb05664";
 
         public string Id
@@ -104,6 +105,11 @@ namespace TrackerHelper
             get { return _Issues; }
             set { _Issues = value; }
         }
+        public Issues IssuesUpdated
+        {
+            get { return _IssuesUpdated; }
+            set { _IssuesUpdated = value; }
+        }
         public string ApiKey
         {
             get { return _ApiKey; }
@@ -114,65 +120,62 @@ namespace TrackerHelper
             }
         }
 
-        public void GetIssues(int Retries)
+        public void FetchOpenedIssues(int Retries)
         {
-            string filter = @"set_filter=1&f[]=assigned_to_id&op[assigned_to_id]=%3D&v[assigned_to_id][]=me";
-            GetIssuesFiltered(Retries, filter);
+            string filter = @"set_filter=1&f[]=assigned_to_id&op[assigned_to_id]=%3D&v[assigned_to_id][]=me&f[]=status_id&op[status_id]=o";
+            FetchIssuesFiltered(Retries, filter);
         }
 
+        public void FetchUpdatedIssues(int Retries, int NumofDaysSinceLastUpdate)
+        {
+            string filter = $@"set_filter=1&f[]=assigned_to_id&op[assigned_to_id]=%3D&v[assigned_to_id][]=me&f[]=status_id&op[status_id]=o&f[]=updated_on&op[updated_on]=%3Et-&v[updated_on][]={NumofDaysSinceLastUpdate}";
 
+            FetchIssuesFiltered(Retries, filter);
+        }
 
-        public void GetIssuesFiltered(int Retries, string filter)
+        public void FetchAllIssues(int Retries)
+        {
+            string filter = @"set_filter=1&f[]=&c[]=project&c[]=tracker&c[]=status&c[]=priority&c[]=author&c[]=subject&c[]=assigned_to&c[]=updated_on&c[]=category&group_by=&t[]=";
+
+            FetchIssuesFiltered(Retries, filter);
+        }
+
+        public void GetOpenedIssuesFromDb() => SQLiteClass.GetIssuesListByUserId(_Id, _Issues);
+
+        public void FetchIssuesFiltered(int Retries, string filter)
         {
             ResultModel resultModel = new ResultModel();
             int retries = 0;
             do
             {
-                string url = $@"{_BaseAddress}issues.xml?utf8=%E2%9C%93&limit={_Issues.limit}&offset={_Issues.offset}&key={_ApiKey}&{filter}";
+                string url = $@"{_BaseAddress}issues.xml?utf8=%E2%9C%93&limit={_IssuesUpdated.limit}&offset={_IssuesUpdated.offset}&key={_ApiKey}&{filter}";
                 resultModel.IsSuccess = false;
 
                 resultModel = Http.Get(url);
                 if (resultModel.IsSuccess)
                 {
-                    if (_Issues.issue.Count > 0)
+                    if (_IssuesUpdated.issue.Count > 0)
                     {
-                        XML.Deserialize<Issues>(resultModel.Results).issue.ForEach(p => _Issues.issue.Add(p));
+                        XML.Deserialize<Issues>(resultModel.Results).issue.ForEach(p => _IssuesUpdated.issue.Add(p));
                         retries = 0;
                     }
                     else
                     {
-                        _Issues = XML.Deserialize<Issues>(resultModel.Results);
+                        _IssuesUpdated = XML.Deserialize<Issues>(resultModel.Results);
                     } // IncOffset увеличивает offset на величину limit при каждом вызове.
-                    _Issues.IncOffset();
+                    _IssuesUpdated.IncOffset();
                 }
                 else
                 {// в случае если запрос к redmine не был успешным сделать повторный запрос с теми же параметрами
                     retries++;
                     if (retries == Retries)
                     {
-                        onError?.Invoke($"No reply from host. Fetched {_Issues.issue.Count} issues");
+                        onError?.Invoke($"No reply from host. Fetched {_IssuesUpdated.issue.Count} issues");
                         break;
                     }
                 }
             }// счётчик - tracker.ucs.ru возвращает максимум 100 элементов, если кол-во total_count больше, необходимо сделать повторные запросы со смещением
-            while (int.Parse(_Issues.offset) < int.Parse(_Issues.total_count));
+            while (int.Parse(_IssuesUpdated.offset) < int.Parse(_IssuesUpdated.total_count));
         }
-
-        public void GetUpdatedIssues(int Retries, int NumofDaysSinceLastUpdate)
-        {
-            string filter = $@"set_filter=1&f[]=assigned_to_id&op[assigned_to_id]=%3D&v[assigned_to_id][]=me&f[]=status_id&op[status_id]=o&f[]=updated_on&op[updated_on]=%3Et-&v[updated_on][]={NumofDaysSinceLastUpdate}";
-
-            GetIssuesFiltered(Retries, filter);
-        }
-
-        public void GetAllIssues(int Retries)
-        {
-            string filter = @"set_filter=1&f[]=&c[]=project&c[]=tracker&c[]=status&c[]=priority&c[]=author&c[]=subject&c[]=assigned_to&c[]=updated_on&c[]=category&group_by=&t[]=";
-
-            GetIssuesFiltered(Retries, filter);
-        }
-
-
-
     }
 }

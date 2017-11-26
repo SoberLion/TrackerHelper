@@ -897,6 +897,91 @@ namespace TrackerHelper
             }
             return dict.Count > 0 ? dict : null;
         }
+
+        public static Dictionary<string, int> GetGroupedData(string id, string name)
+        {
+            Dictionary<string, int> dict = new Dictionary<string, int>();
+            SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;");
+
+            conn.Open();
+
+            if (conn.State == ConnectionState.Open)
+            {
+                SQLiteCommand cmd = conn.CreateCommand();                
+                cmd.CommandText = $"SELECT Count({name}) as {id}, {name} FROM Issues WHERE ProjectId = 26 and StatusId not in (3,5,6,19,26,27,29,30) GROUP BY {name} ORDER BY {name} DESC";
+
+                try
+                {
+                    SQLiteDataReader r = cmd.ExecuteReader();
+                    while (r.Read())
+                    {
+                        dict.Add(r[name].ToString(), int.Parse(r[id].ToString()));
+                    }
+                    r.Close();
+                }
+                catch (SQLiteException sqlex)
+                {
+                    onError?.Invoke($"Error: {sqlex.Message}");
+                }
+                cmd.Dispose();
+                conn.Dispose();
+            }
+            return dict.Count > 0 ? dict : null;
+        }
+
+        public static void GetIssuesListByUserId(string UserId, Issues issues)
+        {
+            SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;");
+
+            conn.Open();
+
+            if (conn.State == ConnectionState.Open)
+            {
+                SQLiteCommand cmd = conn.CreateCommand();
+                cmd.CommandText = "SELECT * FROM Issues WHERE AssignedToId = @UserId and StatusId not in (3,5,6,19,26,27,29,30) ORDER BY IssueID";
+                cmd.Parameters.AddWithValue("@UserId", UserId);
+                try
+                {
+                    SQLiteDataReader r = cmd.ExecuteReader();
+                    while (r.Read())
+                    {
+                        Issue issue = new Issue();
+                        issue.project.id = int.Parse(r["ProjectId"].ToString());
+                        issue.project.name = r["ProjectName"].ToString();
+                        issue.tracker.id = int.Parse(r["TrackerId"].ToString());
+                        issue.tracker.name = r["TrackerName"].ToString();
+                        issue.status.id = int.Parse(r["StatusId"].ToString());
+                        issue.status.name = r["StatusName"].ToString();
+                        issue.priority.id = int.Parse(r["PriorityId"].ToString());
+                        issue.priority.name = r["PriorityName"].ToString();
+                        issue.author.id = int.Parse(r["AuthorId"].ToString());
+                        issue.author.name = r["AuthorName"].ToString();
+                        issue.assigned_to.id = int.Parse(r["AssignedToId"].ToString());
+                        issue.assigned_to.name = r["AssignedToName"].ToString();
+                        issue.category.id = int.Parse(r["CategoryId"].ToString());
+                        issue.category.name = r["CategoryName"].ToString();
+                        issue.subject = r["Subject"].ToString();
+                        issue.description = r["Description"].ToString();
+                        issue.startDate = r["StartDate"].ToString();
+                        issue.dueDate = r["DueDate"].ToString();
+                        issue.doneRatio = r["DoneRatio"].ToString();
+                        issue.IsPrivate = int.Parse(r["IsPrivate"].ToString()) == 0 ? false : true;
+                        issue.estimatedHours = r["EstimatedHours"].ToString();
+                        issue.createdOn = r["CreatedOn"].ToString();
+                        issue.updatedOn = r["UpdatedOn"].ToString();
+                        issue.closedOn = r["ClosedOn"].ToString();
+                        issues.issue.Add(issue);
+                    }
+                    r.Close();
+                }
+                catch (SQLiteException sqlex)
+                {
+                    MessageDel?.Invoke($"Error: {sqlex.Message}");
+                }
+                cmd.Dispose();
+                conn.Dispose();
+            }
+        }
         #endregion
     }
 }

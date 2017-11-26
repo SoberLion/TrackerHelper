@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Linq;
+using System.Collections.Generic;
+
 
 namespace TrackerHelper
 {
@@ -38,7 +41,6 @@ namespace TrackerHelper
             };
             user.onError += ShowMessage;
 
-            user.GetIssues(1);
             //user.GetAllIssues(1);
             // Redmine.GetUserIssueList(user);
 
@@ -79,19 +81,40 @@ namespace TrackerHelper
 
         private void btn_UpdateIssues_Click(object sender, EventArgs e)
         {
-            /*  if (user != null)
-              {
-                  user.GetUpdatedIssues(1, 50);
-                  if (SQLiteClass.Exist("Issues"))
-                  {
-                      SQLiteClass.InsertIssues(user.Issues);
-                  }
+            user = new User
+            {
+                Id = "751",
+                ApiKey = "1287ca3310be20d6992a764b57f9c8bcfbb05664",
+            };
+            IssueComparer comparer = new IssueComparer();
+            if (user != null)
+            {
+                user.GetOpenedIssuesFromDb();
+                user.FetchOpenedIssues(1);
 
-                  if (user.Issues.issue.Count > 0)
+                List<Issue> ExceptIssues = user.Issues.issue.Except(user.IssuesUpdated.issue, comparer).ToList<Issue>();
+                for (int i = 0; i < ExceptIssues.Count; i++)
+                {
+                    ResultModel model = new ResultModel();
+                    string URL = $@"{user.BaseAddress}issues/{ExceptIssues[i].id}.xml?include=journals&key={user.ApiKey}";
+                    model = Http.Get(URL);
+
+                    if (model.IsSuccess)
+                        ExceptIssues[i] = XML.Deserialize<Issue>(model.Results);
+                }
+            }
+                //user.GetUpdatedIssues(1, 50);
+                /*   if (SQLiteClass.Exist("Issues"))
+                   {
+                       SQLiteClass.InsertIssues(user.Issues);
+                   }*/
+
+                if (user.Issues.issue.Count > 0)
                       TreeViewMethods.populateTreeView(user.Issues.issue, treeView_Issues);
-              }*/
+             
 
-            SQLiteClass.GetDict("StatusId", "StatusName");
+            user.GetOpenedIssuesFromDb();
+         //   SQLiteClass.GetDict("StatusId", "StatusName");
         }
         public void ShowMessage(string message)
         {

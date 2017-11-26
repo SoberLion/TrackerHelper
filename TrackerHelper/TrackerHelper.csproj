@@ -64,6 +64,12 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Charts.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Charts.Designer.cs">
+      <DependentUpon>Charts.cs</DependentUpon>
+    </Compile>
     <Compile Include="Http.cs" />
     <Compile Include="Language.cs" />
     <Compile Include="MainForm.cs">
@@ -96,6 +102,9 @@
       <DependentUpon>WorkForm.cs</DependentUpon>
     </Compile>
     <Compile Include="XML.cs" />
+    <EmbeddedResource Include="Charts.resx">
+      <DependentUpon>Charts.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

@@ -418,13 +418,12 @@ namespace TrackerHelper
 
         }
 
-         [XmlArray("journals"), XmlArrayItem(ElementName = "journal", Type = typeof(IssueJournalItem))]
-         public List<IssueJournalItem> JournalList
-         {
-             get { return IssueJournalList; }
-             set { IssueJournalList = value; }
-         }
-
+        [XmlArray("journals"), XmlArrayItem(ElementName = "journal", Type = typeof(IssueJournalItem))]
+        public List<IssueJournalItem> JournalList
+        {
+            get { return IssueJournalList; }
+            set { IssueJournalList = value; }
+        }
 
         public class custom_field
         {
@@ -574,6 +573,21 @@ namespace TrackerHelper
                     set { NewValueField = value; }
                 }
             }
+        }
+    }
+    public class IssueComparer : IEqualityComparer<Issue>
+    {
+        public bool Equals(Issue x, Issue y)
+        {
+            return x.updatedOn.Equals(y.updatedOn) && (x.JournalList.Count == y.JournalList.Count);
+        }
+
+        public int GetHashCode(Issue obj)
+        {
+            if (object.ReferenceEquals(obj, null))
+                return 0;
+
+            return obj.updatedOn.GetHashCode();
         }
     }
     #endregion
