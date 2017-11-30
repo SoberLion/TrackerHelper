@@ -24,9 +24,9 @@ namespace TrackerHelper
             if (model.IsSuccess)
                 te = XML.Deserialize<Time_entries>(model.Results);
 
-            if (SQLiteClass.Exist("TimeEntries"))
+            if (DBman.Exist("TimeEntries"))
             {
-                SQLiteClass.InsertTE(te);
+                DBman.InsertTE(te);
             }
 
         }
@@ -46,9 +46,9 @@ namespace TrackerHelper
 
             
 
-            if (SQLiteClass.Exist("Issues"))
+            if (DBman.Exist("Issues"))
             {
-                SQLiteClass.InsertIssues(user.Issues);
+                DBman.InsertIssues(user.Issues);
             }
 
             if (user.Issues.issue.Count > 0)
@@ -66,7 +66,7 @@ namespace TrackerHelper
             if (model.IsSuccess)
                 issue = XML.Deserialize<Issue>(model.Results);
 
-            SQLiteClass.InsertIssue(issue);
+            DBman.InsertIssue(issue);
 
             tControl.SelectTab(1);
 
@@ -86,13 +86,14 @@ namespace TrackerHelper
                 Id = "751",
                 ApiKey = "1287ca3310be20d6992a764b57f9c8bcfbb05664",
             };
+            user.onError += ShowMessage;
             IssueComparer comparer = new IssueComparer();
             if (user != null)
             {
-                user.GetOpenedIssuesFromDb();
-                user.FetchOpenedIssues(1);
-
-                List<Issue> ExceptIssues = user.Issues.issue.Except(user.IssuesUpdated.issue, comparer).ToList<Issue>();
+             //   user.GetOpenedIssuesFromDb();
+              //  user.FetchOpenedIssues(1);
+                user.FetchUpdatedIssues(3, 120);
+             /*   List<Issue> ExceptIssues = user.Issues.issue.Except(user.IssuesUpdated.issue, comparer).ToList<Issue>();
                 for (int i = 0; i < ExceptIssues.Count; i++)
                 {
                     ResultModel model = new ResultModel();
@@ -101,19 +102,19 @@ namespace TrackerHelper
 
                     if (model.IsSuccess)
                         ExceptIssues[i] = XML.Deserialize<Issue>(model.Results);
-                }
+                }*/
             }
                 //user.GetUpdatedIssues(1, 50);
-                /*   if (SQLiteClass.Exist("Issues"))
+                   if (DBman.Exist("Issues"))
                    {
-                       SQLiteClass.InsertIssues(user.Issues);
-                   }*/
+                       DBman.InsertIssues(user.IssuesUpdated);
+                   }
 
-                if (user.Issues.issue.Count > 0)
-                      TreeViewMethods.populateTreeView(user.Issues.issue, treeView_Issues);
+                if (user.IssuesUpdated.issue.Count > 0)
+                      TreeViewMethods.populateTreeView(user.IssuesUpdated.issue, treeView_Issues);
              
 
-            user.GetOpenedIssuesFromDb();
+           // user.GetOpenedIssuesFromDb();
          //   SQLiteClass.GetDict("StatusId", "StatusName");
         }
         public void ShowMessage(string message)

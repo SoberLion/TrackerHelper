@@ -34,7 +34,7 @@ namespace TrackerHelper
                 user.Telephone = tb_Phone.Text;
                 user.Position = tb_Position.Text;
                 user.ApiKey = tb_ApiKey.Text;
-                SQLiteClass.InsertUser(user);
+                DBman.InsertUser(user);
             }
         }
 
@@ -42,7 +42,7 @@ namespace TrackerHelper
         {
             if (int.TryParse(tb_Id.Text, out int id))
             {
-                user = SQLiteClass.GetUserById(tb_Id.Text);
+                user = DBman.GetUserById(tb_Id.Text);
                 tb_internalPhone.Text = user.InternalPhone;
                 tb_Name.Text = user.Name;
                 tb_CompanyName.Text = user.CompanyName;

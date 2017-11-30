@@ -17,19 +17,10 @@ namespace TrackerHelper
     public class User
     {
         public delegate void Message(string message);
-        public Message MessageDel;
 
         public event Message onError;
+        public event Message onMessage;
 
-
-        public void RegisterDelegate(Message del)
-        {
-            MessageDel += del;
-        }
-        public void UnregisterDelegate(Message del)
-        {
-            MessageDel -= del;
-        }
 
         private string _Id = string.Empty;
         private string _Name = string.Empty;
@@ -96,7 +87,7 @@ namespace TrackerHelper
             get { return _BaseAddress; }
             set
             {
-                MessageDel?.Invoke("BaseAddress = " + value);
+                onMessage?.Invoke("BaseAddress = " + value);
                 _BaseAddress = value;
             }
         }
@@ -115,7 +106,7 @@ namespace TrackerHelper
             get { return _ApiKey; }
             set
             {
-                MessageDel?.Invoke("ApiKey = " + value);
+                onMessage?.Invoke("ApiKey = " + value);
                 _ApiKey = value;
             }
         }
@@ -128,8 +119,8 @@ namespace TrackerHelper
 
         public void FetchUpdatedIssues(int Retries, int NumofDaysSinceLastUpdate)
         {
-            string filter = $@"set_filter=1&f[]=assigned_to_id&op[assigned_to_id]=%3D&v[assigned_to_id][]=me&f[]=status_id&op[status_id]=o&f[]=updated_on&op[updated_on]=%3Et-&v[updated_on][]={NumofDaysSinceLastUpdate}";
-
+            // string filter = $@"set_filter=1&f[]=assigned_to_id&op[assigned_to_id]=%3D&v[assigned_to_id][]=me&f[]=status_id&op[status_id]=*&f[]=updated_on&op[updated_on]=%3Et-&v[updated_on][]={NumofDaysSinceLastUpdate}";
+            string filter = $@"set_filter=1&f[]=status_id&op[status_id]=*&f[]=updated_on&op[updated_on]=%3Et-&v[updated_on][]={NumofDaysSinceLastUpdate}";
             FetchIssuesFiltered(Retries, filter);
         }
 
@@ -140,7 +131,7 @@ namespace TrackerHelper
             FetchIssuesFiltered(Retries, filter);
         }
 
-        public void GetOpenedIssuesFromDb() => SQLiteClass.GetIssuesListByUserId(_Id, _Issues);
+        public void GetOpenedIssuesFromDb() => DBman.GetIssuesListByUserId(_Id, _Issues);
 
         public void FetchIssuesFiltered(int Retries, string filter)
         {

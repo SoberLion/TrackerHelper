@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace TrackerHelper
 {
     public delegate void MessageDelegate(string message);
-    public class SQLiteClass
+    public class DBman
     {
         private static string DbName = "TrackerHelper.db";
 
@@ -274,16 +274,16 @@ namespace TrackerHelper
 
                 try
                 {   // cycle writing data in table
-                        cmd.Parameters["@Id"].Value = user.Id;
-                        cmd.Parameters["@Name"].Value = user.Name;
-                        cmd.Parameters["@CompanyName"].Value = user.CompanyName;
-                        cmd.Parameters["@Position"].Value = user.Position;
-                        cmd.Parameters["@Telephone"].Value = user.Telephone;
-                        cmd.Parameters["@InternalPhone"].Value = user.InternalPhone;
-                        //cmd.Parameters["@Language"].Value = user.Language;
-                        cmd.Parameters["@BaseAddress"].Value = user.BaseAddress;
-                        cmd.Parameters["@APiKey"].Value = user.ApiKey;
-                        cmd.ExecuteNonQuery();
+                    cmd.Parameters["@Id"].Value = user.Id;
+                    cmd.Parameters["@Name"].Value = user.Name;
+                    cmd.Parameters["@CompanyName"].Value = user.CompanyName;
+                    cmd.Parameters["@Position"].Value = user.Position;
+                    cmd.Parameters["@Telephone"].Value = user.Telephone;
+                    cmd.Parameters["@InternalPhone"].Value = user.InternalPhone;
+                    //cmd.Parameters["@Language"].Value = user.Language;
+                    cmd.Parameters["@BaseAddress"].Value = user.BaseAddress;
+                    cmd.Parameters["@APiKey"].Value = user.ApiKey;
+                    cmd.ExecuteNonQuery();
                 }
                 catch (SQLiteException sqlex)
                 {
@@ -342,7 +342,7 @@ namespace TrackerHelper
                 catch (SQLiteException sqlex)
                 {
                     MessageDel?.Invoke($"Error: {sqlex.Message}");
-                }                
+                }
                 transaction.Commit();
                 cmd.Dispose();
                 conn.Dispose();
@@ -634,7 +634,7 @@ namespace TrackerHelper
                         user.Position = r["Position"].ToString();
                         user.Telephone = r["Telephone"].ToString();
                         user.InternalPhone = r["InternalPhone"].ToString();
-                    //    user.Language = (Language)r["Language"].ToString();
+                        //    user.Language = (Language)r["Language"].ToString();
                         user.BaseAddress = r["BaseAddress"].ToString();
                         user.ApiKey = r["ApiKey"].ToString();
                     }
@@ -664,7 +664,7 @@ namespace TrackerHelper
                 {
                     SQLiteDataReader r = cmd.ExecuteReader();
                     while (r.Read())
-                    {                                                 
+                    {
                         issue.project.id = int.Parse(r["ProjectId"].ToString());
                         issue.project.name = r["ProjectName"].ToString();
                         issue.tracker.id = int.Parse(r["TrackerId"].ToString());
@@ -700,7 +700,262 @@ namespace TrackerHelper
                 conn.Dispose();
             }
         }
-        
+
+        /// Get list of isssues created between dates
+        /// <param name="DateFrom">string, format yyyy-MM-dd mm:hh:ss:ttt</param>
+        /// <param name="DateTo">string, format yyyy-MM-dd mm:hh:ss:ttt</param>
+        /// <param name="ProjectId">string, might be empty</param>
+        public static List<Issue> GetIssuesCreatedBetweenDates(string DateFrom, string DateTo, string ProjectId)
+        {
+            List<Issue> IL = new List<Issue>();
+            using (SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;"))
+            {
+                conn.Open();
+
+                if (conn.State == ConnectionState.Open)
+                {
+                    using (SQLiteCommand cmd = conn.CreateCommand())
+                    {
+                        if (ProjectId != "")
+                        {
+                            ProjectId = string.Format("and ProjectId = {0}", ProjectId);
+                        }
+                        else
+                            ProjectId = "";
+
+                        cmd.CommandText = string.Format("SELECT * FROM Issues WHERE CreatedOn >= '{0}' AND CreatedOn < '{1}' {2}", DateFrom, DateTo, ProjectId);
+                        cmd.Parameters.AddWithValue("@DateFrom", DateFrom);
+                        cmd.Parameters.AddWithValue("@DateTo", DateTo);
+
+                        try
+                        {
+                            SQLiteDataReader r = cmd.ExecuteReader();
+                            while (r.Read())
+                            {
+                                Issue issue = new Issue();
+                                issue.project.id = int.Parse(r["ProjectId"].ToString());
+                                issue.project.name = r["ProjectName"].ToString();
+                                issue.tracker.id = int.Parse(r["TrackerId"].ToString());
+                                issue.tracker.name = r["TrackerName"].ToString();
+                                issue.status.id = int.Parse(r["StatusId"].ToString());
+                                issue.status.name = r["StatusName"].ToString();
+                                issue.priority.id = int.Parse(r["PriorityId"].ToString());
+                                issue.priority.name = r["PriorityName"].ToString();
+                                issue.author.id = int.Parse(r["AuthorId"].ToString());
+                                issue.author.name = r["AuthorName"].ToString();
+                                issue.assigned_to.id = int.Parse(r["AssignedToId"].ToString());
+                                issue.assigned_to.name = r["AssignedToName"].ToString();
+                                issue.category.id = int.Parse(r["CategoryId"].ToString());
+                                issue.category.name = r["CategoryName"].ToString();
+                                issue.subject = r["Subject"].ToString();
+                                issue.description = r["Description"].ToString();
+                                issue.startDate = r["StartDate"].ToString();
+                                issue.dueDate = r["DueDate"].ToString();
+                                issue.doneRatio = r["DoneRatio"].ToString();
+                                issue.IsPrivate = int.Parse(r["IsPrivate"].ToString()) == 0 ? false : true;
+                                issue.estimatedHours = r["EstimatedHours"].ToString();
+                                issue.createdOn = r["CreatedOn"].ToString();
+                                issue.updatedOn = r["UpdatedOn"].ToString();
+                                issue.closedOn = r["ClosedOn"].ToString();
+                                IL.Add(issue);
+                            }
+                            r.Close();
+                        }
+                        catch (SQLiteException sqlex)
+                        {
+                            MessageDel?.Invoke($"Error: {sqlex.Message}");
+                        }
+                    }
+                }
+            }
+            return IL;
+        }
+
+        /// Get list of isssues closed between dates
+        /// <param name="DateFrom">string, format yyyy-MM-dd mm:hh:ss:ttt</param>
+        /// <param name="DateTo">string, format yyyy-MM-dd mm:hh:ss:ttt</param>
+        /// <param name="ProjectId">string, might be empty</param>
+        public static List<Issue> GetIssuesClosedBetweenDates(string DateFrom, string DateTo, string ProjectId)
+        {
+            List<Issue> IL = new List<Issue>();
+            using (SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;"))
+            {
+                conn.Open();
+
+                if (conn.State == ConnectionState.Open)
+                {
+                    using (SQLiteCommand cmd = conn.CreateCommand())
+                    {
+                        //    cmd.CommandText = "SELECT * FROM Issues WHERE CreatedOn >= '@DateFrom' AND CreatedOn < '@DateTo' @ProjectId";
+                        if (ProjectId != "")
+                        {
+                            ProjectId = string.Format("and ProjectId = {0}", ProjectId);
+                        }
+                        else
+                            ProjectId = "";
+
+                        cmd.CommandText = string.Format("SELECT * FROM Issues WHERE ClosedOn >= '{0}' AND CreatedOn < '{1}' {2}", DateFrom, DateTo, ProjectId);
+                        cmd.Parameters.AddWithValue("@DateFrom", DateFrom);
+                        cmd.Parameters.AddWithValue("@DateTo", DateTo);
+
+                        try
+                        {
+                            SQLiteDataReader r = cmd.ExecuteReader();
+                            while (r.Read())
+                            {
+                                Issue issue = new Issue();
+                                issue.project.id = int.Parse(r["ProjectId"].ToString());
+                                issue.project.name = r["ProjectName"].ToString();
+                                issue.tracker.id = int.Parse(r["TrackerId"].ToString());
+                                issue.tracker.name = r["TrackerName"].ToString();
+                                issue.status.id = int.Parse(r["StatusId"].ToString());
+                                issue.status.name = r["StatusName"].ToString();
+                                issue.priority.id = int.Parse(r["PriorityId"].ToString());
+                                issue.priority.name = r["PriorityName"].ToString();
+                                issue.author.id = int.Parse(r["AuthorId"].ToString());
+                                issue.author.name = r["AuthorName"].ToString();
+                                issue.assigned_to.id = int.Parse(r["AssignedToId"].ToString());
+                                issue.assigned_to.name = r["AssignedToName"].ToString();
+                                issue.category.id = int.Parse(r["CategoryId"].ToString());
+                                issue.category.name = r["CategoryName"].ToString();
+                                issue.subject = r["Subject"].ToString();
+                                issue.description = r["Description"].ToString();
+                                issue.startDate = r["StartDate"].ToString();
+                                issue.dueDate = r["DueDate"].ToString();
+                                issue.doneRatio = r["DoneRatio"].ToString();
+                                issue.IsPrivate = int.Parse(r["IsPrivate"].ToString()) == 0 ? false : true;
+                                issue.estimatedHours = r["EstimatedHours"].ToString();
+                                issue.createdOn = r["CreatedOn"].ToString();
+                                issue.updatedOn = r["UpdatedOn"].ToString();
+                                issue.closedOn = r["ClosedOn"].ToString();
+                                IL.Add(issue);
+                            }
+                            r.Close();
+                        }
+                        catch (SQLiteException sqlex)
+                        {
+                            MessageDel?.Invoke($"Error: {sqlex.Message}");
+                        }
+                    }
+                }
+            }
+            return IL;
+        }
+
+
+        public enum IssueType
+        {
+            Created,
+            Closed
+        }
+        public enum GroupFormat
+        {
+            Day,
+            Month,
+            Year,
+        }
+
+        public static DataTable OpenQuery(string sql)
+        {
+            DataTable dt = null;
+            if (sql.Length > 0)
+            {
+                using (SQLiteConnection connection = new SQLiteConnection($"Data Source={DbName}; Version=3;"))
+                {
+                    connection.Open();
+                    SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter(sql, connection);
+                    DataSet dataSet = new DataSet();
+                    dataSet.Reset();
+                    dataAdapter.Fill(dataSet);
+                    dt = dataSet.Tables[0];
+                    connection.Close();
+                }
+            }
+            return dt;
+        }
+
+        /// Get list of isssues Created between dates grouped by days
+        /// <param name="DateFrom">string, format yyyy-MM-dd mm:hh:ss:ttt</param>
+        /// <param name="DateTo">string, format yyyy-MM-dd mm:hh:ss:ttt</param>
+        /// <param name="ProjectId">string, might be empty</param>
+        public static List<string[]> GetIssuesCountGroupedByDay(string DateFrom, string DateTo, string ProjectId, GroupFormat groupFormat, IssueType type)
+        {
+            List<string[]> mas = new List<string[]>();
+
+            using (SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;"))
+            {
+                conn.Open();
+
+                if (conn.State == ConnectionState.Open)
+                {
+                    using (SQLiteCommand cmd = conn.CreateCommand())
+                    {
+                        //    cmd.CommandText = "SELECT * FROM Issues WHERE CreatedOn >= '@DateFrom' AND CreatedOn < '@DateTo' @ProjectId";
+                        if (ProjectId != "")
+                        {
+                            ProjectId = string.Format("and ProjectId = {0}", ProjectId);
+                        }
+                        else
+                            ProjectId = "";
+
+                        string GroupingFormat = "%Y";
+
+                        switch (groupFormat)
+                        {
+                            case (GroupFormat.Day):
+                                {
+                                    GroupingFormat = "%Y-%m-%d";
+                                    break;
+                                }
+                            case (GroupFormat.Month):
+                                {
+                                    GroupingFormat = "%Y-%m";
+                                    break;
+                                }
+                            case (GroupFormat.Year):
+                                {
+                                    GroupingFormat = "%Y";
+                                    break;
+                                }
+                        }
+
+                        string createdOn = $"SELECT strftime('{GroupingFormat}', CreatedOn) as CreatedOn, count(*) as number FROM Issues WHERE CreatedOn >= '{DateFrom}' AND CreatedOn < '{DateTo}' {ProjectId} GROUP BY strftime('{GroupingFormat}', CreatedOn)";
+                        string closedOn = $"SELECT strftime('{GroupingFormat}', ClosedOn) as ClosedOn, count(*) as number FROM Issues WHERE ClosedOn >= '{DateFrom}' AND ClosedOn < '{DateTo}' {ProjectId} GROUP BY strftime('{GroupingFormat}', ClosedOn)";
+
+                        switch (type)
+                        {
+                            case (IssueType.Created):
+                                {
+                                    cmd.CommandText = createdOn;
+                                    break;
+                                }
+                            case (IssueType.Closed):
+                                {
+                                    cmd.CommandText = closedOn;
+                                    break;
+                                }
+                        }
+
+                        try
+                        {
+                            SQLiteDataReader r = cmd.ExecuteReader();
+                            while (r.Read())
+                            {
+                                string[] str = new string[] { r.GetString(0), r.GetDecimal(1).ToString() };
+                                mas.Add(str);
+                            }
+                            r.Close();
+                        }
+                        catch (SQLiteException sqlex)
+                        {
+                            MessageDel?.Invoke($"Error: {sqlex.Message}");
+                        }
+                    }
+                }
+            }
+            return mas;
+        }
+
         /// Get min or max date for user existed in DB,
         /// <param name="UserId">string, UserID</param>
         /// <param name="isMIN">true if needed min, false if max</param>
