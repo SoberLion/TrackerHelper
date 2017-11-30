@@ -17,18 +17,18 @@ namespace TrackerHelper
         private void button1_Click(object sender, EventArgs e)
         {
             ResultModel model = new ResultModel();
-            Time_entries te = new Time_entries();
-            string URL = @"http://tracker.ucs.ru/time_entries.xml?limit=100&key=1287ca3310be20d6992a764b57f9c8bcfbb05664&user_id=me&from=2017-09-01&to=2017-09-30";
-            model = Http.Get(URL);
+            Time_entries te = new Time_entries();                                                                       
+            //&user_id=me
+            //string URL = @"http://tracker.ucs.ru/time_entries.xml?limit=100&key=1287ca3310be20d6992a764b57f9c8bcfbb05664&from=2017-10-01&to=2017-12-31";
+            //model = Http.Get(URL);
 
-            if (model.IsSuccess)
-                te = XML.Deserialize<Time_entries>(model.Results);
-
+            //if (model.IsSuccess)
+            //te = XML.Deserialize<Time_entries>(model.Results);
+            te = Redmines.FetchTimeEntriesFiltered(3, "");
             if (DBman.Exist("TimeEntries"))
             {
                 DBman.InsertTE(te);
             }
-
         }
 
         private void btn_GetIssues_Click(object sender, EventArgs e)
@@ -92,7 +92,7 @@ namespace TrackerHelper
             {
              //   user.GetOpenedIssuesFromDb();
               //  user.FetchOpenedIssues(1);
-                user.FetchUpdatedIssues(3, 120);
+                user.FetchUpdatedIssues(3, 5);
              /*   List<Issue> ExceptIssues = user.Issues.issue.Except(user.IssuesUpdated.issue, comparer).ToList<Issue>();
                 for (int i = 0; i < ExceptIssues.Count; i++)
                 {

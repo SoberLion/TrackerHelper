@@ -14,8 +14,10 @@ namespace TrackerHelper
         public List<int> _ProjectId { get; set; } = new List<int>();
     }
     public class Redmines
-    {   
+    {
+        public delegate void Message(string message);
 
+        public static event Message onError;
 
         public static void GetUserIssueList(User user)
         {
@@ -63,6 +65,45 @@ namespace TrackerHelper
                     }
                 }
             }
+        }
+
+        public static Time_entries FetchTimeEntriesFiltered(int Retries, string filter)
+        {
+            ResultModel resultModel = new ResultModel();
+            Time_entries te = new Time_entries();
+            string baseaddress = @"http://tracker.ucs.ru/";
+            int retries = 0;
+            do
+            {//http://tracker.ucs.ru/time_entries.xml?limit=100&key=1287ca3310be20d6992a764b57f9c8bcfbb05664&from=2017-01-01&to=2017-12-31
+                string url = $@"{baseaddress}time_entries.xml?&offset={te.offset}&limit=100&key=1287ca3310be20d6992a764b57f9c8bcfbb05664&from=2017-09-01&to=2017-12-31";
+                resultModel.IsSuccess = false;
+
+                resultModel = Http.Get(url);
+                if (resultModel.IsSuccess)
+                {
+                    if (te.time_entry_list.Count > 0)
+                    {
+                        XML.Deserialize<Time_entries>(resultModel.Results).time_entry_list.ForEach(p => te.time_entry_list.Add(p));
+                        retries = 0;
+                    }
+                    else
+                    {
+                        te = XML.Deserialize<Time_entries>(resultModel.Results);
+                    } // IncOffset увеличивает offset на величину limit при каждом вызове.
+                    te.IncOffset();
+                }
+                else
+                {// в случае если запрос к redmine не был успешным сделать повторный запрос с теми же параметрами
+                    retries++;
+                    if (retries == Retries)
+                    {
+                        onError?.Invoke($"No reply from host. Fetched {te.time_entry_list.Count} time entries");
+                        break;
+                    }
+                }
+            }// счётчик - tracker.ucs.ru возвращает максимум 100 элементов, если кол-во total_count больше, необходимо сделать повторные запросы со смещением
+            while (int.Parse(te.offset) < int.Parse(te.total_count));
+            return te = te.time_entry_list.Count > 0 ? te : null;
         }
     }
 }

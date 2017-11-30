@@ -34,132 +34,164 @@ namespace TrackerHelper
     {
         public Time_entries() { }
 
-        private List<Time_entry> time_entryField;
-        private string total_countField;
-        private string offsetField;
-        private string limitField;
-        private string typeField;
+        private List<Time_entry> _time_entry = new List<Time_entry>();
+        private string _total_count;
+        private string _offset;
+        private string _limit;
+        private string _type;
 
         [XmlElement("time_entry")]
         public List<Time_entry> time_entry_list
         {
-            get { return time_entryField; }
-            set { time_entryField = value; }
+            get
+            {
+                return _time_entry;
+            }
+            set { _time_entry = value; }
         }
 
         [XmlAttribute]
         public string total_count
         {
-            get { return total_countField; }
-            set { total_countField = value; }
+            get { return _total_count; }
+            set { _total_count = value; }
         }
 
         [XmlAttribute]
         public string offset
         {
-            get { return offsetField; }
-            set { offsetField = value; }
+            get { return _offset; }
+            set { _offset = value; }
         }
 
         [XmlAttribute]
         public string limit
         {
-            get { return limitField; }
-            set
-            {
-                limitField = value;
-            }
+            get { return _limit; }
+            set { _limit = value; }
         }
 
         [XmlAttribute]
         public string type
         {
-            get { return typeField; }
-            set { typeField = value; }
+            get { return _type; }
+            set { _type = value; }
+        }
+
+        public void IncOffset()
+        {
+            _offset = (int.Parse(_offset) + int.Parse(_limit)).ToString();
         }
     }
 
     public partial class Time_entry
     {
-        private string idField;
-        private string hoursField;
-        private string commentsField;
-        private DateTime? spent_onField;
-        private DateTime? created_onField;
-        private DateTime? updated_onField;
-        private IdName projectField;
-        private IdName issueField;
-        private IdName userField;
-        private IdName activityField;
+        private string _id;
+        private string _hours;
+        private string _comments;
+        private string _spent_on;
+        private string _created_on;
+        private string _updated_on;
+        private IdName _project;
+        private IdName _issue;
+        private IdName _user;
+        private IdName _activity;
 
         [XmlElement("id")]
         public string id
         {
-            get { return idField; }
-            set { idField = value; }
+            get { return _id; }
+            set { _id = value; }
         }
 
         [XmlElement("hours")]
         public string hours
         {
-            get { return hoursField; }
-            set { hoursField = value; }
+            get { return _hours; }
+            set { _hours = value; }
         }
 
         [XmlElement("comments")]
         public string comments
         {
-            get { return commentsField; }
-            set { commentsField = value; }
+            get { return _comments; }
+            set { _comments = value; }
         }
 
         [XmlElement("spent_on")]
-        public DateTime? spent_on
+        public string spent_on
         {
-            get { return spent_onField; }
-            set { spent_onField = value; }
+            get { return _spent_on; }
+            set
+            {
+                DateTime dt;
+                if (DateTime.TryParse(value, out dt))
+                {
+                    _spent_on = dt.ToString("yyyy-MM-dd hh:mm:00.000");
+                }
+                else
+                    _spent_on = string.Empty;
+            }
         }
 
         [XmlElement("created_on")]
-        public DateTime? created_on
+        public string created_on
         {
-            get { return created_onField; }
-            set { created_onField = value; }
+            get { return _created_on; }
+            set
+            {
+                DateTime dt;
+                if (DateTime.TryParse(value, out dt))
+                {
+                    _created_on = dt.ToString("yyyy-MM-dd hh:mm:00.000");
+                }
+                else
+                    _created_on = string.Empty;
+            }
         }
 
         [XmlElement("updated_on")]
-        public DateTime? updated_on
+        public string updated_on
         {
-            get { return updated_onField; }
-            set { updated_onField = value; }
+            get { return _updated_on; }
+            set
+            {
+                DateTime dt;
+                if (DateTime.TryParse(value, out dt))
+                {
+                    _updated_on = dt.ToString("yyyy-MM-dd hh:mm:00.000");
+                }
+                else
+                    _updated_on = string.Empty;
+            }
         }
 
         [XmlElement("project")]
         public IdName project
         {
-            get { return projectField; }
-            set { projectField = value; }
+            get { return _project; }
+            set { _project = value; }
         }
 
         [XmlElement("issue")]
         public IdName issue
         {
-            get { return issueField; }
-            set { issueField = value; }
+            get { return _issue; }
+            set { _issue = value; }
         }
 
         [XmlElement("user")]
         public IdName user
         {
-            get { return userField; }
-            set { userField = value; }
+            get { return _user; }
+            set { _user = value; }
         }
 
         [XmlElement("activity")]
         public IdName activity
         {
-            get { return activityField; }
-            set { activityField = value; }
+            get { return _activity; }
+            set { _activity = value; }
         }
     }
 

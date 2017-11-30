@@ -868,7 +868,6 @@ namespace TrackerHelper
                     dataSet.Reset();
                     dataAdapter.Fill(dataSet);
                     dt = dataSet.Tables[0];
-                    connection.Close();
                 }
             }
             return dt;

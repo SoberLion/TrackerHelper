@@ -36,6 +36,8 @@
             this.techSupportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupedByStatusToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newClosedLastYearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newIssuesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.timeEntriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -85,16 +87,17 @@
             // 
             this.techSupportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.groupedByStatusToolStripMenuItem,
-            this.newClosedLastYearToolStripMenuItem});
+            this.newClosedLastYearToolStripMenuItem,
+            this.newIssuesMenuItem,
+            this.timeEntriesToolStripMenuItem});
             this.techSupportToolStripMenuItem.Name = "techSupportToolStripMenuItem";
             this.techSupportToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.techSupportToolStripMenuItem.Text = "Tech support";
-            this.techSupportToolStripMenuItem.Click += new System.EventHandler(this.techSupportToolStripMenuItem_Click);
             // 
             // groupedByStatusToolStripMenuItem
             // 
             this.groupedByStatusToolStripMenuItem.Name = "groupedByStatusToolStripMenuItem";
-            this.groupedByStatusToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+            this.groupedByStatusToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this.groupedByStatusToolStripMenuItem.Text = "Grouped by status";
             this.groupedByStatusToolStripMenuItem.Click += new System.EventHandler(this.groupedByStatusToolStripMenuItem_Click);
             // 
@@ -104,6 +107,20 @@
             this.newClosedLastYearToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this.newClosedLastYearToolStripMenuItem.Text = "New/Closed last year";
             this.newClosedLastYearToolStripMenuItem.Click += new System.EventHandler(this.newClosedLastYearToolStripMenuItem_Click);
+            // 
+            // newIssuesMenuItem
+            // 
+            this.newIssuesMenuItem.Name = "newIssuesMenuItem";
+            this.newIssuesMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.newIssuesMenuItem.Text = "New issues";
+            this.newIssuesMenuItem.Click += new System.EventHandler(this.newIssuesMenuItem_Click);
+            // 
+            // timeEntriesToolStripMenuItem
+            // 
+            this.timeEntriesToolStripMenuItem.Name = "timeEntriesToolStripMenuItem";
+            this.timeEntriesToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.timeEntriesToolStripMenuItem.Text = "Time entries";
+            this.timeEntriesToolStripMenuItem.Click += new System.EventHandler(this.timeEntriesToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -134,6 +151,8 @@
         private System.Windows.Forms.ToolStripMenuItem techSupportToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem groupedByStatusToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newClosedLastYearToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem newIssuesMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem timeEntriesToolStripMenuItem;
     }
 }
 
