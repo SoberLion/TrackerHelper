@@ -393,6 +393,60 @@ namespace TrackerHelper
                 {   // cycle writing data in table
                     foreach (Issue issue in issues.issue)
                     {
+                        if (issue == null)
+                            continue;
+                        if (issue.JournalList.Count > 0)
+                        {
+                            SQLiteCommand journalsCmd = conn.CreateCommand();
+                     //       SQLiteTransaction journalsTransaction = conn.BeginTransaction();
+                            journalsCmd.CommandText = "INSERT OR IGNORE INTO Journals(Id, IssueId, UserId, UserName, CreatedOn, Notes) VALUES (@Id, @IssueId, @UserId, @UserName, @CreatedOn, @Notes)";
+                            // create command parameters
+                            journalsCmd.Parameters.AddWithValue("@Id", "");
+                            journalsCmd.Parameters.AddWithValue("@IssueId", "");
+                            journalsCmd.Parameters.AddWithValue("@UserId", "");
+                            journalsCmd.Parameters.AddWithValue("@UserName", "");
+                            journalsCmd.Parameters.AddWithValue("@CreatedOn", "");
+                            journalsCmd.Parameters.AddWithValue("@Notes", "");
+
+                            // cycle writing data in table
+                            foreach (Issue.IssueJournalItem JournalsItem in issue.JournalList)
+                            {
+                                if (JournalsItem.Details.Count > 0)
+                                {
+                                    SQLiteCommand detailsCmd = conn.CreateCommand();
+                         //           SQLiteTransaction detailsTransaction = conn.BeginTransaction();
+                                    detailsCmd.CommandText = "INSERT OR IGNORE INTO JournalDetails(JournalId, Property, Name, OldValue, NewValue) VALUES (@JournalId, @Property, @Name, @OldValue, @NewValue)";
+                                    // create command parameters
+                                    detailsCmd.Parameters.AddWithValue("@JournalId", "");
+                                    detailsCmd.Parameters.AddWithValue("@Property", "");
+                                    detailsCmd.Parameters.AddWithValue("@Name", "");
+                                    detailsCmd.Parameters.AddWithValue("@OldValue", "");
+                                    detailsCmd.Parameters.AddWithValue("@NewValue", "");
+
+                                    foreach (Issue.IssueJournalItem.Detail DetailItem in JournalsItem.Details)
+                                    {
+                                        detailsCmd.Parameters["@JournalId"].Value = JournalsItem.Id;
+                                        detailsCmd.Parameters["@Property"].Value = DetailItem.Property;
+                                        detailsCmd.Parameters["@Name"].Value = DetailItem.Name;
+                                        detailsCmd.Parameters["@OldValue"].Value = DetailItem.OldValue;
+                                        detailsCmd.Parameters["@NewValue"].Value = DetailItem.NewValue;
+                                        detailsCmd.ExecuteNonQuery();
+                                    }
+                              //      detailsTransaction.Commit();
+                                }
+
+                                journalsCmd.Parameters["@id"].Value = JournalsItem.Id;
+                                journalsCmd.Parameters["@IssueId"].Value = issue.id;
+                                journalsCmd.Parameters["@UserId"].Value = JournalsItem.User.id;
+                                journalsCmd.Parameters["@UserName"].Value = JournalsItem.User.name;
+                                journalsCmd.Parameters["@Notes"].Value = JournalsItem.Notes;
+                                journalsCmd.Parameters["@CreatedOn"].Value = JournalsItem.CreatedOn;
+                                journalsCmd.ExecuteNonQuery();
+                            }
+                         //   journalsTransaction.Commit();
+                        }
+                        
+
                         cmd.Parameters["@IssueId"].Value = issue.id;
                         cmd.Parameters["@ProjectId"].Value = issue.project.id;
                         cmd.Parameters["@ProjectName"].Value = issue.project.name;

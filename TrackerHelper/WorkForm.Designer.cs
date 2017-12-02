@@ -43,6 +43,7 @@
             this.pnl_listbox = new System.Windows.Forms.Panel();
             this.listbox_IssueJournal = new System.Windows.Forms.ListBox();
             this.pnl_tools = new System.Windows.Forms.Panel();
+            this.btnGetIssuesJournals = new System.Windows.Forms.Button();
             this.tControl.SuspendLayout();
             this.tP_IssueList.SuspendLayout();
             this.pnl_TreeView.SuspendLayout();
@@ -173,7 +174,7 @@
             this.tp_IssueJournal.Location = new System.Drawing.Point(4, 25);
             this.tp_IssueJournal.Name = "tp_IssueJournal";
             this.tp_IssueJournal.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_IssueJournal.Size = new System.Drawing.Size(297, 391);
+            this.tp_IssueJournal.Size = new System.Drawing.Size(326, 583);
             this.tp_IssueJournal.TabIndex = 0;
             this.tp_IssueJournal.Text = "Issue #";
             this.tp_IssueJournal.UseVisualStyleBackColor = true;
@@ -184,7 +185,7 @@
             this.pnl_listbox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnl_listbox.Location = new System.Drawing.Point(3, 33);
             this.pnl_listbox.Name = "pnl_listbox";
-            this.pnl_listbox.Size = new System.Drawing.Size(291, 355);
+            this.pnl_listbox.Size = new System.Drawing.Size(320, 547);
             this.pnl_listbox.TabIndex = 2;
             // 
             // listbox_IssueJournal
@@ -193,17 +194,28 @@
             this.listbox_IssueJournal.FormattingEnabled = true;
             this.listbox_IssueJournal.Location = new System.Drawing.Point(0, 0);
             this.listbox_IssueJournal.Name = "listbox_IssueJournal";
-            this.listbox_IssueJournal.Size = new System.Drawing.Size(291, 355);
+            this.listbox_IssueJournal.Size = new System.Drawing.Size(320, 547);
             this.listbox_IssueJournal.TabIndex = 0;
             // 
             // pnl_tools
             // 
+            this.pnl_tools.Controls.Add(this.btnGetIssuesJournals);
             this.pnl_tools.Controls.Add(this.button1);
             this.pnl_tools.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnl_tools.Location = new System.Drawing.Point(3, 3);
             this.pnl_tools.Name = "pnl_tools";
-            this.pnl_tools.Size = new System.Drawing.Size(291, 30);
+            this.pnl_tools.Size = new System.Drawing.Size(320, 30);
             this.pnl_tools.TabIndex = 1;
+            // 
+            // btnGetIssuesJournals
+            // 
+            this.btnGetIssuesJournals.Location = new System.Drawing.Point(117, 4);
+            this.btnGetIssuesJournals.Name = "btnGetIssuesJournals";
+            this.btnGetIssuesJournals.Size = new System.Drawing.Size(75, 23);
+            this.btnGetIssuesJournals.TabIndex = 1;
+            this.btnGetIssuesJournals.Text = "Журналы";
+            this.btnGetIssuesJournals.UseVisualStyleBackColor = true;
+            this.btnGetIssuesJournals.Click += new System.EventHandler(this.btnGetIssuesJournals_Click);
             // 
             // WorkForm
             // 
@@ -243,5 +255,6 @@
         private System.Windows.Forms.DateTimePicker dtPicker_IssuesFrom;
         private System.Windows.Forms.Button btn_UpdateIssues;
         private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.Button btnGetIssuesJournals;
     }
 }

@@ -121,5 +121,39 @@ namespace TrackerHelper
         {
             MessageBox.Show(message);
         }
+
+        private void btnGetIssuesJournals_Click(object sender, EventArgs e)
+        {
+            user = new User
+            {
+                Id = "751",
+                ApiKey = "1287ca3310be20d6992a764b57f9c8bcfbb05664",
+            };
+         //   user.FetchUpdatedIssues(3, 5);
+            /*for (int i = 0; i < user.IssuesUpdated.issue.Count; i++)
+            {
+                string url = $@"{user.BaseAddress}issues/{user.IssuesUpdated.issue[i].id}.xml?include=journals&key={user.ApiKey}";
+                Issue issue = new Issue();
+                issue = Issue.GetIssue(url);
+                if (issue != null)
+                    user.IssuesUpdated.issue[i] = issue;
+            }
+            DBman.InsertIssues(user.IssuesUpdated);*/
+            Issues issues = new Issues();
+            for (int i = 45001; i <= 124000; i++)
+            {                
+                string url = $@"{user.BaseAddress}issues/{i.ToString()}.xml?include=journals&key={user.ApiKey}";
+                Issue issue = new Issue();
+                issue = Issue.GetIssue(url);
+                if (issue != null)
+                    issues.issue.Add(issue);
+
+                if (i % 100 == 0)
+                {
+                    DBman.InsertIssues(issues);
+                    issues.issue.Clear();
+                }
+            }
+        }
     }
 }

@@ -606,6 +606,18 @@ namespace TrackerHelper
                 }
             }
         }
+        public static Issue GetIssue(string url)
+        {
+            Issue issue = null;
+            ResultModel model = new ResultModel();
+
+            model = Http.Get(url);
+            if (model.IsSuccess)
+            {
+                issue = XML.Deserialize<Issue>(model.Results);
+            }
+            return issue = issue ?? null;
+        }
     }
     public class IssueComparer : IEqualityComparer<Issue>
     {
