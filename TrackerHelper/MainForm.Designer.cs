@@ -38,6 +38,8 @@
             this.newClosedLastYearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newIssuesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timeEntriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dashBoardsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.techSuppToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -46,7 +48,8 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuToolStripMenuItem,
             this.settingsToolStripMenuItem,
-            this.reportsToolStripMenuItem});
+            this.reportsToolStripMenuItem,
+            this.dashBoardsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(334, 24);
@@ -64,7 +67,7 @@
             // tasksToolStripMenuItem
             // 
             this.tasksToolStripMenuItem.Name = "tasksToolStripMenuItem";
-            this.tasksToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.tasksToolStripMenuItem.Size = new System.Drawing.Size(102, 22);
             this.tasksToolStripMenuItem.Text = "Tasks";
             this.tasksToolStripMenuItem.Click += new System.EventHandler(this.tasksToolStripMenuItem_Click);
             // 
@@ -122,6 +125,21 @@
             this.timeEntriesToolStripMenuItem.Text = "Time entries";
             this.timeEntriesToolStripMenuItem.Click += new System.EventHandler(this.timeEntriesToolStripMenuItem_Click);
             // 
+            // dashBoardsToolStripMenuItem
+            // 
+            this.dashBoardsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.techSuppToolStripMenuItem});
+            this.dashBoardsToolStripMenuItem.Name = "dashBoardsToolStripMenuItem";
+            this.dashBoardsToolStripMenuItem.Size = new System.Drawing.Size(81, 20);
+            this.dashBoardsToolStripMenuItem.Text = "DashBoards";
+            // 
+            // techSuppToolStripMenuItem
+            // 
+            this.techSuppToolStripMenuItem.Name = "techSuppToolStripMenuItem";
+            this.techSuppToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.techSuppToolStripMenuItem.Text = "TechSupp";
+            this.techSuppToolStripMenuItem.Click += new System.EventHandler(this.techSuppToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -153,6 +171,8 @@
         private System.Windows.Forms.ToolStripMenuItem newClosedLastYearToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newIssuesMenuItem;
         private System.Windows.Forms.ToolStripMenuItem timeEntriesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem dashBoardsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem techSuppToolStripMenuItem;
     }
 }
 

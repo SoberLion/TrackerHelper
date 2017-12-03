@@ -15,6 +15,7 @@ namespace TrackerHelper
     {
 
         Form repform;
+        Form dashForm;
         private StickyWindow stickyWindow;
 
         public MainForm()
@@ -79,7 +80,7 @@ namespace TrackerHelper
                 Func<ChartPoint, string> labelPoint = chartPoint => string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
                 repform = new Form
                     { WindowState = FormWindowState.Maximized, AutoScaleDimensions = new SizeF(6F, 13F), Name = "Charts", Text = "Charts" };
-                repform.FormClosed += Repform_FormClosed;
+                repform.FormClosed += FormClosed;
 
                 Panel pnlChart = new Panel
                     { Parent = repform, Dock = DockStyle.Fill, Name = "pnlChart" };
@@ -135,7 +136,7 @@ namespace TrackerHelper
 
                 repform = new Form
                     { WindowState = FormWindowState.Maximized, AutoScaleDimensions = new SizeF(6F, 13F), Name = "Charts", Text = "Charts" };
-                repform.FormClosed += Repform_FormClosed;
+                repform.FormClosed += FormClosed;
 
                 Panel pnlChart = new Panel
                     { Parent = repform, Dock = DockStyle.Fill, Name = "pnlChart" };
@@ -188,7 +189,7 @@ namespace TrackerHelper
             }
         }
 
-        private void Repform_FormClosed(object sender, FormClosedEventArgs e)
+        private new void FormClosed(object sender, FormClosedEventArgs e)
         {
             repform = null;
         }
@@ -256,7 +257,7 @@ namespace TrackerHelper
 
                 repform = new Form
                     { WindowState = FormWindowState.Maximized, AutoScaleDimensions = new SizeF(6F, 13F), Name = "Charts", Text = "Charts" };
-                repform.FormClosed += Repform_FormClosed;
+                repform.FormClosed += FormClosed;
 
                 Panel pnlChart = new Panel
                     { Parent = repform, Dock = DockStyle.Fill, Name = "pnlChart" };
@@ -434,6 +435,14 @@ namespace TrackerHelper
                     }
                 }
             }
+        }
+
+        private void techSuppToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            dashForm = new Dashboard();
+            //dashForm.WindowState = FormWindowState.Maximized;
+            dashForm.Show();
+            
         }
     }
 }
