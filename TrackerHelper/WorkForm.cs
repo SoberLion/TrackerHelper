@@ -140,7 +140,7 @@ namespace TrackerHelper
             }
             DBman.InsertIssues(user.IssuesUpdated);*/
             Issues issues = new Issues();
-            for (int i = 45001; i <= 124000; i++)
+            for (int i = 124601; i <= 125657; i++)
             {                
                 string url = $@"{user.BaseAddress}issues/{i.ToString()}.xml?include=journals&key={user.ApiKey}";
                 Issue issue = new Issue();
@@ -154,6 +154,7 @@ namespace TrackerHelper
                     issues.issue.Clear();
                 }
             }
+            DBman.InsertIssues(issues);
         }
     }
 }

@@ -44,11 +44,10 @@
             this.pnlVertDivider = new System.Windows.Forms.Panel();
             this.pnlLayoutRight = new System.Windows.Forms.Panel();
             this.pnlHorizDivider = new System.Windows.Forms.Panel();
-            this.tsDashboard1 = new TrackerHelper.TSDashboard();
+            this.lblCaption = new System.Windows.Forms.Label();
             this.pnlLayoutLeft.SuspendLayout();
             this.pnlBtns.SuspendLayout();
             this.pnlHeader.SuspendLayout();
-            this.pnlDashboard.SuspendLayout();
             this.pnlLayoutRight.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -83,8 +82,8 @@
             this.btn4.FlatAppearance.BorderSize = 0;
             this.btn4.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(33)))), ((int)(((byte)(45)))));
             this.btn4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn4.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btn4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(184)))), ((int)(((byte)(92)))));
+            this.btn4.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btn4.ForeColor = System.Drawing.Color.White;
             this.btn4.Location = new System.Drawing.Point(0, 184);
             this.btn4.Name = "btn4";
             this.btn4.Size = new System.Drawing.Size(200, 46);
@@ -100,8 +99,8 @@
             this.btn3.FlatAppearance.BorderSize = 0;
             this.btn3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(33)))), ((int)(((byte)(45)))));
             this.btn3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn3.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btn3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(184)))), ((int)(((byte)(92)))));
+            this.btn3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btn3.ForeColor = System.Drawing.Color.White;
             this.btn3.Location = new System.Drawing.Point(0, 138);
             this.btn3.Name = "btn3";
             this.btn3.Size = new System.Drawing.Size(200, 46);
@@ -117,8 +116,8 @@
             this.btn2.FlatAppearance.BorderSize = 0;
             this.btn2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(33)))), ((int)(((byte)(45)))));
             this.btn2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn2.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btn2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(184)))), ((int)(((byte)(92)))));
+            this.btn2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btn2.ForeColor = System.Drawing.Color.White;
             this.btn2.Location = new System.Drawing.Point(0, 92);
             this.btn2.Name = "btn2";
             this.btn2.Size = new System.Drawing.Size(200, 46);
@@ -134,8 +133,8 @@
             this.btn1.FlatAppearance.BorderSize = 0;
             this.btn1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(33)))), ((int)(((byte)(45)))));
             this.btn1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn1.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btn1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(184)))), ((int)(((byte)(92)))));
+            this.btn1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btn1.ForeColor = System.Drawing.Color.White;
             this.btn1.Location = new System.Drawing.Point(0, 46);
             this.btn1.Name = "btn1";
             this.btn1.Size = new System.Drawing.Size(200, 46);
@@ -152,8 +151,8 @@
             this.btnTechSupp.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(184)))), ((int)(((byte)(92)))));
             this.btnTechSupp.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(33)))), ((int)(((byte)(45)))));
             this.btnTechSupp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTechSupp.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnTechSupp.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(184)))), ((int)(((byte)(92)))));
+            this.btnTechSupp.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnTechSupp.ForeColor = System.Drawing.Color.White;
             this.btnTechSupp.Location = new System.Drawing.Point(0, 0);
             this.btnTechSupp.Name = "btnTechSupp";
             this.btnTechSupp.Size = new System.Drawing.Size(200, 46);
@@ -161,6 +160,7 @@
             this.btnTechSupp.Text = "      Tech supp";
             this.btnTechSupp.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnTechSupp.UseVisualStyleBackColor = false;
+            this.btnTechSupp.Click += new System.EventHandler(this.btnTechSupp_Click);
             // 
             // pnlLogo
             // 
@@ -176,6 +176,8 @@
             // 
             // pnlHeader
             // 
+            this.pnlHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(53)))), ((int)(((byte)(65)))));
+            this.pnlHeader.Controls.Add(this.lblCaption);
             this.pnlHeader.Controls.Add(this.button2);
             this.pnlHeader.Controls.Add(this.button1);
             this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
@@ -183,6 +185,7 @@
             this.pnlHeader.Name = "pnlHeader";
             this.pnlHeader.Size = new System.Drawing.Size(1030, 50);
             this.pnlHeader.TabIndex = 0;
+            this.pnlHeader.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pnlHeader_MouseDoubleClick);
             this.pnlHeader.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel3_MouseDown);
             // 
             // button2
@@ -198,21 +201,23 @@
             // 
             // button1
             // 
+            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(184)))), ((int)(((byte)(92)))));
             this.button1.Dock = System.Windows.Forms.DockStyle.Right;
             this.button1.FlatAppearance.BorderSize = 0;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button1.Location = new System.Drawing.Point(973, 0);
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(86)))), ((int)(((byte)(88)))), ((int)(((byte)(86)))));
+            this.button1.Location = new System.Drawing.Point(943, 0);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(57, 50);
+            this.button1.Size = new System.Drawing.Size(87, 50);
             this.button1.TabIndex = 1;
             this.button1.Text = "CLOSE";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // pnlDashboard
             // 
-            this.pnlDashboard.Controls.Add(this.tsDashboard1);
+            this.pnlDashboard.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(53)))), ((int)(((byte)(65)))));
             this.pnlDashboard.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlDashboard.Location = new System.Drawing.Point(4, 50);
             this.pnlDashboard.Name = "pnlDashboard";
@@ -221,7 +226,7 @@
             // 
             // pnlVertDivider
             // 
-            this.pnlVertDivider.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(53)))), ((int)(((byte)(65)))));
+            this.pnlVertDivider.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(33)))), ((int)(((byte)(45)))));
             this.pnlVertDivider.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlVertDivider.Location = new System.Drawing.Point(0, 0);
             this.pnlVertDivider.Name = "pnlVertDivider";
@@ -242,22 +247,22 @@
             // 
             // pnlHorizDivider
             // 
-            this.pnlHorizDivider.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(53)))), ((int)(((byte)(65)))));
+            this.pnlHorizDivider.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(33)))), ((int)(((byte)(45)))));
             this.pnlHorizDivider.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlHorizDivider.Location = new System.Drawing.Point(4, 50);
             this.pnlHorizDivider.Name = "pnlHorizDivider";
             this.pnlHorizDivider.Size = new System.Drawing.Size(1030, 4);
             this.pnlHorizDivider.TabIndex = 4;
             // 
-            // tsDashboard1
+            // lblCaption
             // 
-            this.tsDashboard1.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.tsDashboard1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tsDashboard1.Location = new System.Drawing.Point(0, 0);
-            this.tsDashboard1.Name = "tsDashboard1";
-            this.tsDashboard1.Size = new System.Drawing.Size(1030, 622);
-            this.tsDashboard1.TabIndex = 0;
-            this.tsDashboard1.Load += new System.EventHandler(this.tsDashboard1_Load);
+            this.lblCaption.AutoSize = true;
+            this.lblCaption.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lblCaption.ForeColor = System.Drawing.Color.White;
+            this.lblCaption.Location = new System.Drawing.Point(65, 17);
+            this.lblCaption.Name = "lblCaption";
+            this.lblCaption.Size = new System.Drawing.Size(0, 16);
+            this.lblCaption.TabIndex = 1;
             // 
             // Dashboard
             // 
@@ -270,13 +275,14 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Dashboard";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Dashboard_FormClosing);
             this.Shown += new System.EventHandler(this.Charts_Shown);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Dashboard_Paint);
             this.pnlLayoutLeft.ResumeLayout(false);
             this.pnlBtns.ResumeLayout(false);
             this.pnlHeader.ResumeLayout(false);
-            this.pnlDashboard.ResumeLayout(false);
+            this.pnlHeader.PerformLayout();
             this.pnlLayoutRight.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -295,9 +301,9 @@
         private System.Windows.Forms.Button btn3;
         private System.Windows.Forms.Button btn2;
         private System.Windows.Forms.Button btn1;
-        private TSDashboard tsDashboard1;
         private System.Windows.Forms.Panel pnlVertDivider;
         private System.Windows.Forms.Panel pnlHorizDivider;
         private System.Windows.Forms.Panel pnlLayoutRight;
+        private System.Windows.Forms.Label lblCaption;
     }
 }

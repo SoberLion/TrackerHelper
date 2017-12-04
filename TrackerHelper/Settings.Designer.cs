@@ -109,6 +109,7 @@
             // 
             this.btn_Cancel.Dock = System.Windows.Forms.DockStyle.Left;
             this.btn_Cancel.Location = new System.Drawing.Point(60, 0);
+            this.btn_Cancel.Margin = new System.Windows.Forms.Padding(3);
             this.btn_Cancel.Name = "btn_Cancel";
             this.btn_Cancel.Size = new System.Drawing.Size(30, 30);
             this.btn_Cancel.TabIndex = 2;

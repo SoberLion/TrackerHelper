@@ -90,5 +90,30 @@ namespace TrackerHelper
         {
 
         }
+
+        private void pnlHeader_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+
+            this.WindowState = this.WindowState == FormWindowState.Maximized ? FormWindowState.Normal : FormWindowState.Maximized;
+        }
+
+        private void btnTechSupp_Click(object sender, EventArgs e)
+        {
+            Panel pnl = new Panel();
+            pnl.Parent = this.pnlDashboard;
+            lblCaption.Text = "TECH SUPPORT";
+            //this.SuspendLayout();
+            TSDashboard newTSDashboard = new TSDashboard
+            {
+                Parent = this.pnlDashboard,
+                Dock = DockStyle.Fill,
+                BackColor = Color.FromArgb(41, 53, 65),
+
+            };
+            
+            //newTSDashboard.UpdateTSDashboard();
+            pnl.Dispose();
+            //this.ResumeLayout();
+        }
     }
 }
