@@ -98,9 +98,7 @@ namespace TrackerHelper
         }
 
         private void btnTechSupp_Click(object sender, EventArgs e)
-        {
-            Panel pnl = new Panel();
-            pnl.Parent = this.pnlDashboard;
+        {            
             lblCaption.Text = "TECH SUPPORT";
             //this.SuspendLayout();
             TSDashboard newTSDashboard = new TSDashboard
@@ -108,12 +106,16 @@ namespace TrackerHelper
                 Parent = this.pnlDashboard,
                 Dock = DockStyle.Fill,
                 BackColor = Color.FromArgb(41, 53, 65),
-
+                Name = "newTSDashboard"
             };
             
             //newTSDashboard.UpdateTSDashboard();
-            pnl.Dispose();
             //this.ResumeLayout();
+        }
+
+        private void btn1_Click(object sender, EventArgs e)
+        {
+            Controls.Find("newTSDashboard", true).FirstOrDefault().Dispose();
         }
     }
 }

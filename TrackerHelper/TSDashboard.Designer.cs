@@ -74,7 +74,7 @@
             // sgNewIssues
             // 
             this.sgNewIssues.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.sgNewIssues.BackColor = System.Drawing.Color.Transparent;
+            this.sgNewIssues.BackColor = System.Drawing.SystemColors.WindowFrame;
             this.sgNewIssues.BackColorTransparent = true;
             this.sgNewIssues.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.sgNewIssues.ForeColor = System.Drawing.SystemColors.Control;
@@ -86,6 +86,7 @@
             // 
             // pnlLayoutBot
             // 
+            this.pnlLayoutBot.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(53)))), ((int)(((byte)(65)))));
             this.pnlLayoutBot.Controls.Add(this.lblClosedLastYear);
             this.pnlLayoutBot.Controls.Add(this.lblNewlastYear);
             this.pnlLayoutBot.Controls.Add(this.sgClosedLastYear);
@@ -129,7 +130,7 @@
             // sgClosedLastYear
             // 
             this.sgClosedLastYear.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.sgClosedLastYear.BackColor = System.Drawing.Color.Transparent;
+            this.sgClosedLastYear.BackColor = System.Drawing.SystemColors.WindowFrame;
             this.sgClosedLastYear.BackColorTransparent = true;
             this.sgClosedLastYear.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.sgClosedLastYear.ForeColor = System.Drawing.SystemColors.Control;
@@ -142,10 +143,9 @@
             // sgNewLastYear
             // 
             this.sgNewLastYear.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.sgNewLastYear.BackColor = System.Drawing.Color.Transparent;
+            this.sgNewLastYear.BackColor = System.Drawing.SystemColors.WindowFrame;
             this.sgNewLastYear.BackColorTransparent = true;
             this.sgNewLastYear.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.sgNewLastYear.ForeColor = System.Drawing.SystemColors.Control;
             this.sgNewLastYear.Location = new System.Drawing.Point(458, 31);
             this.sgNewLastYear.Name = "sgNewLastYear";
             this.sgNewLastYear.Size = new System.Drawing.Size(201, 103);
@@ -284,7 +284,7 @@
             // sgClosed
             // 
             this.sgClosed.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.sgClosed.BackColor = System.Drawing.Color.Transparent;
+            this.sgClosed.BackColor = System.Drawing.SystemColors.WindowFrame;
             this.sgClosed.BackColorTransparent = true;
             this.sgClosed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.sgClosed.ForeColor = System.Drawing.SystemColors.Control;
@@ -310,7 +310,7 @@
             // sgAssigned
             // 
             this.sgAssigned.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.sgAssigned.BackColor = System.Drawing.Color.Transparent;
+            this.sgAssigned.BackColor = System.Drawing.SystemColors.WindowFrame;
             this.sgAssigned.BackColorTransparent = true;
             this.sgAssigned.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.sgAssigned.ForeColor = System.Drawing.SystemColors.Control;
@@ -322,6 +322,7 @@
             // 
             // pnlLayoutMid
             // 
+            this.pnlLayoutMid.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(53)))), ((int)(((byte)(65)))));
             this.pnlLayoutMid.Controls.Add(this.label3);
             this.pnlLayoutMid.Controls.Add(this.sgAssigned);
             this.pnlLayoutMid.Dock = System.Windows.Forms.DockStyle.Bottom;

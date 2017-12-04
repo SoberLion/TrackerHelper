@@ -300,7 +300,7 @@ namespace TrackerHelper
             sgNewLastYear.FromColor = Color.FromRgb(255, 0, 0);
             sgNewLastYear.ToColor = Color.FromRgb(255, 0, 0);
             sgNewLastYear.ForeGround = Brushes.Red;
-            sgNewLastYear.BackColor = System.Drawing.Color.FromArgb(255, 158, 68);
+            
 
             string firstDayOfWeek = getFirstDayofWeekDate(DateTime.Now).AddYears(-1).ToString("yyyy-MM-dd 00:00:00,001");
             string now = DateTime.Now.AddYears(-1).ToString(dateFormat);

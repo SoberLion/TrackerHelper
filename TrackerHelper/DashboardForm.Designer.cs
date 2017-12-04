@@ -38,13 +38,13 @@
             this.btnTechSupp = new System.Windows.Forms.Button();
             this.pnlLogo = new System.Windows.Forms.Panel();
             this.pnlHeader = new System.Windows.Forms.Panel();
+            this.lblCaption = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.pnlDashboard = new System.Windows.Forms.Panel();
             this.pnlVertDivider = new System.Windows.Forms.Panel();
             this.pnlLayoutRight = new System.Windows.Forms.Panel();
             this.pnlHorizDivider = new System.Windows.Forms.Panel();
-            this.lblCaption = new System.Windows.Forms.Label();
             this.pnlLayoutLeft.SuspendLayout();
             this.pnlBtns.SuspendLayout();
             this.pnlHeader.SuspendLayout();
@@ -142,6 +142,7 @@
             this.btn1.Text = "      Placeholder 1";
             this.btn1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btn1.UseVisualStyleBackColor = false;
+            this.btn1.Click += new System.EventHandler(this.btn1_Click);
             // 
             // btnTechSupp
             // 
@@ -187,6 +188,16 @@
             this.pnlHeader.TabIndex = 0;
             this.pnlHeader.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pnlHeader_MouseDoubleClick);
             this.pnlHeader.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel3_MouseDown);
+            // 
+            // lblCaption
+            // 
+            this.lblCaption.AutoSize = true;
+            this.lblCaption.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lblCaption.ForeColor = System.Drawing.Color.White;
+            this.lblCaption.Location = new System.Drawing.Point(65, 17);
+            this.lblCaption.Name = "lblCaption";
+            this.lblCaption.Size = new System.Drawing.Size(0, 16);
+            this.lblCaption.TabIndex = 1;
             // 
             // button2
             // 
@@ -253,16 +264,6 @@
             this.pnlHorizDivider.Name = "pnlHorizDivider";
             this.pnlHorizDivider.Size = new System.Drawing.Size(1030, 4);
             this.pnlHorizDivider.TabIndex = 4;
-            // 
-            // lblCaption
-            // 
-            this.lblCaption.AutoSize = true;
-            this.lblCaption.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lblCaption.ForeColor = System.Drawing.Color.White;
-            this.lblCaption.Location = new System.Drawing.Point(65, 17);
-            this.lblCaption.Name = "lblCaption";
-            this.lblCaption.Size = new System.Drawing.Size(0, 16);
-            this.lblCaption.TabIndex = 1;
             // 
             // Dashboard
             // 
