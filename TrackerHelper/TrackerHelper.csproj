@@ -64,6 +64,12 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CheckedButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CheckedButton.Designer.cs">
+      <DependentUpon>CheckedButton.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controller.cs" />
     <Compile Include="DashboardForm.cs">
       <SubType>Form</SubType>
@@ -71,6 +77,7 @@
     <Compile Include="DashboardForm.Designer.cs">
       <DependentUpon>DashboardForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="DB\DBController.cs" />
     <Compile Include="Http.cs" />
     <Compile Include="Language.cs" />
     <Compile Include="MainForm.cs">
@@ -100,7 +107,7 @@
     <Compile Include="Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
-    <Compile Include="DBman.cs" />
+    <Compile Include="DB\DBman.cs" />
     <Compile Include="StickyWindow.cs" />
     <Compile Include="TreeViewMethods.cs" />
     <Compile Include="TSDashboard.cs">

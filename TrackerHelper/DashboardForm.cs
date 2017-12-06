@@ -93,12 +93,12 @@ namespace TrackerHelper
 
         private void pnlHeader_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-
             this.WindowState = this.WindowState == FormWindowState.Maximized ? FormWindowState.Normal : FormWindowState.Maximized;
         }
 
         private void btnTechSupp_Click(object sender, EventArgs e)
-        {            
+        {
+            Toggle(sender);
             lblCaption.Text = "TECH SUPPORT";
             //this.SuspendLayout();
             TSDashboard newTSDashboard = new TSDashboard
@@ -115,7 +115,27 @@ namespace TrackerHelper
 
         private void btn1_Click(object sender, EventArgs e)
         {
-            Controls.Find("newTSDashboard", true).FirstOrDefault().Dispose();
+            Toggle(sender);
+            TSDashboard tsdb = Controls.Find("newTSDashboard", true).FirstOrDefault() as TSDashboard;
+            tsdb?.Dispose();
+        }
+
+        private void Toggle(object sender)
+        {
+            btnTechSupp.Check = false;
+            btnTechSupp.BackColor = Color.FromArgb(41, 53, 65);
+            btn1.Check = false;
+            btn1.BackColor = Color.FromArgb(41, 53, 65);
+            btn2.Check = false;
+            btn2.BackColor = Color.FromArgb(41, 53, 65);
+            btn3.Check = false;
+            btn3.BackColor = Color.FromArgb(41, 53, 65);
+            btn4.Check = false;
+            btn4.BackColor = Color.FromArgb(41, 53, 65);
+
+            (sender as CheckedButton).Check = true;
+            (sender as CheckedButton).BackColor = Color.FromArgb(21, 33, 45);
+
         }
     }
 }

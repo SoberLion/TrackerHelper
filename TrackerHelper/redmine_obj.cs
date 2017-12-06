@@ -5,7 +5,6 @@ using System.Xml.Serialization;
 
 namespace TrackerHelper
 {
-    // id, name pair class
     public class IdName
     {
         public IdName() { }
@@ -127,7 +126,7 @@ namespace TrackerHelper
                 DateTime dt;
                 if (DateTime.TryParse(value, out dt))
                 {
-                    _spent_on = dt.ToString("yyyy-MM-dd hh:mm:00.000");
+                    _spent_on = dt.ToString("yyyy-MM-dd HH:mm:ss.000");
                 }
                 else
                     _spent_on = string.Empty;
@@ -143,7 +142,7 @@ namespace TrackerHelper
                 DateTime dt;
                 if (DateTime.TryParse(value, out dt))
                 {
-                    _created_on = dt.ToString("yyyy-MM-dd hh:mm:00.000");
+                    _created_on = dt.ToString("yyyy-MM-dd HH:mm:ss.000");
                 }
                 else
                     _created_on = string.Empty;
@@ -159,7 +158,7 @@ namespace TrackerHelper
                 DateTime dt;
                 if (DateTime.TryParse(value, out dt))
                 {
-                    _updated_on = dt.ToString("yyyy-MM-dd hh:mm:00.000");
+                    _updated_on = dt.ToString("yyyy-MM-dd HH:mm:ss.000");
                 }
                 else
                     _updated_on = string.Empty;
@@ -349,7 +348,7 @@ namespace TrackerHelper
                 DateTime dt;
                 if (DateTime.TryParse(value, out dt))
                 {
-                    startDateField = dt.ToString("yyyy-MM-dd hh:mm:00.000");
+                    startDateField = dt.ToString("yyyy-MM-dd HH:mm:ss.000");
                 }
                 else
                     startDateField = string.Empty;
@@ -365,7 +364,7 @@ namespace TrackerHelper
                 DateTime dt;
                 if (DateTime.TryParse(value, out dt))
                 {
-                    dueDateField = dt.ToString("yyyy-MM-dd hh:mm:00.000");
+                    dueDateField = dt.ToString("yyyy-MM-dd HH:mm:ss.000");
                 }
                 else
                     dueDateField = string.Empty;
@@ -410,7 +409,7 @@ namespace TrackerHelper
                 DateTime dt;
                 if (DateTime.TryParse(value, out dt))
                 {
-                    createdOnField = dt.ToString("yyyy-MM-dd hh:mm:00.000");
+                    createdOnField = dt.ToString("yyyy-MM-dd HH:mm:ss.000");
                 }
                 else
                     createdOnField = string.Empty;
@@ -426,7 +425,7 @@ namespace TrackerHelper
                 DateTime dt;
                 if (DateTime.TryParse(value, out dt))
                 {
-                    updatedOnField = dt.ToString("yyyy-MM-dd hh:mm:00.000");
+                    updatedOnField = dt.ToString("yyyy-MM-dd HH:mm:ss.000");
                 }
                 else
                     updatedOnField = string.Empty;
@@ -442,7 +441,7 @@ namespace TrackerHelper
                 DateTime dt;
                 if (DateTime.TryParse(value, out dt))
                 {
-                    closedOnField = dt.ToString("yyyy-MM-dd hh:mm:00.000");
+                    closedOnField = dt.ToString("yyyy-MM-dd HH:mm:ss.000");
                 }
                 else
                     closedOnField = string.Empty;
@@ -561,7 +560,7 @@ namespace TrackerHelper
                     DateTime dt;
                     if (DateTime.TryParse(value, out dt))
                     {
-                        CreatedOnField = dt.ToString("yyyy-MM-dd hh:mm:00.000");
+                        CreatedOnField = dt.ToString("yyyy-MM-dd HH:mm:00.000");
                     }
                     else
                         CreatedOnField = string.Empty;
@@ -623,7 +622,7 @@ namespace TrackerHelper
     {
         public bool Equals(Issue x, Issue y)
         {
-            return x.updatedOn.Equals(y.updatedOn) && (x.JournalList.Count == y.JournalList.Count);
+            return x.id.Equals(y.id) && x.updatedOn.Equals(y.updatedOn) && (x.JournalList.Count == y.JournalList.Count);
         }
 
         public int GetHashCode(Issue obj)

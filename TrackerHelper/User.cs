@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
+using TrackerHelper.DB;
 
 namespace TrackerHelper
 {
@@ -167,6 +169,11 @@ namespace TrackerHelper
                 }
             }// счётчик - tracker.ucs.ru возвращает максимум 100 элементов, если кол-во total_count больше, необходимо сделать повторные запросы со смещением
             while (int.Parse(_IssuesUpdated.offset) < int.Parse(_IssuesUpdated.total_count));
+        }
+
+        public void Update()
+        {
+
         }
     }
 }

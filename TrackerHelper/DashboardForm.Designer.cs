@@ -31,11 +31,11 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Dashboard));
             this.pnlLayoutLeft = new System.Windows.Forms.Panel();
             this.pnlBtns = new System.Windows.Forms.Panel();
-            this.btn4 = new System.Windows.Forms.Button();
-            this.btn3 = new System.Windows.Forms.Button();
-            this.btn2 = new System.Windows.Forms.Button();
-            this.btn1 = new System.Windows.Forms.Button();
-            this.btnTechSupp = new System.Windows.Forms.Button();
+            this.btn4 = new TrackerHelper.CheckedButton();
+            this.btn3 = new TrackerHelper.CheckedButton();
+            this.btn2 = new TrackerHelper.CheckedButton();
+            this.btn1 = new TrackerHelper.CheckedButton();
+            this.btnTechSupp = new TrackerHelper.CheckedButton();
             this.pnlLogo = new System.Windows.Forms.Panel();
             this.pnlHeader = new System.Windows.Forms.Panel();
             this.lblCaption = new System.Windows.Forms.Label();
@@ -78,6 +78,7 @@
             // btn4
             // 
             this.btn4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(53)))), ((int)(((byte)(65)))));
+            this.btn4.Check = false;
             this.btn4.Dock = System.Windows.Forms.DockStyle.Top;
             this.btn4.FlatAppearance.BorderSize = 0;
             this.btn4.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(33)))), ((int)(((byte)(45)))));
@@ -95,6 +96,7 @@
             // btn3
             // 
             this.btn3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(53)))), ((int)(((byte)(65)))));
+            this.btn3.Check = false;
             this.btn3.Dock = System.Windows.Forms.DockStyle.Top;
             this.btn3.FlatAppearance.BorderSize = 0;
             this.btn3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(33)))), ((int)(((byte)(45)))));
@@ -112,6 +114,7 @@
             // btn2
             // 
             this.btn2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(53)))), ((int)(((byte)(65)))));
+            this.btn2.Check = false;
             this.btn2.Dock = System.Windows.Forms.DockStyle.Top;
             this.btn2.FlatAppearance.BorderSize = 0;
             this.btn2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(33)))), ((int)(((byte)(45)))));
@@ -129,6 +132,7 @@
             // btn1
             // 
             this.btn1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(53)))), ((int)(((byte)(65)))));
+            this.btn1.Check = false;
             this.btn1.Dock = System.Windows.Forms.DockStyle.Top;
             this.btn1.FlatAppearance.BorderSize = 0;
             this.btn1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(33)))), ((int)(((byte)(45)))));
@@ -147,6 +151,7 @@
             // btnTechSupp
             // 
             this.btnTechSupp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(53)))), ((int)(((byte)(65)))));
+            this.btnTechSupp.Check = false;
             this.btnTechSupp.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnTechSupp.FlatAppearance.BorderSize = 0;
             this.btnTechSupp.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(184)))), ((int)(((byte)(92)))));
@@ -292,16 +297,16 @@
         #endregion
         private System.Windows.Forms.Panel pnlLayoutLeft;
         private System.Windows.Forms.Panel pnlBtns;
-        private System.Windows.Forms.Button btnTechSupp;
+        private TrackerHelper.CheckedButton btnTechSupp;
         private System.Windows.Forms.Panel pnlLogo;
         private System.Windows.Forms.Panel pnlHeader;
         private System.Windows.Forms.Panel pnlDashboard;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button btn4;
-        private System.Windows.Forms.Button btn3;
-        private System.Windows.Forms.Button btn2;
-        private System.Windows.Forms.Button btn1;
+        private TrackerHelper.CheckedButton btn4;
+        private TrackerHelper.CheckedButton btn3;
+        private TrackerHelper.CheckedButton btn2;
+        private TrackerHelper.CheckedButton btn1;
         private System.Windows.Forms.Panel pnlVertDivider;
         private System.Windows.Forms.Panel pnlHorizDivider;
         private System.Windows.Forms.Panel pnlLayoutRight;

@@ -3,7 +3,7 @@ using System.Data;
 using System.Data.SQLite;
 using System.Collections.Generic;
 
-namespace TrackerHelper
+namespace TrackerHelper.DB
 {
     public delegate void MessageDelegate(string message);
     public class DBman
@@ -755,148 +755,6 @@ namespace TrackerHelper
             }
         }
 
-        /// Get list of isssues created between dates
-        /// <param name="DateFrom">string, format yyyy-MM-dd mm:hh:ss:ttt</param>
-        /// <param name="DateTo">string, format yyyy-MM-dd mm:hh:ss:ttt</param>
-        /// <param name="ProjectId">string, might be empty</param>
-        public static List<Issue> GetIssuesCreatedBetweenDates(string DateFrom, string DateTo, string ProjectId)
-        {
-            List<Issue> IL = new List<Issue>();
-            using (SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;"))
-            {
-                conn.Open();
-
-                if (conn.State == ConnectionState.Open)
-                {
-                    using (SQLiteCommand cmd = conn.CreateCommand())
-                    {
-                        if (ProjectId != "")
-                        {
-                            ProjectId = string.Format("and ProjectId = {0}", ProjectId);
-                        }
-                        else
-                            ProjectId = "";
-
-                        cmd.CommandText = string.Format("SELECT * FROM Issues WHERE CreatedOn >= '{0}' AND CreatedOn < '{1}' {2}", DateFrom, DateTo, ProjectId);
-                        cmd.Parameters.AddWithValue("@DateFrom", DateFrom);
-                        cmd.Parameters.AddWithValue("@DateTo", DateTo);
-
-                        try
-                        {
-                            SQLiteDataReader r = cmd.ExecuteReader();
-                            while (r.Read())
-                            {
-                                Issue issue = new Issue();
-                                issue.project.id = int.Parse(r["ProjectId"].ToString());
-                                issue.project.name = r["ProjectName"].ToString();
-                                issue.tracker.id = int.Parse(r["TrackerId"].ToString());
-                                issue.tracker.name = r["TrackerName"].ToString();
-                                issue.status.id = int.Parse(r["StatusId"].ToString());
-                                issue.status.name = r["StatusName"].ToString();
-                                issue.priority.id = int.Parse(r["PriorityId"].ToString());
-                                issue.priority.name = r["PriorityName"].ToString();
-                                issue.author.id = int.Parse(r["AuthorId"].ToString());
-                                issue.author.name = r["AuthorName"].ToString();
-                                issue.assigned_to.id = int.Parse(r["AssignedToId"].ToString());
-                                issue.assigned_to.name = r["AssignedToName"].ToString();
-                                issue.category.id = int.Parse(r["CategoryId"].ToString());
-                                issue.category.name = r["CategoryName"].ToString();
-                                issue.subject = r["Subject"].ToString();
-                                issue.description = r["Description"].ToString();
-                                issue.startDate = r["StartDate"].ToString();
-                                issue.dueDate = r["DueDate"].ToString();
-                                issue.doneRatio = r["DoneRatio"].ToString();
-                                issue.IsPrivate = int.Parse(r["IsPrivate"].ToString()) == 0 ? false : true;
-                                issue.estimatedHours = r["EstimatedHours"].ToString();
-                                issue.createdOn = r["CreatedOn"].ToString();
-                                issue.updatedOn = r["UpdatedOn"].ToString();
-                                issue.closedOn = r["ClosedOn"].ToString();
-                                IL.Add(issue);
-                            }
-                            r.Close();
-                        }
-                        catch (SQLiteException sqlex)
-                        {
-                            MessageDel?.Invoke($"Error: {sqlex.Message}");
-                        }
-                    }
-                }
-            }
-            return IL;
-        }
-
-        /// Get list of isssues closed between dates
-        /// <param name="DateFrom">string, format yyyy-MM-dd mm:hh:ss:ttt</param>
-        /// <param name="DateTo">string, format yyyy-MM-dd mm:hh:ss:ttt</param>
-        /// <param name="ProjectId">string, might be empty</param>
-        public static List<Issue> GetIssuesClosedBetweenDates(string DateFrom, string DateTo, string ProjectId)
-        {
-            List<Issue> IL = new List<Issue>();
-            using (SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;"))
-            {
-                conn.Open();
-
-                if (conn.State == ConnectionState.Open)
-                {
-                    using (SQLiteCommand cmd = conn.CreateCommand())
-                    {
-                        //    cmd.CommandText = "SELECT * FROM Issues WHERE CreatedOn >= '@DateFrom' AND CreatedOn < '@DateTo' @ProjectId";
-                        if (ProjectId != "")
-                        {
-                            ProjectId = string.Format("and ProjectId = {0}", ProjectId);
-                        }
-                        else
-                            ProjectId = "";
-
-                        cmd.CommandText = string.Format("SELECT * FROM Issues WHERE ClosedOn >= '{0}' AND CreatedOn < '{1}' {2}", DateFrom, DateTo, ProjectId);
-                        cmd.Parameters.AddWithValue("@DateFrom", DateFrom);
-                        cmd.Parameters.AddWithValue("@DateTo", DateTo);
-
-                        try
-                        {
-                            SQLiteDataReader r = cmd.ExecuteReader();
-                            while (r.Read())
-                            {
-                                Issue issue = new Issue();
-                                issue.project.id = int.Parse(r["ProjectId"].ToString());
-                                issue.project.name = r["ProjectName"].ToString();
-                                issue.tracker.id = int.Parse(r["TrackerId"].ToString());
-                                issue.tracker.name = r["TrackerName"].ToString();
-                                issue.status.id = int.Parse(r["StatusId"].ToString());
-                                issue.status.name = r["StatusName"].ToString();
-                                issue.priority.id = int.Parse(r["PriorityId"].ToString());
-                                issue.priority.name = r["PriorityName"].ToString();
-                                issue.author.id = int.Parse(r["AuthorId"].ToString());
-                                issue.author.name = r["AuthorName"].ToString();
-                                issue.assigned_to.id = int.Parse(r["AssignedToId"].ToString());
-                                issue.assigned_to.name = r["AssignedToName"].ToString();
-                                issue.category.id = int.Parse(r["CategoryId"].ToString());
-                                issue.category.name = r["CategoryName"].ToString();
-                                issue.subject = r["Subject"].ToString();
-                                issue.description = r["Description"].ToString();
-                                issue.startDate = r["StartDate"].ToString();
-                                issue.dueDate = r["DueDate"].ToString();
-                                issue.doneRatio = r["DoneRatio"].ToString();
-                                issue.IsPrivate = int.Parse(r["IsPrivate"].ToString()) == 0 ? false : true;
-                                issue.estimatedHours = r["EstimatedHours"].ToString();
-                                issue.createdOn = r["CreatedOn"].ToString();
-                                issue.updatedOn = r["UpdatedOn"].ToString();
-                                issue.closedOn = r["ClosedOn"].ToString();
-                                IL.Add(issue);
-                            }
-                            r.Close();
-                        }
-                        catch (SQLiteException sqlex)
-                        {
-                            MessageDel?.Invoke($"Error: {sqlex.Message}");
-                        }
-                    }
-                }
-            }
-            return IL;
-        }
-
-
         public enum IssueType
         {
             Created,
@@ -1170,14 +1028,8 @@ namespace TrackerHelper
         }
 
 
-        /// <summary>
-        /// Получить справочные данные
-        /// </summary>
-        /// <param name="id">id in collection like ProjectId, StatusId, etc...</param>
-        /// <param name="name">name in collection ProjectName, StatusName, etc...</param>
-        public static Dictionary<int, string> GetDict(string id, string name)
+        public static void GetOpenedIssues(Issues issues, int NumOfDays)
         {
-            Dictionary<int, string> dict = new Dictionary<int, string>();
             SQLiteConnection conn = new SQLiteConnection($"Data Source={DbName}; Version=3;");
 
             conn.Open();
@@ -1185,25 +1037,49 @@ namespace TrackerHelper
             if (conn.State == ConnectionState.Open)
             {
                 SQLiteCommand cmd = conn.CreateCommand();
-                cmd.CommandText = $"SELECT DISTINCT {id}, {name} FROM Issues order by {id}";
-
+                cmd.CommandText = $"SELECT * FROM Issues WHERE UpdatedOn > '{DateTime.Now.AddDays(-NumOfDays).ToString("yyyy-MM-dd HH:mm:ss.fff")}' ORDER BY IssueID";
                 try
                 {
                     SQLiteDataReader r = cmd.ExecuteReader();
                     while (r.Read())
-                    {                      
-                        dict.Add(int.Parse(r[id].ToString()), r[name].ToString());
+                    {
+                        Issue issue = new Issue();
+                        issue.id = r["IssueId"].ToString();
+                        issue.project.id = int.Parse(r["ProjectId"].ToString());
+                        issue.project.name = r["ProjectName"].ToString();
+                        issue.tracker.id = int.Parse(r["TrackerId"].ToString());
+                        issue.tracker.name = r["TrackerName"].ToString();
+                        issue.status.id = int.Parse(r["StatusId"].ToString());
+                        issue.status.name = r["StatusName"].ToString();
+                        issue.priority.id = int.Parse(r["PriorityId"].ToString());
+                        issue.priority.name = r["PriorityName"].ToString();
+                        issue.author.id = int.Parse(r["AuthorId"].ToString());
+                        issue.author.name = r["AuthorName"].ToString();
+                        issue.assigned_to.id = int.Parse(r["AssignedToId"].ToString());
+                        issue.assigned_to.name = r["AssignedToName"].ToString();
+                        issue.category.id = int.Parse(r["CategoryId"].ToString());
+                        issue.category.name = r["CategoryName"].ToString();
+                        issue.subject = r["Subject"].ToString();
+                        issue.description = r["Description"].ToString();
+                        issue.startDate = r["StartDate"].ToString();
+                        issue.dueDate = r["DueDate"].ToString();
+                        issue.doneRatio = r["DoneRatio"].ToString();
+                        issue.IsPrivate = int.Parse(r["IsPrivate"].ToString()) == 0 ? false : true;
+                        issue.estimatedHours = r["EstimatedHours"].ToString();
+                        issue.createdOn = r["CreatedOn"].ToString();
+                        issue.updatedOn = r["UpdatedOn"].ToString();
+                        issue.closedOn = r["ClosedOn"].ToString();
+                        issues.issue.Add(issue);
                     }
                     r.Close();
                 }
                 catch (SQLiteException sqlex)
                 {
-                    onError?.Invoke($"Error: {sqlex.Message}");
+                    MessageDel?.Invoke($"Error: {sqlex.Message}");
                 }
                 cmd.Dispose();
                 conn.Dispose();
             }
-            return dict.Count > 0 ? dict : null;
         }
 
         public static Dictionary<string, int> GetGroupedData(string id, string name)

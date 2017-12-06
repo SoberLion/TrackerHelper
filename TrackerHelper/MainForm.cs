@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Windows.Media;
 using System.Linq;
 using System.Data;
+using TrackerHelper.DB;
 
 namespace TrackerHelper
 {

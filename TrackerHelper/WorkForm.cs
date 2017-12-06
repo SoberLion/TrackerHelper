@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using System.Linq;
 using System.Collections.Generic;
+using TrackerHelper.DB;
 
 
 namespace TrackerHelper
@@ -90,19 +91,7 @@ namespace TrackerHelper
             IssueComparer comparer = new IssueComparer();
             if (user != null)
             {
-             //   user.GetOpenedIssuesFromDb();
-              //  user.FetchOpenedIssues(1);
-                user.FetchUpdatedIssues(3, 5);
-             /*   List<Issue> ExceptIssues = user.Issues.issue.Except(user.IssuesUpdated.issue, comparer).ToList<Issue>();
-                for (int i = 0; i < ExceptIssues.Count; i++)
-                {
-                    ResultModel model = new ResultModel();
-                    string URL = $@"{user.BaseAddress}issues/{ExceptIssues[i].id}.xml?include=journals&key={user.ApiKey}";
-                    model = Http.Get(URL);
-
-                    if (model.IsSuccess)
-                        ExceptIssues[i] = XML.Deserialize<Issue>(model.Results);
-                }*/
+                user.FetchUpdatedIssues(3, 2);
             }
                 //user.GetUpdatedIssues(1, 50);
                    if (DBman.Exist("Issues"))
@@ -129,32 +118,50 @@ namespace TrackerHelper
                 Id = "751",
                 ApiKey = "1287ca3310be20d6992a764b57f9c8bcfbb05664",
             };
-         //   user.FetchUpdatedIssues(3, 5);
-            /*for (int i = 0; i < user.IssuesUpdated.issue.Count; i++)
-            {
-                string url = $@"{user.BaseAddress}issues/{user.IssuesUpdated.issue[i].id}.xml?include=journals&key={user.ApiKey}";
-                Issue issue = new Issue();
-                issue = Issue.GetIssue(url);
-                if (issue != null)
-                    user.IssuesUpdated.issue[i] = issue;
-            }
-            DBman.InsertIssues(user.IssuesUpdated);*/
-            Issues issues = new Issues();
-            for (int i = 124601; i <= 125657; i++)
-            {                
-                string url = $@"{user.BaseAddress}issues/{i.ToString()}.xml?include=journals&key={user.ApiKey}";
-                Issue issue = new Issue();
-                issue = Issue.GetIssue(url);
-                if (issue != null)
-                    issues.issue.Add(issue);
+            DBController dbController = new DBController(user);
 
-                if (i % 100 == 0)
-                {
-                    DBman.InsertIssues(issues);
-                    issues.issue.Clear();
-                }
-            }
-            DBman.InsertIssues(issues);
+            dbController.UpdateDB(3, 1);
+            /* user = new User
+             {
+                 Id = "751",
+                 ApiKey = "1287ca3310be20d6992a764b57f9c8bcfbb05664",
+             };
+             user.FetchUpdatedIssues(3, 2);
+             /*for (int i = 0; i < user.IssuesUpdated.issue.Count; i++)
+             {
+                 string url = $@"{user.BaseAddress}issues/{user.IssuesUpdated.issue[i].id}.xml?include=journals&key={user.ApiKey}";
+                 Issue issue = new Issue();
+                 issue = Issue.GetIssue(url);
+                 if (issue != null)
+                     user.IssuesUpdated.issue[i] = issue;
+             }
+             DBman.InsertIssues(user.IssuesUpdated);*/
+            /* Issues issues = new Issues();
+             for (int i = 124601; i <= 125657; i++)
+             {                
+                 string url = $@"{user.BaseAddress}issues/{i.ToString()}.xml?include=journals&key={user.ApiKey}";
+                 Issue issue = new Issue();
+                 issue = Issue.GetIssue(url);
+                 if (issue != null)
+                     issues.issue.Add(issue);
+
+                 if (i % 100 == 0)
+                 {
+                     DBman.InsertIssues(issues);
+                     issues.issue.Clear();
+                 }
+             }
+             DBman.InsertIssues(issues);*/
+
+            /* for (int i = 0; i < user.IssuesUpdated.issue.Count; i++)
+             {
+                 string url = $@"{user.BaseAddress}issues/{user.IssuesUpdated.issue[i].id}.xml?include=journals&key={user.ApiKey}";
+                 Issue issue = new Issue();
+                 issue = Issue.GetIssue(url);
+                 if (issue != null)
+                     user.IssuesUpdated.issue[i] = issue;
+             }
+             DBman.InsertIssues(user.IssuesUpdated);*/
         }
     }
 }
