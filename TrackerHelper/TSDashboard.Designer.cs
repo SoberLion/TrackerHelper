@@ -67,6 +67,9 @@
             this.pieChartProjects = new LiveCharts.WinForms.PieChart();
             this.pnlTopRight = new System.Windows.Forms.Panel();
             this.pnlHorizDividerBot = new System.Windows.Forms.Panel();
+            this.lblStatusAssignedOverduedValue = new System.Windows.Forms.Label();
+            this.pieChartCategory = new LiveCharts.WinForms.PieChart();
+            this.pnlCategory = new System.Windows.Forms.Panel();
             this.pnlLayoutBot.SuspendLayout();
             this.pnlBotRightCorner.SuspendLayout();
             this.pnlFilters.SuspendLayout();
@@ -82,6 +85,7 @@
             this.pnlTopMid.SuspendLayout();
             this.pnlStatusChart.SuspendLayout();
             this.pnlProjects.SuspendLayout();
+            this.pnlCategory.SuspendLayout();
             this.SuspendLayout();
             // 
             // sgNewIssues
@@ -110,7 +114,7 @@
             this.pnlLayoutBot.Controls.Add(this.sgClosed);
             this.pnlLayoutBot.Controls.Add(this.sgNewIssues);
             this.pnlLayoutBot.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlLayoutBot.Location = new System.Drawing.Point(0, 475);
+            this.pnlLayoutBot.Location = new System.Drawing.Point(0, 653);
             this.pnlLayoutBot.Name = "pnlLayoutBot";
             this.pnlLayoutBot.Size = new System.Drawing.Size(1200, 147);
             this.pnlLayoutBot.TabIndex = 5;
@@ -331,7 +335,7 @@
             this.pnlLayoutMid.Controls.Add(this.pnlStatusAssigned);
             this.pnlLayoutMid.Controls.Add(this.pnlStatusNew);
             this.pnlLayoutMid.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlLayoutMid.Location = new System.Drawing.Point(0, 324);
+            this.pnlLayoutMid.Location = new System.Drawing.Point(0, 502);
             this.pnlLayoutMid.Name = "pnlLayoutMid";
             this.pnlLayoutMid.Size = new System.Drawing.Size(1200, 147);
             this.pnlLayoutMid.TabIndex = 6;
@@ -388,12 +392,14 @@
             this.pnlStatusAssigned.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.pnlStatusAssigned.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.pnlStatusAssigned.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(228)))), ((int)(((byte)(252)))));
+            this.pnlStatusAssigned.Controls.Add(this.lblStatusAssignedOverduedValue);
             this.pnlStatusAssigned.Controls.Add(this.lblStatusAssignedValue);
             this.pnlStatusAssigned.Controls.Add(this.lblStatusAssigned);
             this.pnlStatusAssigned.Location = new System.Drawing.Point(220, 34);
             this.pnlStatusAssigned.Name = "pnlStatusAssigned";
             this.pnlStatusAssigned.Size = new System.Drawing.Size(200, 101);
             this.pnlStatusAssigned.TabIndex = 12;
+            this.pnlStatusAssigned.Click += new System.EventHandler(this.pnlStatusAssigned_Click);
             // 
             // lblStatusAssignedValue
             // 
@@ -466,7 +472,7 @@
             this.pnlLayoutTop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlLayoutTop.Location = new System.Drawing.Point(0, 0);
             this.pnlLayoutTop.Name = "pnlLayoutTop";
-            this.pnlLayoutTop.Size = new System.Drawing.Size(1200, 324);
+            this.pnlLayoutTop.Size = new System.Drawing.Size(1200, 502);
             this.pnlLayoutTop.TabIndex = 7;
             // 
             // pnlCartesianChart
@@ -475,7 +481,7 @@
             this.pnlCartesianChart.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlCartesianChart.Location = new System.Drawing.Point(0, 0);
             this.pnlCartesianChart.Name = "pnlCartesianChart";
-            this.pnlCartesianChart.Size = new System.Drawing.Size(640, 324);
+            this.pnlCartesianChart.Size = new System.Drawing.Size(640, 502);
             this.pnlCartesianChart.TabIndex = 3;
             // 
             // cartesianChart
@@ -488,18 +494,19 @@
             this.cartesianChart.Location = new System.Drawing.Point(10, 3);
             this.cartesianChart.Name = "cartesianChart";
             this.cartesianChart.Padding = new System.Windows.Forms.Padding(3);
-            this.cartesianChart.Size = new System.Drawing.Size(620, 315);
+            this.cartesianChart.Size = new System.Drawing.Size(620, 493);
             this.cartesianChart.TabIndex = 0;
             this.cartesianChart.TabStop = false;
             // 
             // pnlTopMid
             // 
+            this.pnlTopMid.Controls.Add(this.pnlCategory);
             this.pnlTopMid.Controls.Add(this.pnlStatusChart);
             this.pnlTopMid.Controls.Add(this.pnlProjects);
             this.pnlTopMid.Dock = System.Windows.Forms.DockStyle.Right;
             this.pnlTopMid.Location = new System.Drawing.Point(640, 0);
             this.pnlTopMid.Name = "pnlTopMid";
-            this.pnlTopMid.Size = new System.Drawing.Size(294, 324);
+            this.pnlTopMid.Size = new System.Drawing.Size(294, 502);
             this.pnlTopMid.TabIndex = 6;
             // 
             // pnlStatusChart
@@ -542,17 +549,44 @@
             this.pnlTopRight.Dock = System.Windows.Forms.DockStyle.Right;
             this.pnlTopRight.Location = new System.Drawing.Point(934, 0);
             this.pnlTopRight.Name = "pnlTopRight";
-            this.pnlTopRight.Size = new System.Drawing.Size(266, 324);
+            this.pnlTopRight.Size = new System.Drawing.Size(266, 502);
             this.pnlTopRight.TabIndex = 4;
             // 
             // pnlHorizDividerBot
             // 
             this.pnlHorizDividerBot.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(33)))), ((int)(((byte)(45)))));
             this.pnlHorizDividerBot.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlHorizDividerBot.Location = new System.Drawing.Point(0, 471);
+            this.pnlHorizDividerBot.Location = new System.Drawing.Point(0, 649);
             this.pnlHorizDividerBot.Name = "pnlHorizDividerBot";
             this.pnlHorizDividerBot.Size = new System.Drawing.Size(1200, 4);
             this.pnlHorizDividerBot.TabIndex = 9;
+            // 
+            // lblStatusAssignedOverduedValue
+            // 
+            this.lblStatusAssignedOverduedValue.AutoSize = true;
+            this.lblStatusAssignedOverduedValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lblStatusAssignedOverduedValue.ForeColor = System.Drawing.Color.Red;
+            this.lblStatusAssignedOverduedValue.Location = new System.Drawing.Point(105, 40);
+            this.lblStatusAssignedOverduedValue.Name = "lblStatusAssignedOverduedValue";
+            this.lblStatusAssignedOverduedValue.Size = new System.Drawing.Size(0, 24);
+            this.lblStatusAssignedOverduedValue.TabIndex = 11;
+            // 
+            // pieChartCategory
+            // 
+            this.pieChartCategory.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.pieChartCategory.Location = new System.Drawing.Point(0, 0);
+            this.pieChartCategory.Name = "pieChartCategory";
+            this.pieChartCategory.Size = new System.Drawing.Size(294, 163);
+            this.pieChartCategory.TabIndex = 1;
+            // 
+            // pnlCategory
+            // 
+            this.pnlCategory.Controls.Add(this.pieChartCategory);
+            this.pnlCategory.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlCategory.Location = new System.Drawing.Point(0, 326);
+            this.pnlCategory.Name = "pnlCategory";
+            this.pnlCategory.Size = new System.Drawing.Size(294, 163);
+            this.pnlCategory.TabIndex = 6;
             // 
             // TSDashboard
             // 
@@ -564,7 +598,7 @@
             this.Controls.Add(this.pnlHorizDividerBot);
             this.Controls.Add(this.pnlLayoutBot);
             this.Name = "TSDashboard";
-            this.Size = new System.Drawing.Size(1200, 622);
+            this.Size = new System.Drawing.Size(1200, 800);
             this.Load += new System.EventHandler(this.TSDashboard_Load);
             this.pnlLayoutBot.ResumeLayout(false);
             this.pnlLayoutBot.PerformLayout();
@@ -586,6 +620,7 @@
             this.pnlTopMid.ResumeLayout(false);
             this.pnlStatusChart.ResumeLayout(false);
             this.pnlProjects.ResumeLayout(false);
+            this.pnlCategory.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -630,5 +665,8 @@
         private System.Windows.Forms.Label lblStatusNewOverduedValue;
         private System.Windows.Forms.Label lblPnlStatusHeader;
         private System.Windows.Forms.Panel pnlTopMid;
+        private System.Windows.Forms.Label lblStatusAssignedOverduedValue;
+        private System.Windows.Forms.Panel pnlCategory;
+        public LiveCharts.WinForms.PieChart pieChartCategory;
     }
 }

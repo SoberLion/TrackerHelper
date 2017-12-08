@@ -22,7 +22,8 @@ namespace TrackerHelper
             InitializeComponent();
             cartesianChart.DataTooltip.Background = Brushes.Gainsboro;
             pieChartProjects.DataTooltip.Background = Brushes.Gainsboro;
-            pieChartStatus.DataTooltip.Background = Brushes.Gainsboro; 
+            pieChartStatus.DataTooltip.Background = Brushes.Gainsboro;
+            pieChartCategory.DataTooltip.Background = Brushes.Gainsboro;
         }
 
         private void TSDashboard_Load(object sender, EventArgs e)
@@ -44,6 +45,7 @@ namespace TrackerHelper
         {
             UpdatePieChartProjects(_userIdList);
             UpdatePieChartStatus(_userIdList);
+            UpdatePieChartCategory(_userIdList);
             CartesianChartStackedColumns(_userIdList);
             btnWeek_Click(btnWeek, EventArgs.Empty);
 
@@ -51,9 +53,9 @@ namespace TrackerHelper
             UpdateLblStatusValue(lblStatusAssignedValue, "9", _userIdList);
             UpdateLblStatusValue(lblStatusEscalatedValue, "22", _userIdList);
 
-            CheckStatusNewOverdue(10, 18, 5, _userIdList);
+            CheckStatusOverdue(lblStatusNewOverduedValue,pnlStatusNew, 10, 18, 5, _userIdList, "1");
+            CheckStatusOverdue(lblStatusAssignedOverduedValue, pnlStatusAssigned, 10, 18, 72, _userIdList, "9");
             CreateUsersButtons(_userIdList);
-
         }
 
         private DateTime getFirstDayofWeekDate(DateTime Date)
@@ -84,7 +86,9 @@ namespace TrackerHelper
                     Height = 30,
                     ForeColor = System.Drawing.Color.FromArgb(86, 88, 86),
                     FlatStyle = FlatStyle.Flat,
-                    Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold)
+                    Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold),
+                    TextAlign = System.Drawing.ContentAlignment.MiddleRight
+                    
             };
                 btn.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(184)))), ((int)(((byte)(92)))));
                 btn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(33)))), ((int)(((byte)(45)))));
@@ -224,6 +228,48 @@ namespace TrackerHelper
             pieChartStatus.Series = col;
         }
 
+        private void UpdatePieChartCategory(string userIdList)
+        {
+            Func<ChartPoint, string> labelPoint = chartPoint => string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
+
+            DataTable dt = DBman.OpenQuery($"SELECT count (*) as IssuesCount, CategoryName FROM issues WHERE AssignedToId in ({userIdList}) AND statusId NOT IN ({_statusIdList}) GROUP BY CategoryName ORDER BY IssuesCount desc");
+            DataRow[] dr = dt.Select("");
+            SeriesCollection col = new SeriesCollection();
+            List<string> ls = dr.Select(p => p[0].ToString()).ToList();
+
+            int sum = ls.Sum(p => Convert.ToInt32(p));
+            int otherIssuesSum = 0;
+            int otherCounter = 0;
+            for (int i = 0; i < dr.Length; i++)
+            {
+                if (Convert.ToInt32(dr[i][0]) < (sum / 100))
+                {
+                    otherIssuesSum += Convert.ToInt32(dr[i][0]);
+                    otherCounter++;
+                    continue;
+                }
+                PieSeries columnSeries = new PieSeries
+                {
+                    Title = dr[i][1].ToString(),
+                    Values = new ChartValues<int> { Convert.ToInt32(dr[i][0]) },
+                    LabelPoint = point => point.Y.ToString(),
+                    DataLabels = true,
+                };
+                col.Add(columnSeries);
+            }
+
+            PieSeries otherSeries = new PieSeries
+            {
+                Title = "Другие категории < 1%: " + otherCounter.ToString(),
+                Values = new ChartValues<int> { otherIssuesSum },
+                LabelPoint = point => point.Y.ToString(),
+                DataLabels = true,
+            };
+            col.Add(otherSeries);
+
+            pieChartCategory.Series = col;
+        }
+
         private void CartesianChartStackedColumns(string userIdList)
         {
             string query = $"select count (*) as IssuesCount, StatusName, AssignedToName from issues where AssignedToId in ({userIdList}) and statusId not in ({_statusIdList}) group by StatusName, AssignedToName order by AssignedToName, StatusName";
@@ -321,18 +367,18 @@ namespace TrackerHelper
 
         }
 
-        public void CheckStatusNewOverdue(int hoursFrom, int hoursTo, int hoursToOverdue, string userIdList)
+        public void CheckStatusOverdue(object label, object panel, int hoursFrom, int hoursTo, int hoursToOverdue, string userIdList, string statusId)
         {
             string overdue;            
 
             overdue = DateTime.Now.AddHours(-GetHours(hoursFrom, hoursTo, hoursToOverdue)).ToString(_dateFormat);
 
-            string query = $"SELECT count(*) from issues WHERE statusid = 1 AND createdOn < '{overdue}' AND AssignedToId in ({userIdList}) and projectId in (26, 220)";
+            string query = $"SELECT count(*) from issues WHERE statusid = {statusId} AND createdOn < '{overdue}' AND AssignedToId in ({userIdList}) and projectId in (26, 220)";
 
             DataTable dt = DBman.OpenQuery(query);
 
-            lblStatusNewOverduedValue.Text = dt.Rows[0][0].ToString();
-            pnlStatusNew.Tag = overdue;
+            (label as Label).Text = dt.Rows[0][0].ToString();
+            (panel as Panel).Tag = overdue + "," + statusId;
         }
 
         public int GetHours(int hoursFrom, int hoursTo, int hoursToOverdue)
@@ -359,7 +405,6 @@ namespace TrackerHelper
             }
             return hours;
         }
-
 
         public void UpdateLblStatusValue(object obj, string statusId, string userIdList)
         {
@@ -568,7 +613,6 @@ namespace TrackerHelper
             selectedSeries.PushOut = 8;*/
         }
 
-        //TODO Toggle Buttons
         private void BtnUsersToggle(object sender)
         {
             foreach (var item in pnlTopRight.Controls)
@@ -580,7 +624,6 @@ namespace TrackerHelper
             }
 
             (sender as CheckedButton).Check = true;
-        //    (sender as CheckedButton).BackColor = System.Drawing.Color.FromArgb(21, 33, 45);
         }
 
         private void btnUsersCheckedChange(object sender, EventArgs e)
@@ -592,7 +635,6 @@ namespace TrackerHelper
 
         private void BtnFiltersToggle(object sender)
         {
-
             btnWeek.Check = false;
             btnWeek.BackColor = System.Drawing.Color.FromArgb(41, 53, 65);
             btnMonth.Check = false;
@@ -604,8 +646,15 @@ namespace TrackerHelper
 
         private void pnlStatusNew_Click(object sender, EventArgs e)
         {
-            string overdue = (sender as Panel).Tag.ToString();
-            string query = $"SELECT IssueId, AssignedToName from issues WHERE statusid = 1 AND createdOn < '{overdue}' AND AssignedToId in ({_userIdList}) and projectId in (26, 220)";
+            StatusPanelClick(sender);
+        }
+
+        private void StatusPanelClick(object sender)
+        {           
+            string[] overdue = (sender as Panel).Tag?.ToString().Split(',');
+            if (overdue == null || overdue.Length < 2)
+                return;
+            string query = $"SELECT IssueId, AssignedToName from issues WHERE statusid = {overdue[1]} AND createdOn < '{overdue[0]}' AND AssignedToId in ({_userIdList}) and projectId in (26, 220)";
 
             DataTable dt = DBman.OpenQuery(query);
             DataRow[] dr = dt.Select("");
@@ -615,6 +664,11 @@ namespace TrackerHelper
                 sb.AppendLine($"{item[0].ToString()}: {item[1].ToString()}");
             }
             MessageBox.Show(sb.ToString());
+        }
+
+        private void pnlStatusAssigned_Click(object sender, EventArgs e)
+        {
+            StatusPanelClick(sender);
         }
     }
 }

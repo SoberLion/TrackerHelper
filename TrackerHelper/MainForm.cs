@@ -80,7 +80,7 @@ namespace TrackerHelper
             {
                 Func<ChartPoint, string> labelPoint = chartPoint => string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
                 repform = new Form
-                    { WindowState = FormWindowState.Maximized, AutoScaleDimensions = new SizeF(6F, 13F), Name = "Charts", Text = "Charts" };
+                    { WindowState = FormWindowState.Maximized, AutoScaleDimensions = new SizeF(6F, 13F), Name = "Charts", Text = "Charts", BackColor = System.Drawing.Color.FromArgb(61, 73, 85) };
                 repform.FormClosed += FormClosed;
 
                 Panel pnlChart = new Panel
@@ -136,7 +136,7 @@ namespace TrackerHelper
                 Func<ChartPoint, string> labelPoint = chartPoint => string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
 
                 repform = new Form
-                    { WindowState = FormWindowState.Maximized, AutoScaleDimensions = new SizeF(6F, 13F), Name = "Charts", Text = "Charts" };
+                    { WindowState = FormWindowState.Maximized, AutoScaleDimensions = new SizeF(6F, 13F), Name = "Charts", Text = "Charts", BackColor = System.Drawing.Color.FromArgb(61, 73, 85) };
                 repform.FormClosed += FormClosed;
 
                 Panel pnlChart = new Panel
@@ -149,24 +149,27 @@ namespace TrackerHelper
                 Panel pnlRadioButton = new Panel
                     { Parent = pnlFilter, Dock = DockStyle.Top, Name = "pnlRadioButton", Height = 150 };
                 RadioButton rbYear = new RadioButton
-                    { Parent = pnlRadioButton, Dock = DockStyle.Top, Name = "rbYear", Text = "Год", Tag = DBman.GroupFormat.Year };
+                    { Parent = pnlRadioButton, Dock = DockStyle.Top, Name = "rbYear", Text = "Год",
+                    Tag = DBman.GroupFormat.Year, ForeColor = System.Drawing.Color.Gainsboro };
                 RadioButton rbMonth = new RadioButton
-                    { Parent = pnlRadioButton, Dock = DockStyle.Top, Name = "rbMonth", Text = "Месяц", Checked = true, Tag = DBman.GroupFormat.Month };
+                    { Parent = pnlRadioButton, Dock = DockStyle.Top, Name = "rbMonth", Text = "Месяц", Checked = true,
+                    Tag = DBman.GroupFormat.Month, ForeColor = System.Drawing.Color.Gainsboro };
                 RadioButton rbDay = new RadioButton
-                    { Parent = pnlRadioButton, Dock = DockStyle.Top, Name = "rbDay", Text = "День", Tag = DBman.GroupFormat.Day };
+                    { Parent = pnlRadioButton, Dock = DockStyle.Top, Name = "rbDay", Text = "День",
+                    Tag = DBman.GroupFormat.Day, ForeColor = System.Drawing.Color.Gainsboro };
                 Label lblrbGroup = new Label
-                { Parent = pnlRadioButton, Dock = DockStyle.Top, Name = "lblrbGroup", Text = "Группировка" };
+                { Parent = pnlRadioButton, Dock = DockStyle.Top, Name = "lblrbGroup", Text = "Группировка", ForeColor = System.Drawing.Color.Gainsboro };
 
 
                 Panel pnldtpTo = new Panel
                     { Parent = pnlFilter, Dock = DockStyle.Top, Name = "pnldtpTo", Height = 50 };
                 DateTimePicker dtpTo = new DateTimePicker
-                    { Parent = pnldtpTo, Format = DateTimePickerFormat.Short, Dock = DockStyle.Top, Name = "dtpTo" };
+                    { Parent = pnldtpTo, Format = DateTimePickerFormat.Short, Dock = DockStyle.Top, Name = "dtpTo", ForeColor = System.Drawing.Color.Gainsboro };
 
                 dtpTo.CloseUp += dtpOnCloseUp;
 
                 Label lblTo = new Label
-                    { Parent = pnldtpTo, Dock = DockStyle.Top, Name = "lblFrom", Text = "Дата по:" };
+                    { Parent = pnldtpTo, Dock = DockStyle.Top, Name = "lblFrom", Text = "Дата по:", ForeColor = System.Drawing.Color.Gainsboro };
                 
 
                 Panel pnldtpFrom = new Panel
@@ -177,11 +180,13 @@ namespace TrackerHelper
                 dtpFrom.CloseUp += dtpOnCloseUp;
 
                 Label lblFrom = new Label
-                    { Parent = pnldtpFrom, Dock = DockStyle.Top, Name = "lblFrom", Text = "Дата с:" };                
+                    { Parent = pnldtpFrom, Dock = DockStyle.Top, Name = "lblFrom", Text = "Дата с:", ForeColor = System.Drawing.Color.Gainsboro };                
                 
 
                 Button btnFilter = new Button
-                    { Parent = pnlFilter, Name = "btnFilter", Text = "FilterIt!", Dock = DockStyle.Top };
+                    { Parent = pnlFilter, Name = "btnFilter", Text = "FILTER", Dock = DockStyle.Top,
+                    ForeColor = System.Drawing.Color.Gainsboro, Height = 30, FlatStyle = FlatStyle.Flat };
+                btnFilter.FlatAppearance.BorderSize = 0;
 
                 btnFilter.Click += btnFilterOnClick;
                 cartesianChart.DataClick += CartesianChartOnDataClick;
@@ -257,7 +262,7 @@ namespace TrackerHelper
                 Func<ChartPoint, string> labelPoint = chartPoint => string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
 
                 repform = new Form
-                    { WindowState = FormWindowState.Maximized, AutoScaleDimensions = new SizeF(6F, 13F), Name = "Charts", Text = "Charts" };
+                    { WindowState = FormWindowState.Maximized, AutoScaleDimensions = new SizeF(6F, 13F), Name = "Charts", Text = "Charts", BackColor = System.Drawing.Color.FromArgb(61, 73, 85) };
                 repform.FormClosed += FormClosed;
 
                 Panel pnlChart = new Panel
@@ -273,22 +278,26 @@ namespace TrackerHelper
                 Panel pnldtpTo = new Panel
                     { Parent = pnlFilter, Dock = DockStyle.Top, Name = "pnldtpTo", Height = 50 };
                 DateTimePicker dtpTo = new DateTimePicker
-                    { Parent = pnldtpTo, Format = DateTimePickerFormat.Short, Dock = DockStyle.Top, Name = "dtpTo" };
+                    { Parent = pnldtpTo, Format = DateTimePickerFormat.Short, Dock = DockStyle.Top,
+                    Name = "dtpTo", ForeColor = System.Drawing.Color.Gainsboro };
                 dtpTo.CloseUp += dtpOnCloseUp;
                 Label lblTo = new Label
-                    { Parent = pnldtpTo, Dock = DockStyle.Top, Name = "lblFrom", Text = "Дата по:" };
+                    { Parent = pnldtpTo, Dock = DockStyle.Top, Name = "lblFrom", Text = "Дата по:", ForeColor = System.Drawing.Color.Gainsboro };
 
 
                 Panel pnldtpFrom = new Panel
                     { Parent = pnlFilter, Dock = DockStyle.Top, Name = "pnldtpFrom", Height = 50 };
                 DateTimePicker dtpFrom = new DateTimePicker
-                    { Parent = pnldtpFrom, Format = DateTimePickerFormat.Short, Dock = DockStyle.Top, Name = "dtpFrom" };
+                    { Parent = pnldtpFrom, Format = DateTimePickerFormat.Short, Dock = DockStyle.Top,
+                    Name = "dtpFrom", ForeColor = System.Drawing.Color.Gainsboro };
                 dtpFrom.CloseUp += dtpOnCloseUp;
                 Label lblFrom = new Label
-                    { Parent = pnldtpFrom, Dock = DockStyle.Top, Name = "lblFrom", Text = "Дата с:" };
+                    { Parent = pnldtpFrom, Dock = DockStyle.Top, Name = "lblFrom", Text = "Дата с:", ForeColor = System.Drawing.Color.Gainsboro };
 
                 Button btnFilter = new Button
-                    { Parent = pnlFilter, Name = "btnFilterTE", Text = "FilterIt!", Dock = DockStyle.Top };
+                    { Parent = pnlFilter, Name = "btnFilterTE", Text = "FILTER", Dock = DockStyle.Top,
+                    ForeColor = System.Drawing.Color.Gainsboro, Height = 30, FlatStyle = FlatStyle.Flat };
+                btnFilter.FlatAppearance.BorderSize = 0;
 
                 btnFilter.Click += btnFilterOnClick;
                 cartesianChart.DataClick += CartesianChartOnDataClick;
@@ -337,7 +346,7 @@ namespace TrackerHelper
                 cartesianChart.AxisX.Clear();
                 cartesianChart.AxisY.Clear();
 
-                Axis ax = new Axis { Labels = new List<string>(), Separator = new Separator { Step = 1, IsEnabled = false }, LabelsRotation = 25 };
+                Axis ax = new Axis { Labels = new List<string>(), Separator = new Separator { Step = 1, IsEnabled = false }, LabelsRotation = 50 };
                 Axis ay = new Axis { LabelFormatter = value => value.ToString(), Separator = new Separator(), MinValue = 0 };
 
 
@@ -347,6 +356,7 @@ namespace TrackerHelper
                     Values = new ChartValues<int>(),
                     LabelPoint = point => point.Y.ToString(),
                     DataLabels = true,
+                    Foreground = System.Windows.Media.Brushes.Gainsboro,
                     Fill = System.Windows.Media.Brushes.Red
                 };
 
@@ -356,6 +366,7 @@ namespace TrackerHelper
                     Values = new ChartValues<int>(),
                     LabelPoint = point => point.Y.ToString(),
                     DataLabels = true,
+                    Foreground = System.Windows.Media.Brushes.Gainsboro,
                     Fill = System.Windows.Media.Brushes.Gray
                 };
 
