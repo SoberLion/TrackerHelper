@@ -52,7 +52,7 @@
             this.dashBoardsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(334, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(384, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -67,7 +67,7 @@
             // tasksToolStripMenuItem
             // 
             this.tasksToolStripMenuItem.Name = "tasksToolStripMenuItem";
-            this.tasksToolStripMenuItem.Size = new System.Drawing.Size(102, 22);
+            this.tasksToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.tasksToolStripMenuItem.Text = "Tasks";
             this.tasksToolStripMenuItem.Click += new System.EventHandler(this.tasksToolStripMenuItem_Click);
             // 
@@ -94,7 +94,7 @@
             this.newIssuesMenuItem,
             this.timeEntriesToolStripMenuItem});
             this.techSupportToolStripMenuItem.Name = "techSupportToolStripMenuItem";
-            this.techSupportToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.techSupportToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.techSupportToolStripMenuItem.Text = "Tech support";
             // 
             // groupedByStatusToolStripMenuItem
@@ -136,7 +136,7 @@
             // techSuppToolStripMenuItem
             // 
             this.techSuppToolStripMenuItem.Name = "techSuppToolStripMenuItem";
-            this.techSuppToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.techSuppToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.techSuppToolStripMenuItem.Text = "TechSupp";
             this.techSuppToolStripMenuItem.Click += new System.EventHandler(this.techSuppToolStripMenuItem_Click);
             // 
@@ -144,7 +144,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(334, 616);
+            this.ClientSize = new System.Drawing.Size(384, 616);
             this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.IsMdiContainer = true;

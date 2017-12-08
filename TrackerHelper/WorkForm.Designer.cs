@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
             this.tControl = new System.Windows.Forms.TabControl();
             this.tP_IssueList = new System.Windows.Forms.TabPage();
             this.pnl_TreeView = new System.Windows.Forms.Panel();
@@ -44,6 +43,7 @@
             this.listbox_IssueJournal = new System.Windows.Forms.ListBox();
             this.pnl_tools = new System.Windows.Forms.Panel();
             this.btnGetIssuesJournals = new System.Windows.Forms.Button();
+            this.tbNumOfDays = new System.Windows.Forms.TextBox();
             this.tControl.SuspendLayout();
             this.tP_IssueList.SuspendLayout();
             this.pnl_TreeView.SuspendLayout();
@@ -52,16 +52,6 @@
             this.pnl_listbox.SuspendLayout();
             this.pnl_tools.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(3, 3);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(78, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // tControl
             // 
@@ -199,8 +189,8 @@
             // 
             // pnl_tools
             // 
+            this.pnl_tools.Controls.Add(this.tbNumOfDays);
             this.pnl_tools.Controls.Add(this.btnGetIssuesJournals);
-            this.pnl_tools.Controls.Add(this.button1);
             this.pnl_tools.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnl_tools.Location = new System.Drawing.Point(3, 3);
             this.pnl_tools.Name = "pnl_tools";
@@ -213,9 +203,17 @@
             this.btnGetIssuesJournals.Name = "btnGetIssuesJournals";
             this.btnGetIssuesJournals.Size = new System.Drawing.Size(75, 23);
             this.btnGetIssuesJournals.TabIndex = 1;
-            this.btnGetIssuesJournals.Text = "Журналы";
+            this.btnGetIssuesJournals.Text = "Update";
             this.btnGetIssuesJournals.UseVisualStyleBackColor = true;
             this.btnGetIssuesJournals.Click += new System.EventHandler(this.btnGetIssuesJournals_Click);
+            // 
+            // tbNumOfDays
+            // 
+            this.tbNumOfDays.Location = new System.Drawing.Point(6, 4);
+            this.tbNumOfDays.Name = "tbNumOfDays";
+            this.tbNumOfDays.Size = new System.Drawing.Size(48, 21);
+            this.tbNumOfDays.TabIndex = 2;
+            this.tbNumOfDays.Text = "1";
             // 
             // WorkForm
             // 
@@ -234,13 +232,12 @@
             this.tp_IssueJournal.ResumeLayout(false);
             this.pnl_listbox.ResumeLayout(false);
             this.pnl_tools.ResumeLayout(false);
+            this.pnl_tools.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TabControl tControl;
         private System.Windows.Forms.TabPage tp_IssueJournal;
         private System.Windows.Forms.TabPage tP_IssueList;
@@ -256,5 +253,6 @@
         private System.Windows.Forms.Button btn_UpdateIssues;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Button btnGetIssuesJournals;
+        private System.Windows.Forms.TextBox tbNumOfDays;
     }
 }

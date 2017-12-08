@@ -75,7 +75,7 @@ namespace TrackerHelper
             int retries = 0;
             do
             {//http://tracker.ucs.ru/time_entries.xml?limit=100&key=1287ca3310be20d6992a764b57f9c8bcfbb05664&from=2017-01-01&to=2017-12-31
-                string url = $@"{baseaddress}time_entries.xml?&offset={te.offset}&limit=100&key=1287ca3310be20d6992a764b57f9c8bcfbb05664&from=2017-09-01&to=2017-12-31";
+                string url = $@"{baseaddress}time_entries.xml?&offset={te.offset}&limit=100&key=1287ca3310be20d6992a764b57f9c8bcfbb05664{filter}";
                 resultModel.IsSuccess = false;
 
                 resultModel = Http.Get(url);

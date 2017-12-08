@@ -20,6 +20,9 @@ namespace TrackerHelper
         public TSDashboard()
         {
             InitializeComponent();
+            cartesianChart.DataTooltip.Background = Brushes.Gainsboro;
+            pieChartProjects.DataTooltip.Background = Brushes.Gainsboro;
+            pieChartStatus.DataTooltip.Background = Brushes.Gainsboro; 
         }
 
         private void TSDashboard_Load(object sender, EventArgs e)
@@ -41,7 +44,7 @@ namespace TrackerHelper
         {
             UpdatePieChartProjects(_userIdList);
             UpdatePieChartStatus(_userIdList);
-            UpdateCartesianChart(_userIdList);
+            CartesianChartStackedColumns(_userIdList);
             btnWeek_Click(btnWeek, EventArgs.Empty);
 
             UpdateLblStatusValue(lblStatusNewValue, "1", _userIdList);
@@ -62,6 +65,9 @@ namespace TrackerHelper
 
         private void CreateUsersButtons(string userIdList)
         {
+            if (pnlTopRight.Controls.Count > 0)
+                return;
+
             string query = $"SELECT DISTINCT AssignedToName, AssignedToId FROM Issues WHERE AssignedToId IN ({userIdList}) ORDER BY AssignedToName desc";
 
             DataTable dt = DBman.OpenQuery(query);
@@ -83,21 +89,23 @@ namespace TrackerHelper
                 btn.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(184)))), ((int)(((byte)(92)))));
                 btn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(33)))), ((int)(((byte)(45)))));
                 btn.FlatAppearance.BorderSize = 0;
-                btn.Click += Btn_Click;
+                btn.Click += btnUsers_Click;
+                btn.CheckedChange += btnUsersCheckedChange;
             }
         }
 
-        private void Btn_Click(object sender, EventArgs e)
+        private void btnUsers_Click(object sender, EventArgs e)
         {
             if (sender is CheckedButton cb)
             {
-                BtnFiltersToggle(sender);
+                BtnUsersToggle(sender);
                 string id = cb.Tag.ToString();
 
                 UpdatePieChartProjects(id);
                 UpdatePieChartStatus(id);
                 UpdateLblStatusValue(lblStatusNewValue, "1", id);
                 UpdateLblStatusValue(lblStatusAssignedValue, "9", id);
+                CartesianChartColumns(id);
             }            
         }
 
@@ -216,7 +224,7 @@ namespace TrackerHelper
             pieChartStatus.Series = col;
         }
 
-        private void UpdateCartesianChart(string userIdList)
+        private void CartesianChartStackedColumns(string userIdList)
         {
             string query = $"select count (*) as IssuesCount, StatusName, AssignedToName from issues where AssignedToId in ({userIdList}) and statusId not in ({_statusIdList}) group by StatusName, AssignedToName order by AssignedToName, StatusName";
             DataTable dt = DBman.OpenQuery(query);
@@ -269,7 +277,7 @@ namespace TrackerHelper
                 Separator = new Separator { Step = 1, IsEnabled = false },
                 Labels = AssignedToNameList,
                 LabelsRotation = 70,
-                Foreground = Brushes.White
+                Foreground = Brushes.Gainsboro
             };
 
             cartesianChart.AxisX.Clear();
@@ -277,6 +285,40 @@ namespace TrackerHelper
 
             cartesianChart.Series = col;
             cartesianChart.AxisX.Add(ax);
+        }
+
+        private void CartesianChartColumns(string userIdList)
+        {
+            string query = $"select count (*) as StatusCount, StatusName from issues where AssignedToId in ({userIdList}) and statusId not in ({_statusIdList}) group by StatusName order by StatusCount desc";
+            DataTable dt = DBman.OpenQuery(query);
+            DataRow[] dr = dt.Select("");
+
+            SeriesCollection col = new SeriesCollection();            
+
+            Axis ay = new Axis { LabelFormatter = value => value.ToString(), Separator = new Separator(), MinValue = 0 };
+
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                ColumnSeries columnSeries = new ColumnSeries
+                {
+                    Title = dt.Rows[i][1].ToString(),
+                    Values = new ChartValues<int> { Convert.ToInt32(dt.Rows[i][0]) },
+                    LabelPoint = point => point.Y.ToString(),
+                    DataLabels = true,
+                    Foreground = Brushes.Gainsboro
+                };
+                col.Add(columnSeries);
+            }
+
+            cartesianChart.AxisX.Clear();
+            cartesianChart.AxisY.Clear();
+
+            cartesianChart.Series = col;
+            cartesianChart.AxisY.Add(ay);
+
+
+         //   cartesianChart.DataTooltip. .SelectionMode = LiveCharts.TooltipSelectionMode.OnlySender;
+
         }
 
         public void CheckStatusNewOverdue(int hoursFrom, int hoursTo, int hoursToOverdue, string userIdList)
@@ -529,17 +571,28 @@ namespace TrackerHelper
         //TODO Toggle Buttons
         private void BtnUsersToggle(object sender)
         {
-            btnWeek.Check = false;
-            btnWeek.BackColor = System.Drawing.Color.FromArgb(41, 53, 65);
-            btnMonth.Check = false;
-            btnMonth.BackColor = System.Drawing.Color.FromArgb(41, 53, 65);
+            foreach (var item in pnlTopRight.Controls)
+            {
+                if (item is CheckedButton cb)
+                {
+                    cb.Check = false;
+                }
+            }
 
             (sender as CheckedButton).Check = true;
-            (sender as CheckedButton).BackColor = System.Drawing.Color.FromArgb(21, 33, 45);
+        //    (sender as CheckedButton).BackColor = System.Drawing.Color.FromArgb(21, 33, 45);
         }
+
+        private void btnUsersCheckedChange(object sender, EventArgs e)
+        {
+            if(sender is CheckedButton cb)
+                cb.BackColor = cb.Check == false ? System.Drawing.Color.FromArgb(21, 33, 45) : System.Drawing.Color.FromArgb(41, 53, 65);
+        }
+
 
         private void BtnFiltersToggle(object sender)
         {
+
             btnWeek.Check = false;
             btnWeek.BackColor = System.Drawing.Color.FromArgb(41, 53, 65);
             btnMonth.Check = false;
