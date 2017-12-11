@@ -9,9 +9,9 @@ using LiveCharts.Wpf;
 using TrackerHelper.DB;
 using System.Text;
 
-namespace TrackerHelper
+namespace TrackerHelper.Controls
 {
-    public partial class TSDashboard : UserControl
+    public partial class DashboardIssues : UserControl
     {
         /*static string cartesianAssigned = @"";
         static string cartesianNew = @"";
@@ -19,7 +19,7 @@ namespace TrackerHelper
 
 
         static string _dateFormat = "yyyy-MM-dd HH:mm:ss:fff";
-        private string _userIdList = "2361,2374,1830,2233,1240,1383,2886,2235,1521,2232,1537,2535,551,894,3713,328";
+        private string _userIdList = "2361,2374,1830,2233,1240,1383,2886,2235,1521,2232,1537,2535,551,894,3713,328,751,2270";
         private string _statusIdList = "3,5,6,19,26,27,29,30";
 
         public string UserIdList
@@ -28,7 +28,13 @@ namespace TrackerHelper
             set { _userIdList = value; }
         }
 
-        public TSDashboard()
+        public string StatusIdList
+        {
+            get { return _statusIdList; }
+            set { _statusIdList = value; }
+        }
+
+        public DashboardIssues()
         {
             InitializeComponent();
             cartesianChart.DataTooltip.Background = Brushes.Gainsboro;
@@ -55,19 +61,23 @@ namespace TrackerHelper
 
         public void UpdateTSDashboard()
         {
-            UpdatePieChartProjects(_userIdList);
-            UpdatePieChartStatus(_userIdList);
-            UpdatePieChartCategory(_userIdList);
-            CartesianChartStackedColumns(_userIdList);
+            UpdatePieChartProjects(UserIdList);
+            UpdatePieChartStatus(UserIdList);
+            UpdatePieChartCategory(UserIdList);
+            CartesianChartStackedColumns(UserIdList);
+
             FilterBtnClick(btnWeek, EventArgs.Empty);
 
-            UpdateLblStatusValue(lblStatusNewValue, "1", _userIdList);
-            UpdateLblStatusValue(lblStatusAssignedValue, "9", _userIdList);
-            UpdateLblStatusValue(lblStatusEscalatedValue, "22", _userIdList);
+            UpdateLblStatusValue(lblStatusNewValue, "1", UserIdList);
+            UpdateLblStatusValue(lblStatusAssignedValue, "9", UserIdList);
+            UpdateLblStatusValue(lblStatusNeedInfoEmplValue, "18", UserIdList);
+            UpdateLblStatusValue(lblStatusEscalatedValue, "22", UserIdList);
 
 
-            CheckStatusOverdue(lblStatusNewOverduedValue,pnlStatusNew, 10, 18, 5, "1");
-            CheckStatusOverdue(lblStatusAssignedOverduedValue, pnlStatusAssigned, 10, 18, 72, "9");
+            CheckStatusOverdue(lblStatusNewOverduedValue,pnlStatusNew, 10, 18, 5, "1", UserIdList);
+            CheckStatusOverdue(lblStatusAssignedOverduedValue, pnlStatusAssigned, 10, 18, 72, "9", UserIdList);
+            CheckStatusOverdue(lblStatusNeedInfoEmplOverduedValue, pnlStatusNeedInfoEmpl, 10, 18, 8, "18", UserIdList);
+            CheckStatusOverdue(lblStatusEscalatedOverduedValue, pnlStatusEscalated, 10, 18, 1, "22", UserIdList);
 
             CreateUsersButtons();
         }
@@ -97,8 +107,8 @@ namespace TrackerHelper
                     TextAlign = System.Drawing.ContentAlignment.MiddleRight
                 };
 
-                btn.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(184)))), ((int)(((byte)(92)))));
-                btn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(33)))), ((int)(((byte)(45)))));
+                btn.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(65, 184, 92);
+                btn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(21, 33, 45);
                 btn.FlatAppearance.BorderSize = 0;
                 btn.Click += btnUsers_Click;
                 btn.CheckedChange += btnUsersCheckedChange;
@@ -116,8 +126,8 @@ namespace TrackerHelper
                 Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold),
                 TextAlign = System.Drawing.ContentAlignment.MiddleRight
             };
-            AllUsers.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(184)))), ((int)(((byte)(92)))));
-            AllUsers.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(33)))), ((int)(((byte)(45)))));
+            AllUsers.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(65, 184, 92);
+            AllUsers.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(21,33,45);
             AllUsers.FlatAppearance.BorderSize = 0;
             AllUsers.Click += btnUsers_Click;
             AllUsers.CheckedChange += btnUsersCheckedChange;
@@ -134,15 +144,24 @@ namespace TrackerHelper
                 UpdatePieChartStatus(id);
                 UpdateLblStatusValue(lblStatusNewValue, "1", id);
                 UpdateLblStatusValue(lblStatusAssignedValue, "9", id);
+                UpdateLblStatusValue(lblStatusNeedInfoEmplValue, "18", id);
+                UpdateLblStatusValue(lblStatusEscalatedValue, "22", id);
+
+                CheckStatusOverdue(lblStatusNewOverduedValue, pnlStatusNew, 10, 18, 5, "1", id);
+                CheckStatusOverdue(lblStatusAssignedOverduedValue, pnlStatusAssigned, 10, 18, 72, "9", id);
+                CheckStatusOverdue(lblStatusNeedInfoEmplOverduedValue, pnlStatusNeedInfoEmpl, 10, 18, 8, "18", id);
+                CheckStatusOverdue(lblStatusEscalatedOverduedValue, pnlStatusEscalated, 10, 18, 1, "22", id);
+
                 CartesianChartColumns(id);
             }            
         }
 
         private void UpdatePieChartProjects(string userIdList)
         {
-            Func<ChartPoint, string> labelPoint = chartPoint => string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);            
-
-            DataTable dt = DBman.OpenQuery($"select count (*) as IssuesCount, projectName from issues where AssignedToId in ({userIdList}) and statusId not in ({_statusIdList}) group by ProjectName order by IssuesCount desc");
+            Func<ChartPoint, string> labelPoint = chartPoint => string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
+            string query = $@"SELECT count (*) AS IssuesCount, projectName FROM Issues WHERE AssignedToId IN ({userIdList}) 
+                            AND statusId NOT IN ({StatusIdList}) GROUP BY ProjectName ORDER BY IssuesCount DESC";
+            DataTable dt = DBman.OpenQuery(query);
             DataRow[] dr = dt.Select("");
             SeriesCollection col = new SeriesCollection();
             List<string> ls = dr.Select(p => p[0].ToString()).ToList();
@@ -181,16 +200,14 @@ namespace TrackerHelper
 
         private void PieChartOtherProjects(string userIdList)
         {
-            string query = string.Format("{0}{1}{2}{3}{4}{5}{6}{7}",
-                "SELECT * ",
-                    "FROM (SELECT count (*) as IssuesCount,projectName ",
-                          "FROM Issues ",
-                         $"WHERE AssignedToId in ({userIdList}) and statusId not in ({_statusIdList}) ",
-                          "GROUP BY issues.ProjectName) GroupedIssues ",
-                   "WHERE GroupedIssues.IssuesCount < ",
-                          $"(select Count(*) from issues where AssignedToId in ({userIdList}) and statusId not in ({_statusIdList})) / 100 ",
-                   "ORDER BY IssuesCount desc"
-                          );
+            string query = $@"SELECT * 
+                            FROM (SELECT count (*) AS IssuesCount, projectName
+                                FROM Issues
+                                WHERE AssignedToId IN ({userIdList}) AND statusId NOT IN ({_statusIdList})
+                                GROUP BY issues.ProjectName) GroupedIssues
+                            WHERE GroupedIssues.IssuesCount < 
+                                (SELECT Count(*) FROM Issues WHERE AssignedToId IN ({userIdList}) AND statusId NOT IN ({StatusIdList})) / 100 
+                            ORDER BY IssuesCount DESC";
 
             DataTable dt = DBman.OpenQuery(query);
 
@@ -215,7 +232,8 @@ namespace TrackerHelper
         {
             Func<ChartPoint, string> labelPoint = chartPoint => string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
 
-            DataTable dt = DBman.OpenQuery($"SELECT count (*) as IssuesCount, StatusName FROM issues WHERE AssignedToId in ({userIdList}) AND statusId NOT IN ({_statusIdList}) GROUP BY StatusName ORDER BY IssuesCount desc");
+            DataTable dt = DBman.OpenQuery($@"SELECT count (*) as IssuesCount, StatusName FROM issues WHERE AssignedToId in 
+                                           ({userIdList}) AND statusId NOT IN ({StatusIdList}) GROUP BY StatusName ORDER BY IssuesCount desc");
             DataRow[] dr = dt.Select("");
             SeriesCollection col = new SeriesCollection();
             List<string> ls = dr.Select(p => p[0].ToString()).ToList();
@@ -257,7 +275,8 @@ namespace TrackerHelper
         {
             Func<ChartPoint, string> labelPoint = chartPoint => string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
 
-            DataTable dt = DBman.OpenQuery($"SELECT count (*) as IssuesCount, CategoryName FROM issues WHERE AssignedToId in ({userIdList}) AND statusId NOT IN ({_statusIdList}) GROUP BY CategoryName ORDER BY IssuesCount desc");
+            DataTable dt = DBman.OpenQuery($@"SELECT count (*) as IssuesCount, CategoryName FROM issues WHERE AssignedToId in 
+                                           ({userIdList}) AND statusId NOT IN ({StatusIdList}) GROUP BY CategoryName ORDER BY IssuesCount desc");
             DataRow[] dr = dt.Select("");
             SeriesCollection col = new SeriesCollection();
             List<string> ls = dr.Select(p => p[0].ToString()).ToList();
@@ -297,7 +316,8 @@ namespace TrackerHelper
 
         private void CartesianChartStackedColumns(string userIdList)
         {
-            string query = $"select count (*) as IssuesCount, StatusName, AssignedToName from issues where AssignedToId in ({userIdList}) and statusId not in ({_statusIdList}) group by StatusName, AssignedToName order by AssignedToName, StatusName";
+            string query = $@"select count (*) as IssuesCount, StatusName, AssignedToName from issues where AssignedToId in ({userIdList}) and 
+                            statusId not in ({StatusIdList}) group by StatusName, AssignedToName order by AssignedToName, StatusName";
             DataTable dt = DBman.OpenQuery(query);
             DataRow[] dr = dt.Select("");
 
@@ -360,7 +380,8 @@ namespace TrackerHelper
 
         private void CartesianChartColumns(string userIdList)
         {
-            string query = $"select count (*) as StatusCount, StatusName from issues where AssignedToId in ({userIdList}) and statusId not in ({_statusIdList}) group by StatusName order by StatusCount desc";
+            string query = $@"SELECT count (*) as StatusCount, StatusName FROM Issues WHERE AssignedToId IN ({userIdList}) 
+                            AND statusId NOT IN ({StatusIdList}) GROUP BY StatusName ORDER BY StatusCount DESC";
             DataTable dt = DBman.OpenQuery(query);
             DataRow[] dr = dt.Select("");
 
@@ -398,18 +419,20 @@ namespace TrackerHelper
         /// <param name="hoursTo">Время конца рабочего дня</param>
         /// <param name="hoursToOverdue">Часы до превышения лимита</param>
         /// <param name="statusId">Id статуса</param>
-        public void CheckStatusOverdue(Label label, Panel panel, int hoursFrom, int hoursTo, int hoursToOverdue, string statusId)
+        public void CheckStatusOverdue(Label label, Panel panel, int hoursFrom, int hoursTo, int hoursToOverdue, string statusId, string UserId)
         {
             string overdue;            
 
             overdue = DateTime.Now.AddHours(-GetHours(hoursFrom, hoursTo, hoursToOverdue)).ToString(_dateFormat);
 
-            string query = $"SELECT count(*) from issues WHERE statusid = {statusId} AND createdOn < '{overdue}' AND AssignedToId in ({UserIdList}) and projectId in (26, 220)";
+            string query = $@"SELECT count(*) from issues WHERE statusid = {statusId} AND createdOn < '{overdue}' 
+                            AND AssignedToId in ({UserId}) and projectId in (26, 220)";
 
             DataTable dt = DBman.OpenQuery(query);
 
-            (label as Label).Text = dt.Rows[0][0].ToString();
-            (panel as Panel).Tag = overdue + "," + statusId;
+            (label as Label).Text = dt.Rows[0][0].ToString() != "0" ? dt.Rows[0][0].ToString() : string.Empty;
+
+            (panel as Panel).Tag = overdue + ";" + statusId + ";" + UserId;
         }
 
         public int GetHours(int hoursFrom, int hoursTo, int hoursToOverdue)
@@ -441,7 +464,7 @@ namespace TrackerHelper
         {
             string query = $"SELECT count(*) FROM Issues WHERE AssignedToId in ({userIdList}) AND StatusId = {statusId}";
             DataTable dt = DBman.OpenQuery(query);
-            (obj as Label).Text = dt.Rows[0][0].ToString();
+            (obj as Label).Text = dt.Rows[0][0].ToString() != "0" ? dt.Rows[0][0].ToString() : "";
         }
 
         #region  ------------------------------ Week / Month labels -------------------------------
@@ -520,7 +543,7 @@ namespace TrackerHelper
 
         private void pieChartProjects_DataClick(object sender, ChartPoint chartPoint)
         {
-            PieChartOtherProjects(_userIdList);
+            PieChartOtherProjects(UserIdList);
             /*
             var chart = (LiveCharts.Wpf.PieChart)chartPoint.ChartView;
             var selectedSeries = (PieSeries)chartPoint.SeriesView;  
@@ -553,7 +576,6 @@ namespace TrackerHelper
                 cb.BackColor = cb.Check == false ? System.Drawing.Color.FromArgb(21, 33, 45) : System.Drawing.Color.FromArgb(41, 53, 65);
         }
 
-
         private void BtnFiltersToggle(object sender)
         {
             btnWeek.Check = false;
@@ -572,10 +594,12 @@ namespace TrackerHelper
 
         private void StatusPanelClick(object sender)
         {           
-            string[] overdue = (sender as Panel).Tag?.ToString().Split(',');
+            string[] overdue = (sender as Panel).Tag?.ToString().Split(';');
             if (overdue == null || overdue.Length < 2)
                 return;
-            string query = $"SELECT IssueId, AssignedToName from issues WHERE statusid = {overdue[1]} AND createdOn < '{overdue[0]}' AND AssignedToId in ({_userIdList}) and projectId in (26, 220)";
+
+            string query = $@"SELECT IssueId, AssignedToName from issues WHERE statusid = {overdue[1]} AND createdOn < '{overdue[0]}' 
+                            AND AssignedToId in ({overdue[2]}) and projectId in (26, 220)";
 
             DataTable dt = DBman.OpenQuery(query);
             DataRow[] dr = dt.Select("");
@@ -584,10 +608,22 @@ namespace TrackerHelper
             {
                 sb.AppendLine($"{item[0].ToString()}: {item[1].ToString()}");
             }
-            MessageBox.Show(sb.ToString());
+            if(sb.Length > 0)
+                MessageBox.Show(sb.ToString());
         }
 
         private void pnlStatusAssigned_Click(object sender, EventArgs e)
+        {
+            StatusPanelClick(sender);
+        }
+
+        private void pnlStatusNeedInfoEmpl_Click(object sender, EventArgs e)
+        {
+            StatusPanelClick(sender);
+        }
+
+
+        private void pnlStatusEscalated_Click(object sender, EventArgs e)
         {
             StatusPanelClick(sender);
         }

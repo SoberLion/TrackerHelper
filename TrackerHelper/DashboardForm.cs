@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TrackerHelper.Controls;
 
 namespace TrackerHelper
 {
@@ -101,12 +102,12 @@ namespace TrackerHelper
             Toggle(sender);
             lblCaption.Text = "TECH SUPPORT";
             //this.SuspendLayout();
-            TSDashboard newTSDashboard = new TSDashboard
+            DashboardIssues newTSDashboard = new DashboardIssues
             {
                 Parent = this.pnlDashboard,
                 Dock = DockStyle.Fill,
                 BackColor = Color.FromArgb(41, 53, 65),
-                Name = "newTSDashboard"
+                Name = "DashboardIssues"
             };
             
             //newTSDashboard.UpdateTSDashboard();
@@ -115,9 +116,19 @@ namespace TrackerHelper
 
         private void btn1_Click(object sender, EventArgs e)
         {
+            lblCaption.Text = "USERS";
             Toggle(sender);
-            TSDashboard tsdb = Controls.Find("newTSDashboard", true).FirstOrDefault() as TSDashboard;
+            DashboardIssues tsdb = Controls.Find("DashboardIssues", true).FirstOrDefault() as DashboardIssues;
             tsdb?.Dispose();
+
+            DashboardTime dbTime = new DashboardTime
+            {
+                Parent = this.pnlDashboard,
+                Dock = DockStyle.Fill,
+                BackColor = Color.FromArgb(41, 53, 65),
+                Name = "Users"
+            };
+
         }
 
         private void Toggle(object sender)

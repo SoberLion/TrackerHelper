@@ -109,12 +109,18 @@
     </Compile>
     <Compile Include="DB\DBman.cs" />
     <Compile Include="StickyWindow.cs" />
-    <Compile Include="TreeViewMethods.cs" />
-    <Compile Include="TSDashboard.cs">
+    <Compile Include="Controls\DashboardTime.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="TSDashboard.Designer.cs">
-      <DependentUpon>TSDashboard.cs</DependentUpon>
+    <Compile Include="Controls\DashboardTime.Designer.cs">
+      <DependentUpon>DashboardTime.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TreeViewMethods.cs" />
+    <Compile Include="Controls\DashboardIssues.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DashboardIssues.Designer.cs">
+      <DependentUpon>DashboardIssues.cs</DependentUpon>
     </Compile>
     <Compile Include="User.cs" />
     <Compile Include="WorkForm.cs">
@@ -127,6 +133,9 @@
     <EmbeddedResource Include="DashboardForm.resx">
       <DependentUpon>DashboardForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DashboardTime.resx">
+      <DependentUpon>DashboardTime.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -138,8 +147,8 @@
     <EmbeddedResource Include="Settings.resx">
       <DependentUpon>Settings.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TSDashboard.resx">
-      <DependentUpon>TSDashboard.cs</DependentUpon>
+    <EmbeddedResource Include="Controls\DashboardIssues.resx">
+      <DependentUpon>DashboardIssues.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WorkForm.resx">
       <DependentUpon>WorkForm.cs</DependentUpon>
