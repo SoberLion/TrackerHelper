@@ -28,23 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.sgNewIssues = new LiveCharts.WinForms.SolidGauge();
             this.pnlLayoutBot = new System.Windows.Forms.Panel();
-            this.lblIssuesClosedLastYear = new System.Windows.Forms.Label();
-            this.lblIssuesCreatedLastYear = new System.Windows.Forms.Label();
-            this.sgClosedLastYear = new LiveCharts.WinForms.SolidGauge();
-            this.sgNewLastYear = new LiveCharts.WinForms.SolidGauge();
+            this.lblLastYearDates = new System.Windows.Forms.Label();
+            this.pnlBotLastYear = new System.Windows.Forms.Panel();
+            this.lblClosedLastYearValue = new System.Windows.Forms.Label();
+            this.lblClosedLastYear = new System.Windows.Forms.Label();
+            this.lblCreatedLastYearValue = new System.Windows.Forms.Label();
+            this.lblCreatedLastYear = new System.Windows.Forms.Label();
+            this.pnlBotThisYear = new System.Windows.Forms.Panel();
+            this.lblClosedThisYearValue = new System.Windows.Forms.Label();
+            this.lblClosedThisYear = new System.Windows.Forms.Label();
+            this.lblCreatedThisYearValue = new System.Windows.Forms.Label();
+            this.lblCreatedThisYear = new System.Windows.Forms.Label();
             this.pnlBotRightCorner = new System.Windows.Forms.Panel();
             this.pnlFilters = new System.Windows.Forms.Panel();
             this.pnlWeekFilter = new System.Windows.Forms.Panel();
-            this.btnWeek = new TrackerHelper.CheckedButton();
             this.pnlMonthFilter = new System.Windows.Forms.Panel();
-            this.btnMonth = new TrackerHelper.CheckedButton();
             this.pnlUpdateBtn = new System.Windows.Forms.Panel();
             this.btnUpdateData = new System.Windows.Forms.Button();
-            this.lblIssuesClosed = new System.Windows.Forms.Label();
-            this.lblIssuesCreated = new System.Windows.Forms.Label();
-            this.sgClosed = new LiveCharts.WinForms.SolidGauge();
+            this.lblThisYearDates = new System.Windows.Forms.Label();
             this.lblStatusAssigned = new System.Windows.Forms.Label();
             this.pnlLayoutMid = new System.Windows.Forms.Panel();
             this.lblPnlStatusHeader = new System.Windows.Forms.Label();
@@ -52,6 +54,7 @@
             this.lblStatusEscalatedValue = new System.Windows.Forms.Label();
             this.lblStatusEscalated = new System.Windows.Forms.Label();
             this.pnlStatusAssigned = new System.Windows.Forms.Panel();
+            this.lblStatusAssignedOverduedValue = new System.Windows.Forms.Label();
             this.lblStatusAssignedValue = new System.Windows.Forms.Label();
             this.pnlStatusNew = new System.Windows.Forms.Panel();
             this.lblStatusNewOverduedValue = new System.Windows.Forms.Label();
@@ -61,16 +64,19 @@
             this.pnlCartesianChart = new System.Windows.Forms.Panel();
             this.cartesianChart = new LiveCharts.WinForms.CartesianChart();
             this.pnlTopMid = new System.Windows.Forms.Panel();
+            this.pnlCategory = new System.Windows.Forms.Panel();
+            this.pieChartCategory = new LiveCharts.WinForms.PieChart();
             this.pnlStatusChart = new System.Windows.Forms.Panel();
             this.pieChartStatus = new LiveCharts.WinForms.PieChart();
             this.pnlProjects = new System.Windows.Forms.Panel();
             this.pieChartProjects = new LiveCharts.WinForms.PieChart();
             this.pnlTopRight = new System.Windows.Forms.Panel();
             this.pnlHorizDividerBot = new System.Windows.Forms.Panel();
-            this.lblStatusAssignedOverduedValue = new System.Windows.Forms.Label();
-            this.pieChartCategory = new LiveCharts.WinForms.PieChart();
-            this.pnlCategory = new System.Windows.Forms.Panel();
+            this.btnWeek = new TrackerHelper.CheckedButton();
+            this.btnMonth = new TrackerHelper.CheckedButton();
             this.pnlLayoutBot.SuspendLayout();
+            this.pnlBotLastYear.SuspendLayout();
+            this.pnlBotThisYear.SuspendLayout();
             this.pnlBotRightCorner.SuspendLayout();
             this.pnlFilters.SuspendLayout();
             this.pnlWeekFilter.SuspendLayout();
@@ -83,92 +89,161 @@
             this.pnlLayoutTop.SuspendLayout();
             this.pnlCartesianChart.SuspendLayout();
             this.pnlTopMid.SuspendLayout();
+            this.pnlCategory.SuspendLayout();
             this.pnlStatusChart.SuspendLayout();
             this.pnlProjects.SuspendLayout();
-            this.pnlCategory.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // sgNewIssues
-            // 
-            this.sgNewIssues.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.sgNewIssues.BackColor = System.Drawing.SystemColors.WindowFrame;
-            this.sgNewIssues.BackColorTransparent = true;
-            this.sgNewIssues.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.sgNewIssues.ForeColor = System.Drawing.SystemColors.Control;
-            this.sgNewIssues.Location = new System.Drawing.Point(10, 34);
-            this.sgNewIssues.Name = "sgNewIssues";
-            this.sgNewIssues.Size = new System.Drawing.Size(200, 103);
-            this.sgNewIssues.TabIndex = 3;
-            this.sgNewIssues.TabStop = false;
             // 
             // pnlLayoutBot
             // 
             this.pnlLayoutBot.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(53)))), ((int)(((byte)(65)))));
-            this.pnlLayoutBot.Controls.Add(this.lblIssuesClosedLastYear);
-            this.pnlLayoutBot.Controls.Add(this.lblIssuesCreatedLastYear);
-            this.pnlLayoutBot.Controls.Add(this.sgClosedLastYear);
-            this.pnlLayoutBot.Controls.Add(this.sgNewLastYear);
+            this.pnlLayoutBot.Controls.Add(this.lblLastYearDates);
+            this.pnlLayoutBot.Controls.Add(this.pnlBotLastYear);
+            this.pnlLayoutBot.Controls.Add(this.pnlBotThisYear);
             this.pnlLayoutBot.Controls.Add(this.pnlBotRightCorner);
-            this.pnlLayoutBot.Controls.Add(this.lblIssuesClosed);
-            this.pnlLayoutBot.Controls.Add(this.lblIssuesCreated);
-            this.pnlLayoutBot.Controls.Add(this.sgClosed);
-            this.pnlLayoutBot.Controls.Add(this.sgNewIssues);
+            this.pnlLayoutBot.Controls.Add(this.lblThisYearDates);
             this.pnlLayoutBot.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.pnlLayoutBot.Location = new System.Drawing.Point(0, 653);
             this.pnlLayoutBot.Name = "pnlLayoutBot";
             this.pnlLayoutBot.Size = new System.Drawing.Size(1200, 147);
             this.pnlLayoutBot.TabIndex = 5;
             // 
-            // lblIssuesClosedLastYear
+            // lblLastYearDates
             // 
-            this.lblIssuesClosedLastYear.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.lblIssuesClosedLastYear.AutoSize = true;
-            this.lblIssuesClosedLastYear.BackColor = System.Drawing.Color.Transparent;
-            this.lblIssuesClosedLastYear.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lblIssuesClosedLastYear.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(86)))), ((int)(((byte)(88)))), ((int)(((byte)(86)))));
-            this.lblIssuesClosedLastYear.Location = new System.Drawing.Point(663, 12);
-            this.lblIssuesClosedLastYear.Name = "lblIssuesClosedLastYear";
-            this.lblIssuesClosedLastYear.Size = new System.Drawing.Size(166, 20);
-            this.lblIssuesClosedLastYear.TabIndex = 11;
-            this.lblIssuesClosedLastYear.Text = "CLOSED (last year)";
+            this.lblLastYearDates.AutoSize = true;
+            this.lblLastYearDates.BackColor = System.Drawing.Color.Transparent;
+            this.lblLastYearDates.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.lblLastYearDates.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(86)))), ((int)(((byte)(88)))), ((int)(((byte)(86)))));
+            this.lblLastYearDates.Location = new System.Drawing.Point(235, 12);
+            this.lblLastYearDates.Name = "lblLastYearDates";
+            this.lblLastYearDates.Size = new System.Drawing.Size(0, 13);
+            this.lblLastYearDates.TabIndex = 15;
             // 
-            // lblIssuesCreatedLastYear
+            // pnlBotLastYear
             // 
-            this.lblIssuesCreatedLastYear.AutoSize = true;
-            this.lblIssuesCreatedLastYear.BackColor = System.Drawing.Color.Transparent;
-            this.lblIssuesCreatedLastYear.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lblIssuesCreatedLastYear.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(86)))), ((int)(((byte)(88)))), ((int)(((byte)(86)))));
-            this.lblIssuesCreatedLastYear.Location = new System.Drawing.Point(471, 12);
-            this.lblIssuesCreatedLastYear.Name = "lblIssuesCreatedLastYear";
-            this.lblIssuesCreatedLastYear.Size = new System.Drawing.Size(134, 20);
-            this.lblIssuesCreatedLastYear.TabIndex = 10;
-            this.lblIssuesCreatedLastYear.Text = "NEW (last year)";
+            this.pnlBotLastYear.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.pnlBotLastYear.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.pnlBotLastYear.Controls.Add(this.lblClosedLastYearValue);
+            this.pnlBotLastYear.Controls.Add(this.lblClosedLastYear);
+            this.pnlBotLastYear.Controls.Add(this.lblCreatedLastYearValue);
+            this.pnlBotLastYear.Controls.Add(this.lblCreatedLastYear);
+            this.pnlBotLastYear.Location = new System.Drawing.Point(224, 36);
+            this.pnlBotLastYear.Name = "pnlBotLastYear";
+            this.pnlBotLastYear.Size = new System.Drawing.Size(200, 101);
+            this.pnlBotLastYear.TabIndex = 14;
             // 
-            // sgClosedLastYear
+            // lblClosedLastYearValue
             // 
-            this.sgClosedLastYear.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.sgClosedLastYear.BackColor = System.Drawing.SystemColors.WindowFrame;
-            this.sgClosedLastYear.BackColorTransparent = true;
-            this.sgClosedLastYear.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.sgClosedLastYear.ForeColor = System.Drawing.SystemColors.Control;
-            this.sgClosedLastYear.Location = new System.Drawing.Point(640, 34);
-            this.sgClosedLastYear.Name = "sgClosedLastYear";
-            this.sgClosedLastYear.Size = new System.Drawing.Size(200, 103);
-            this.sgClosedLastYear.TabIndex = 9;
-            this.sgClosedLastYear.TabStop = false;
+            this.lblClosedLastYearValue.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.lblClosedLastYearValue.AutoSize = true;
+            this.lblClosedLastYearValue.BackColor = System.Drawing.Color.Transparent;
+            this.lblClosedLastYearValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lblClosedLastYearValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(86)))), ((int)(((byte)(88)))), ((int)(((byte)(86)))));
+            this.lblClosedLastYearValue.Location = new System.Drawing.Point(105, 38);
+            this.lblClosedLastYearValue.Name = "lblClosedLastYearValue";
+            this.lblClosedLastYearValue.Size = new System.Drawing.Size(0, 24);
+            this.lblClosedLastYearValue.TabIndex = 13;
             // 
-            // sgNewLastYear
+            // lblClosedLastYear
             // 
-            this.sgNewLastYear.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.sgNewLastYear.BackColor = System.Drawing.SystemColors.WindowFrame;
-            this.sgNewLastYear.BackColorTransparent = true;
-            this.sgNewLastYear.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.sgNewLastYear.ForeColor = System.Drawing.SystemColors.Control;
-            this.sgNewLastYear.Location = new System.Drawing.Point(430, 34);
-            this.sgNewLastYear.Name = "sgNewLastYear";
-            this.sgNewLastYear.Size = new System.Drawing.Size(200, 103);
-            this.sgNewLastYear.TabIndex = 8;
-            this.sgNewLastYear.TabStop = false;
+            this.lblClosedLastYear.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.lblClosedLastYear.AutoSize = true;
+            this.lblClosedLastYear.BackColor = System.Drawing.Color.Transparent;
+            this.lblClosedLastYear.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lblClosedLastYear.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(86)))), ((int)(((byte)(88)))), ((int)(((byte)(86)))));
+            this.lblClosedLastYear.Location = new System.Drawing.Point(10, 42);
+            this.lblClosedLastYear.Name = "lblClosedLastYear";
+            this.lblClosedLastYear.Size = new System.Drawing.Size(79, 20);
+            this.lblClosedLastYear.TabIndex = 12;
+            this.lblClosedLastYear.Text = "Закрыто:";
+            // 
+            // lblCreatedLastYearValue
+            // 
+            this.lblCreatedLastYearValue.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.lblCreatedLastYearValue.AutoSize = true;
+            this.lblCreatedLastYearValue.BackColor = System.Drawing.Color.Transparent;
+            this.lblCreatedLastYearValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lblCreatedLastYearValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(178)))), ((int)(((byte)(178)))));
+            this.lblCreatedLastYearValue.Location = new System.Drawing.Point(105, 7);
+            this.lblCreatedLastYearValue.Name = "lblCreatedLastYearValue";
+            this.lblCreatedLastYearValue.Size = new System.Drawing.Size(0, 24);
+            this.lblCreatedLastYearValue.TabIndex = 11;
+            // 
+            // lblCreatedLastYear
+            // 
+            this.lblCreatedLastYear.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.lblCreatedLastYear.AutoSize = true;
+            this.lblCreatedLastYear.BackColor = System.Drawing.Color.Transparent;
+            this.lblCreatedLastYear.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lblCreatedLastYear.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(178)))), ((int)(((byte)(178)))));
+            this.lblCreatedLastYear.Location = new System.Drawing.Point(10, 10);
+            this.lblCreatedLastYear.Name = "lblCreatedLastYear";
+            this.lblCreatedLastYear.Size = new System.Drawing.Size(79, 20);
+            this.lblCreatedLastYear.TabIndex = 10;
+            this.lblCreatedLastYear.Text = "Создано:";
+            // 
+            // pnlBotThisYear
+            // 
+            this.pnlBotThisYear.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.pnlBotThisYear.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.pnlBotThisYear.Controls.Add(this.lblClosedThisYearValue);
+            this.pnlBotThisYear.Controls.Add(this.lblClosedThisYear);
+            this.pnlBotThisYear.Controls.Add(this.lblCreatedThisYearValue);
+            this.pnlBotThisYear.Controls.Add(this.lblCreatedThisYear);
+            this.pnlBotThisYear.Location = new System.Drawing.Point(10, 36);
+            this.pnlBotThisYear.Name = "pnlBotThisYear";
+            this.pnlBotThisYear.Size = new System.Drawing.Size(200, 101);
+            this.pnlBotThisYear.TabIndex = 13;
+            // 
+            // lblClosedThisYearValue
+            // 
+            this.lblClosedThisYearValue.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.lblClosedThisYearValue.AutoSize = true;
+            this.lblClosedThisYearValue.BackColor = System.Drawing.Color.Transparent;
+            this.lblClosedThisYearValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lblClosedThisYearValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(86)))), ((int)(((byte)(88)))), ((int)(((byte)(86)))));
+            this.lblClosedThisYearValue.Location = new System.Drawing.Point(105, 38);
+            this.lblClosedThisYearValue.Name = "lblClosedThisYearValue";
+            this.lblClosedThisYearValue.Size = new System.Drawing.Size(0, 24);
+            this.lblClosedThisYearValue.TabIndex = 13;
+            // 
+            // lblClosedThisYear
+            // 
+            this.lblClosedThisYear.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.lblClosedThisYear.AutoSize = true;
+            this.lblClosedThisYear.BackColor = System.Drawing.Color.Transparent;
+            this.lblClosedThisYear.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lblClosedThisYear.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(86)))), ((int)(((byte)(88)))), ((int)(((byte)(86)))));
+            this.lblClosedThisYear.Location = new System.Drawing.Point(10, 42);
+            this.lblClosedThisYear.Name = "lblClosedThisYear";
+            this.lblClosedThisYear.Size = new System.Drawing.Size(79, 20);
+            this.lblClosedThisYear.TabIndex = 12;
+            this.lblClosedThisYear.Text = "Закрыто:";
+            // 
+            // lblCreatedThisYearValue
+            // 
+            this.lblCreatedThisYearValue.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.lblCreatedThisYearValue.AutoSize = true;
+            this.lblCreatedThisYearValue.BackColor = System.Drawing.Color.Transparent;
+            this.lblCreatedThisYearValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lblCreatedThisYearValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(178)))), ((int)(((byte)(178)))));
+            this.lblCreatedThisYearValue.Location = new System.Drawing.Point(105, 7);
+            this.lblCreatedThisYearValue.Name = "lblCreatedThisYearValue";
+            this.lblCreatedThisYearValue.Size = new System.Drawing.Size(0, 24);
+            this.lblCreatedThisYearValue.TabIndex = 11;
+            // 
+            // lblCreatedThisYear
+            // 
+            this.lblCreatedThisYear.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.lblCreatedThisYear.AutoSize = true;
+            this.lblCreatedThisYear.BackColor = System.Drawing.Color.Transparent;
+            this.lblCreatedThisYear.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lblCreatedThisYear.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(178)))), ((int)(((byte)(178)))));
+            this.lblCreatedThisYear.Location = new System.Drawing.Point(10, 10);
+            this.lblCreatedThisYear.Name = "lblCreatedThisYear";
+            this.lblCreatedThisYear.Size = new System.Drawing.Size(79, 20);
+            this.lblCreatedThisYear.TabIndex = 10;
+            this.lblCreatedThisYear.Text = "Создано:";
             // 
             // pnlBotRightCorner
             // 
@@ -199,26 +274,6 @@
             this.pnlWeekFilter.Size = new System.Drawing.Size(75, 74);
             this.pnlWeekFilter.TabIndex = 1;
             // 
-            // btnWeek
-            // 
-            this.btnWeek.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(53)))), ((int)(((byte)(65)))));
-            this.btnWeek.Check = false;
-            this.btnWeek.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnWeek.FlatAppearance.BorderSize = 0;
-            this.btnWeek.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(184)))), ((int)(((byte)(92)))));
-            this.btnWeek.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(33)))), ((int)(((byte)(45)))));
-            this.btnWeek.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnWeek.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.btnWeek.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(86)))), ((int)(((byte)(88)))), ((int)(((byte)(86)))));
-            this.btnWeek.Location = new System.Drawing.Point(0, 0);
-            this.btnWeek.Name = "btnWeek";
-            this.btnWeek.Size = new System.Drawing.Size(75, 74);
-            this.btnWeek.TabIndex = 3;
-            this.btnWeek.Text = "   week";
-            this.btnWeek.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnWeek.UseVisualStyleBackColor = false;
-            this.btnWeek.Click += new System.EventHandler(this.btnWeek_Click);
-            // 
             // pnlMonthFilter
             // 
             this.pnlMonthFilter.Controls.Add(this.btnMonth);
@@ -227,26 +282,6 @@
             this.pnlMonthFilter.Name = "pnlMonthFilter";
             this.pnlMonthFilter.Size = new System.Drawing.Size(75, 74);
             this.pnlMonthFilter.TabIndex = 0;
-            // 
-            // btnMonth
-            // 
-            this.btnMonth.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(53)))), ((int)(((byte)(65)))));
-            this.btnMonth.Check = false;
-            this.btnMonth.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnMonth.FlatAppearance.BorderSize = 0;
-            this.btnMonth.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(184)))), ((int)(((byte)(92)))));
-            this.btnMonth.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(33)))), ((int)(((byte)(45)))));
-            this.btnMonth.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMonth.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.btnMonth.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(86)))), ((int)(((byte)(88)))), ((int)(((byte)(86)))));
-            this.btnMonth.Location = new System.Drawing.Point(0, 0);
-            this.btnMonth.Name = "btnMonth";
-            this.btnMonth.Size = new System.Drawing.Size(75, 74);
-            this.btnMonth.TabIndex = 2;
-            this.btnMonth.Text = " month";
-            this.btnMonth.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnMonth.UseVisualStyleBackColor = false;
-            this.btnMonth.Click += new System.EventHandler(this.btnMonth_Click);
             // 
             // pnlUpdateBtn
             // 
@@ -276,43 +311,16 @@
             this.btnUpdateData.UseVisualStyleBackColor = false;
             this.btnUpdateData.Click += new System.EventHandler(this.btnUpdateData_Click);
             // 
-            // lblIssuesClosed
+            // lblThisYearDates
             // 
-            this.lblIssuesClosed.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.lblIssuesClosed.AutoSize = true;
-            this.lblIssuesClosed.BackColor = System.Drawing.Color.Transparent;
-            this.lblIssuesClosed.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lblIssuesClosed.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(86)))), ((int)(((byte)(88)))), ((int)(((byte)(86)))));
-            this.lblIssuesClosed.Location = new System.Drawing.Point(281, 13);
-            this.lblIssuesClosed.Name = "lblIssuesClosed";
-            this.lblIssuesClosed.Size = new System.Drawing.Size(81, 20);
-            this.lblIssuesClosed.TabIndex = 6;
-            this.lblIssuesClosed.Text = "CLOSED";
-            // 
-            // lblIssuesCreated
-            // 
-            this.lblIssuesCreated.AutoSize = true;
-            this.lblIssuesCreated.BackColor = System.Drawing.Color.Transparent;
-            this.lblIssuesCreated.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lblIssuesCreated.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(86)))), ((int)(((byte)(88)))), ((int)(((byte)(86)))));
-            this.lblIssuesCreated.Location = new System.Drawing.Point(61, 13);
-            this.lblIssuesCreated.Name = "lblIssuesCreated";
-            this.lblIssuesCreated.Size = new System.Drawing.Size(93, 20);
-            this.lblIssuesCreated.TabIndex = 5;
-            this.lblIssuesCreated.Text = "CREATED";
-            // 
-            // sgClosed
-            // 
-            this.sgClosed.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.sgClosed.BackColor = System.Drawing.SystemColors.WindowFrame;
-            this.sgClosed.BackColorTransparent = true;
-            this.sgClosed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.sgClosed.ForeColor = System.Drawing.SystemColors.Control;
-            this.sgClosed.Location = new System.Drawing.Point(220, 34);
-            this.sgClosed.Name = "sgClosed";
-            this.sgClosed.Size = new System.Drawing.Size(200, 103);
-            this.sgClosed.TabIndex = 4;
-            this.sgClosed.TabStop = false;
+            this.lblThisYearDates.AutoSize = true;
+            this.lblThisYearDates.BackColor = System.Drawing.Color.Transparent;
+            this.lblThisYearDates.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.lblThisYearDates.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(86)))), ((int)(((byte)(88)))), ((int)(((byte)(86)))));
+            this.lblThisYearDates.Location = new System.Drawing.Point(20, 12);
+            this.lblThisYearDates.Name = "lblThisYearDates";
+            this.lblThisYearDates.Size = new System.Drawing.Size(0, 13);
+            this.lblThisYearDates.TabIndex = 5;
             // 
             // lblStatusAssigned
             // 
@@ -320,7 +328,7 @@
             this.lblStatusAssigned.AutoSize = true;
             this.lblStatusAssigned.BackColor = System.Drawing.Color.Transparent;
             this.lblStatusAssigned.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lblStatusAssigned.ForeColor = System.Drawing.Color.Black;
+            this.lblStatusAssigned.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(86)))), ((int)(((byte)(88)))), ((int)(((byte)(86)))));
             this.lblStatusAssigned.Location = new System.Drawing.Point(10, 10);
             this.lblStatusAssigned.Name = "lblStatusAssigned";
             this.lblStatusAssigned.Size = new System.Drawing.Size(100, 20);
@@ -380,7 +388,7 @@
             this.lblStatusEscalated.AutoSize = true;
             this.lblStatusEscalated.BackColor = System.Drawing.Color.Transparent;
             this.lblStatusEscalated.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lblStatusEscalated.ForeColor = System.Drawing.Color.Black;
+            this.lblStatusEscalated.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(86)))), ((int)(((byte)(88)))), ((int)(((byte)(86)))));
             this.lblStatusEscalated.Location = new System.Drawing.Point(10, 10);
             this.lblStatusEscalated.Name = "lblStatusEscalated";
             this.lblStatusEscalated.Size = new System.Drawing.Size(127, 20);
@@ -400,6 +408,16 @@
             this.pnlStatusAssigned.Size = new System.Drawing.Size(200, 101);
             this.pnlStatusAssigned.TabIndex = 12;
             this.pnlStatusAssigned.Click += new System.EventHandler(this.pnlStatusAssigned_Click);
+            // 
+            // lblStatusAssignedOverduedValue
+            // 
+            this.lblStatusAssignedOverduedValue.AutoSize = true;
+            this.lblStatusAssignedOverduedValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lblStatusAssignedOverduedValue.ForeColor = System.Drawing.Color.Red;
+            this.lblStatusAssignedOverduedValue.Location = new System.Drawing.Point(105, 40);
+            this.lblStatusAssignedOverduedValue.Name = "lblStatusAssignedOverduedValue";
+            this.lblStatusAssignedOverduedValue.Size = new System.Drawing.Size(0, 24);
+            this.lblStatusAssignedOverduedValue.TabIndex = 11;
             // 
             // lblStatusAssignedValue
             // 
@@ -457,7 +475,7 @@
             this.lblStatusNew.AutoSize = true;
             this.lblStatusNew.BackColor = System.Drawing.Color.Transparent;
             this.lblStatusNew.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lblStatusNew.ForeColor = System.Drawing.Color.Black;
+            this.lblStatusNew.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(86)))), ((int)(((byte)(88)))), ((int)(((byte)(86)))));
             this.lblStatusNew.Location = new System.Drawing.Point(10, 10);
             this.lblStatusNew.Name = "lblStatusNew";
             this.lblStatusNew.Size = new System.Drawing.Size(65, 20);
@@ -508,6 +526,23 @@
             this.pnlTopMid.Name = "pnlTopMid";
             this.pnlTopMid.Size = new System.Drawing.Size(294, 502);
             this.pnlTopMid.TabIndex = 6;
+            // 
+            // pnlCategory
+            // 
+            this.pnlCategory.Controls.Add(this.pieChartCategory);
+            this.pnlCategory.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlCategory.Location = new System.Drawing.Point(0, 326);
+            this.pnlCategory.Name = "pnlCategory";
+            this.pnlCategory.Size = new System.Drawing.Size(294, 163);
+            this.pnlCategory.TabIndex = 6;
+            // 
+            // pieChartCategory
+            // 
+            this.pieChartCategory.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.pieChartCategory.Location = new System.Drawing.Point(0, 0);
+            this.pieChartCategory.Name = "pieChartCategory";
+            this.pieChartCategory.Size = new System.Drawing.Size(294, 163);
+            this.pieChartCategory.TabIndex = 1;
             // 
             // pnlStatusChart
             // 
@@ -561,32 +596,45 @@
             this.pnlHorizDividerBot.Size = new System.Drawing.Size(1200, 4);
             this.pnlHorizDividerBot.TabIndex = 9;
             // 
-            // lblStatusAssignedOverduedValue
+            // btnWeek
             // 
-            this.lblStatusAssignedOverduedValue.AutoSize = true;
-            this.lblStatusAssignedOverduedValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lblStatusAssignedOverduedValue.ForeColor = System.Drawing.Color.Red;
-            this.lblStatusAssignedOverduedValue.Location = new System.Drawing.Point(105, 40);
-            this.lblStatusAssignedOverduedValue.Name = "lblStatusAssignedOverduedValue";
-            this.lblStatusAssignedOverduedValue.Size = new System.Drawing.Size(0, 24);
-            this.lblStatusAssignedOverduedValue.TabIndex = 11;
+            this.btnWeek.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(53)))), ((int)(((byte)(65)))));
+            this.btnWeek.Check = false;
+            this.btnWeek.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnWeek.FlatAppearance.BorderSize = 0;
+            this.btnWeek.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(184)))), ((int)(((byte)(92)))));
+            this.btnWeek.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(33)))), ((int)(((byte)(45)))));
+            this.btnWeek.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnWeek.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.btnWeek.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(86)))), ((int)(((byte)(88)))), ((int)(((byte)(86)))));
+            this.btnWeek.Location = new System.Drawing.Point(0, 0);
+            this.btnWeek.Name = "btnWeek";
+            this.btnWeek.Size = new System.Drawing.Size(75, 74);
+            this.btnWeek.TabIndex = 3;
+            this.btnWeek.Text = "   week";
+            this.btnWeek.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnWeek.UseVisualStyleBackColor = false;
+            this.btnWeek.Click += new System.EventHandler(this.FilterBtnClick);
             // 
-            // pieChartCategory
+            // btnMonth
             // 
-            this.pieChartCategory.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pieChartCategory.Location = new System.Drawing.Point(0, 0);
-            this.pieChartCategory.Name = "pieChartCategory";
-            this.pieChartCategory.Size = new System.Drawing.Size(294, 163);
-            this.pieChartCategory.TabIndex = 1;
-            // 
-            // pnlCategory
-            // 
-            this.pnlCategory.Controls.Add(this.pieChartCategory);
-            this.pnlCategory.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlCategory.Location = new System.Drawing.Point(0, 326);
-            this.pnlCategory.Name = "pnlCategory";
-            this.pnlCategory.Size = new System.Drawing.Size(294, 163);
-            this.pnlCategory.TabIndex = 6;
+            this.btnMonth.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(53)))), ((int)(((byte)(65)))));
+            this.btnMonth.Check = false;
+            this.btnMonth.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnMonth.FlatAppearance.BorderSize = 0;
+            this.btnMonth.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(184)))), ((int)(((byte)(92)))));
+            this.btnMonth.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(33)))), ((int)(((byte)(45)))));
+            this.btnMonth.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMonth.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.btnMonth.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(86)))), ((int)(((byte)(88)))), ((int)(((byte)(86)))));
+            this.btnMonth.Location = new System.Drawing.Point(0, 0);
+            this.btnMonth.Name = "btnMonth";
+            this.btnMonth.Size = new System.Drawing.Size(75, 74);
+            this.btnMonth.TabIndex = 2;
+            this.btnMonth.Text = " month";
+            this.btnMonth.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnMonth.UseVisualStyleBackColor = false;
+            this.btnMonth.Click += new System.EventHandler(this.FilterBtnClick);
             // 
             // TSDashboard
             // 
@@ -602,6 +650,10 @@
             this.Load += new System.EventHandler(this.TSDashboard_Load);
             this.pnlLayoutBot.ResumeLayout(false);
             this.pnlLayoutBot.PerformLayout();
+            this.pnlBotLastYear.ResumeLayout(false);
+            this.pnlBotLastYear.PerformLayout();
+            this.pnlBotThisYear.ResumeLayout(false);
+            this.pnlBotThisYear.PerformLayout();
             this.pnlBotRightCorner.ResumeLayout(false);
             this.pnlFilters.ResumeLayout(false);
             this.pnlWeekFilter.ResumeLayout(false);
@@ -618,18 +670,17 @@
             this.pnlLayoutTop.ResumeLayout(false);
             this.pnlCartesianChart.ResumeLayout(false);
             this.pnlTopMid.ResumeLayout(false);
+            this.pnlCategory.ResumeLayout(false);
             this.pnlStatusChart.ResumeLayout(false);
             this.pnlProjects.ResumeLayout(false);
-            this.pnlCategory.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
         private System.Windows.Forms.Panel pnlLayoutBot;
-        private System.Windows.Forms.Label lblIssuesCreated;
+        private System.Windows.Forms.Label lblThisYearDates;
         private System.Windows.Forms.Label lblStatusAssigned;
-        private System.Windows.Forms.Label lblIssuesClosed;
         private System.Windows.Forms.Panel pnlLayoutMid;
         private System.Windows.Forms.Panel pnlLayoutTop;
         private System.Windows.Forms.Panel pnlStatusChart;
@@ -638,8 +689,6 @@
         public LiveCharts.WinForms.CartesianChart cartesianChart;
         public LiveCharts.WinForms.PieChart pieChartStatus;
         public LiveCharts.WinForms.PieChart pieChartProjects;
-        public LiveCharts.WinForms.SolidGauge sgNewIssues;
-        public LiveCharts.WinForms.SolidGauge sgClosed;
         private System.Windows.Forms.Panel pnlBotRightCorner;
         private System.Windows.Forms.Button btnUpdateData;
         private System.Windows.Forms.Panel pnlFilters;
@@ -649,10 +698,6 @@
         private System.Windows.Forms.Panel pnlMonthFilter;
         private TrackerHelper.CheckedButton btnMonth;
         private System.Windows.Forms.Panel pnlTopRight;
-        private System.Windows.Forms.Label lblIssuesClosedLastYear;
-        private System.Windows.Forms.Label lblIssuesCreatedLastYear;
-        public LiveCharts.WinForms.SolidGauge sgClosedLastYear;
-        public LiveCharts.WinForms.SolidGauge sgNewLastYear;
         private System.Windows.Forms.Panel pnlHorizDividerBot;
         private System.Windows.Forms.Label lblStatusNew;
         private System.Windows.Forms.Panel pnlStatusNew;
@@ -668,5 +713,16 @@
         private System.Windows.Forms.Label lblStatusAssignedOverduedValue;
         private System.Windows.Forms.Panel pnlCategory;
         public LiveCharts.WinForms.PieChart pieChartCategory;
+        private System.Windows.Forms.Panel pnlBotLastYear;
+        private System.Windows.Forms.Label lblClosedLastYearValue;
+        private System.Windows.Forms.Label lblClosedLastYear;
+        private System.Windows.Forms.Label lblCreatedLastYearValue;
+        private System.Windows.Forms.Label lblCreatedLastYear;
+        private System.Windows.Forms.Panel pnlBotThisYear;
+        private System.Windows.Forms.Label lblClosedThisYearValue;
+        private System.Windows.Forms.Label lblClosedThisYear;
+        private System.Windows.Forms.Label lblCreatedThisYearValue;
+        private System.Windows.Forms.Label lblCreatedThisYear;
+        private System.Windows.Forms.Label lblLastYearDates;
     }
 }
