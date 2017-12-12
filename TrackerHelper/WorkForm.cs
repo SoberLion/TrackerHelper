@@ -115,7 +115,6 @@ namespace TrackerHelper
             tbNumOfDays.Text = numOfDays.ToString();
             dbController.UpdateIssues(3, numOfDays);
 
-            dbController.UpdateTimeEntries(3, numOfDays);
             /* user = new User
              {
                  Id = "751",
@@ -157,6 +156,24 @@ namespace TrackerHelper
                      user.IssuesUpdated.issue[i] = issue;
              }
              DBman.InsertIssues(user.IssuesUpdated);*/
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            user = new User
+            {
+                Id = "751",
+                ApiKey = "1287ca3310be20d6992a764b57f9c8bcfbb05664",
+            };
+            DBController dbController = new DBController(user);
+
+            int numOfDays = 1;
+
+            int.TryParse(tbNumOfDays.Text, out numOfDays);
+
+            tbNumOfDays.Text = numOfDays.ToString();
+
+            dbController.UpdateTimeEntries(3, numOfDays);
         }
     }
 }

@@ -42,8 +42,9 @@
             this.pnl_listbox = new System.Windows.Forms.Panel();
             this.listbox_IssueJournal = new System.Windows.Forms.ListBox();
             this.pnl_tools = new System.Windows.Forms.Panel();
-            this.btnGetIssuesJournals = new System.Windows.Forms.Button();
             this.tbNumOfDays = new System.Windows.Forms.TextBox();
+            this.btnGetIssuesJournals = new System.Windows.Forms.Button();
+            this.btnUpdateTE = new System.Windows.Forms.Button();
             this.tControl.SuspendLayout();
             this.tP_IssueList.SuspendLayout();
             this.pnl_TreeView.SuspendLayout();
@@ -189,6 +190,7 @@
             // 
             // pnl_tools
             // 
+            this.pnl_tools.Controls.Add(this.btnUpdateTE);
             this.pnl_tools.Controls.Add(this.tbNumOfDays);
             this.pnl_tools.Controls.Add(this.btnGetIssuesJournals);
             this.pnl_tools.Dock = System.Windows.Forms.DockStyle.Top;
@@ -197,16 +199,6 @@
             this.pnl_tools.Size = new System.Drawing.Size(320, 30);
             this.pnl_tools.TabIndex = 1;
             // 
-            // btnGetIssuesJournals
-            // 
-            this.btnGetIssuesJournals.Location = new System.Drawing.Point(117, 4);
-            this.btnGetIssuesJournals.Name = "btnGetIssuesJournals";
-            this.btnGetIssuesJournals.Size = new System.Drawing.Size(75, 23);
-            this.btnGetIssuesJournals.TabIndex = 1;
-            this.btnGetIssuesJournals.Text = "Update";
-            this.btnGetIssuesJournals.UseVisualStyleBackColor = true;
-            this.btnGetIssuesJournals.Click += new System.EventHandler(this.btnGetIssuesJournals_Click);
-            // 
             // tbNumOfDays
             // 
             this.tbNumOfDays.Location = new System.Drawing.Point(6, 4);
@@ -214,6 +206,26 @@
             this.tbNumOfDays.Size = new System.Drawing.Size(48, 21);
             this.tbNumOfDays.TabIndex = 2;
             this.tbNumOfDays.Text = "1";
+            // 
+            // btnGetIssuesJournals
+            // 
+            this.btnGetIssuesJournals.Location = new System.Drawing.Point(76, 4);
+            this.btnGetIssuesJournals.Name = "btnGetIssuesJournals";
+            this.btnGetIssuesJournals.Size = new System.Drawing.Size(90, 23);
+            this.btnGetIssuesJournals.TabIndex = 1;
+            this.btnGetIssuesJournals.Text = "Update Issues";
+            this.btnGetIssuesJournals.UseVisualStyleBackColor = true;
+            this.btnGetIssuesJournals.Click += new System.EventHandler(this.btnGetIssuesJournals_Click);
+            // 
+            // btnUpdateTE
+            // 
+            this.btnUpdateTE.Location = new System.Drawing.Point(172, 4);
+            this.btnUpdateTE.Name = "btnUpdateTE";
+            this.btnUpdateTE.Size = new System.Drawing.Size(90, 23);
+            this.btnUpdateTE.TabIndex = 3;
+            this.btnUpdateTE.Text = "Update TE";
+            this.btnUpdateTE.UseVisualStyleBackColor = true;
+            this.btnUpdateTE.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // WorkForm
             // 
@@ -254,5 +266,6 @@
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Button btnGetIssuesJournals;
         private System.Windows.Forms.TextBox tbNumOfDays;
+        private System.Windows.Forms.Button btnUpdateTE;
     }
 }

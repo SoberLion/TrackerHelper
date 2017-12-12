@@ -163,7 +163,7 @@
             this.btnTechSupp.Name = "btnTechSupp";
             this.btnTechSupp.Size = new System.Drawing.Size(200, 46);
             this.btnTechSupp.TabIndex = 0;
-            this.btnTechSupp.Text = "      Tech supp";
+            this.btnTechSupp.Text = "      Issues";
             this.btnTechSupp.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnTechSupp.UseVisualStyleBackColor = false;
             this.btnTechSupp.Click += new System.EventHandler(this.btnTechSupp_Click);

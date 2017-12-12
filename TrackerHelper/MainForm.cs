@@ -28,10 +28,6 @@ namespace TrackerHelper
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form settings = new Settings();
-            settings.MdiParent = this;
-            settings.WindowState = FormWindowState.Maximized;
-            settings.Show();
         }
 
         private void tasksToolStripMenuItem_Click(object sender, EventArgs e)
@@ -129,72 +125,104 @@ namespace TrackerHelper
 
         private void newClosedLastYearToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (repform != null)
-                MessageBox.Show("Close previous  report");
-            else
+            repform?.Dispose();
+
+            Func<ChartPoint, string> labelPoint = chartPoint => string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
+
+            repform = new Form
+            { WindowState = FormWindowState.Maximized, AutoScaleDimensions = new SizeF(6F, 13F), Name = "Charts", Text = "Charts", BackColor = System.Drawing.Color.White };
+            repform.FormClosed += FormClosed;
+
+            Panel pnlChart = new Panel
+            { Parent = repform, Dock = DockStyle.Fill, Name = "pnlChart" };
+            Panel pnlFilter = new Panel
+            { Parent = repform, Dock = DockStyle.Right, Width = 200, Name = "pnlFilter" };
+            LiveCharts.WinForms.CartesianChart cartesianChart = new LiveCharts.WinForms.CartesianChart
+            { Parent = pnlChart, Dock = DockStyle.Fill, LegendLocation = LegendLocation.Bottom, Name = "cartesianChart" };
+
+            Panel pnlRadioButton = new Panel
+            { Parent = pnlFilter, Dock = DockStyle.Top, Name = "pnlRadioButton", Height = 150 };
+            RadioButton rbYear = new RadioButton
             {
-                Func<ChartPoint, string> labelPoint = chartPoint => string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
+                Parent = pnlRadioButton,
+                Dock = DockStyle.Top,
+                Name = "rbYear",
+                Text = "Год",
+                Tag = DBman.GroupFormat.Year
+            };
+            RadioButton rbMonth = new RadioButton
+            {
+                Parent = pnlRadioButton,
+                Dock = DockStyle.Top,
+                Name = "rbMonth",
+                Text = "Месяц",
+                Checked = true,
+                Tag = DBman.GroupFormat.Month
+            };
+            RadioButton rbDay = new RadioButton
+            {
+                Parent = pnlRadioButton,
+                Dock = DockStyle.Top,
+                Name = "rbDay",
+                Text = "День",
+                Tag = DBman.GroupFormat.Day
+            };
+            Label lblrbGroup = new Label
+            { Parent = pnlRadioButton, Dock = DockStyle.Top, Name = "lblrbGroup", Text = "Группировка" };
 
-                repform = new Form
-                    { WindowState = FormWindowState.Maximized, AutoScaleDimensions = new SizeF(6F, 13F), Name = "Charts", Text = "Charts", BackColor = System.Drawing.Color.FromArgb(61, 73, 85) };
-                repform.FormClosed += FormClosed;
+            Panel pnlCheckBox = new Panel
+            {
+                Parent = pnlFilter,
+                Dock = DockStyle.Top,
+                Name = "pnlCheckBox",
+                Height = 60
+            };
+            CheckBox cbByTracker = new CheckBox
+            {
+                Parent = pnlCheckBox,
+                Dock = DockStyle.Fill,
+                Name = "cbByTracker",
+                Text = "Разрез: Трекер"               
+            };
 
-                Panel pnlChart = new Panel
-                    { Parent = repform, Dock = DockStyle.Fill, Name = "pnlChart" };
-                Panel pnlFilter = new Panel
-                    { Parent = repform, Dock = DockStyle.Right, Width = 200, Name = "pnlFilter" };
-                LiveCharts.WinForms.CartesianChart cartesianChart = new LiveCharts.WinForms.CartesianChart
-                    { Parent = pnlChart, Dock = DockStyle.Fill, LegendLocation = LegendLocation.Bottom, Name = "cartesianChart" };
+            Panel pnldtpTo = new Panel
+            { Parent = pnlFilter, Dock = DockStyle.Top, Name = "pnldtpTo", Height = 50 };
+            DateTimePicker dtpTo = new DateTimePicker
+            { Parent = pnldtpTo, Format = DateTimePickerFormat.Short, Dock = DockStyle.Top, Name = "dtpTo" };
 
-                Panel pnlRadioButton = new Panel
-                    { Parent = pnlFilter, Dock = DockStyle.Top, Name = "pnlRadioButton", Height = 150 };
-                RadioButton rbYear = new RadioButton
-                    { Parent = pnlRadioButton, Dock = DockStyle.Top, Name = "rbYear", Text = "Год",
-                    Tag = DBman.GroupFormat.Year, ForeColor = System.Drawing.Color.Gainsboro };
-                RadioButton rbMonth = new RadioButton
-                    { Parent = pnlRadioButton, Dock = DockStyle.Top, Name = "rbMonth", Text = "Месяц", Checked = true,
-                    Tag = DBman.GroupFormat.Month, ForeColor = System.Drawing.Color.Gainsboro };
-                RadioButton rbDay = new RadioButton
-                    { Parent = pnlRadioButton, Dock = DockStyle.Top, Name = "rbDay", Text = "День",
-                    Tag = DBman.GroupFormat.Day, ForeColor = System.Drawing.Color.Gainsboro };
-                Label lblrbGroup = new Label
-                { Parent = pnlRadioButton, Dock = DockStyle.Top, Name = "lblrbGroup", Text = "Группировка", ForeColor = System.Drawing.Color.Gainsboro };
+            dtpTo.CloseUp += dtpOnCloseUp;
+
+            Label lblTo = new Label
+            { Parent = pnldtpTo, Dock = DockStyle.Top, Name = "lblFrom", Text = "Дата по:" };
 
 
-                Panel pnldtpTo = new Panel
-                    { Parent = pnlFilter, Dock = DockStyle.Top, Name = "pnldtpTo", Height = 50 };
-                DateTimePicker dtpTo = new DateTimePicker
-                    { Parent = pnldtpTo, Format = DateTimePickerFormat.Short, Dock = DockStyle.Top, Name = "dtpTo", ForeColor = System.Drawing.Color.Gainsboro };
+            Panel pnldtpFrom = new Panel
+            { Parent = pnlFilter, Dock = DockStyle.Top, Name = "pnldtpFrom", Height = 50 };
+            DateTimePicker dtpFrom = new DateTimePicker
+            { Parent = pnldtpFrom, Format = DateTimePickerFormat.Short, Dock = DockStyle.Top, Name = "dtpFrom" };
 
-                dtpTo.CloseUp += dtpOnCloseUp;
+            dtpFrom.CloseUp += dtpOnCloseUp;
 
-                Label lblTo = new Label
-                    { Parent = pnldtpTo, Dock = DockStyle.Top, Name = "lblFrom", Text = "Дата по:", ForeColor = System.Drawing.Color.Gainsboro };
-                
+            Label lblFrom = new Label
+            { Parent = pnldtpFrom, Dock = DockStyle.Top, Name = "lblFrom", Text = "Дата с:" };
 
-                Panel pnldtpFrom = new Panel
-                    { Parent = pnlFilter, Dock = DockStyle.Top, Name = "pnldtpFrom", Height = 50 };
-                DateTimePicker dtpFrom = new DateTimePicker
-                    { Parent = pnldtpFrom, Format = DateTimePickerFormat.Short, Dock = DockStyle.Top, Name = "dtpFrom" };
 
-                dtpFrom.CloseUp += dtpOnCloseUp;
+            Button btnFilter = new Button
+            {
+                Parent = pnlFilter,
+                Name = "btnFilter",
+                Text = "FILTER",
+                Dock = DockStyle.Top,
+                Height = 30,
+                FlatStyle = FlatStyle.Flat
+            };
+            btnFilter.FlatAppearance.BorderSize = 0;
 
-                Label lblFrom = new Label
-                    { Parent = pnldtpFrom, Dock = DockStyle.Top, Name = "lblFrom", Text = "Дата с:", ForeColor = System.Drawing.Color.Gainsboro };                
-                
+            btnFilter.Click += btnFilterOnClick;
+            cartesianChart.DataClick += CartesianChartOnDataClick;
 
-                Button btnFilter = new Button
-                    { Parent = pnlFilter, Name = "btnFilter", Text = "FILTER", Dock = DockStyle.Top,
-                    ForeColor = System.Drawing.Color.Gainsboro, Height = 30, FlatStyle = FlatStyle.Flat };
-                btnFilter.FlatAppearance.BorderSize = 0;
-
-                btnFilter.Click += btnFilterOnClick;
-                cartesianChart.DataClick += CartesianChartOnDataClick;
-
-                repform.Show();
-            }
+            repform.Show();
         }
-
         private new void FormClosed(object sender, FormClosedEventArgs e)
         {
             repform = null;
@@ -212,8 +240,6 @@ namespace TrackerHelper
         }
         private void CartesianChartOnDataClick(object sender, ChartPoint chartPoint)
         {
-            LiveCharts.WinForms.CartesianChart cartesianChart = repform.Controls.Find("cartesianChart", true).FirstOrDefault() as LiveCharts.WinForms.CartesianChart;            
-            MessageBox.Show(cartesianChart.AxisX[0].Labels[(int)chartPoint.X].ToString() + ": " + chartPoint.SeriesView.Values[(int)chartPoint.X].ToString());
         }
 
         private void dtpOnCloseUp(object sender, EventArgs e)
@@ -255,58 +281,198 @@ namespace TrackerHelper
 
         private void timeEntriesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (repform != null)
-                MessageBox.Show("Close previous  report");
-            else
+            repform?.Dispose();
+            Func<ChartPoint, string> labelPoint = chartPoint => string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
+
+            repform = new Form
+            { WindowState = FormWindowState.Maximized, AutoScaleDimensions = new SizeF(6F, 13F), Name = "Charts", Text = "Charts" };
+            repform.FormClosed += FormClosed;
+
+            Panel pnlChart = new Panel
+            { Parent = repform, Dock = DockStyle.Fill, Name = "pnlChart" };
+            Panel pnlFilter = new Panel
+            { Parent = repform, Dock = DockStyle.Right, Width = 200, Name = "pnlFilter" };
+            LiveCharts.WinForms.CartesianChart cartesianChart = new LiveCharts.WinForms.CartesianChart
+            { Parent = pnlChart, Dock = DockStyle.Fill, LegendLocation = LegendLocation.Bottom, Name = "cartesianChart" };
+
+            Panel pnlCheckBox = new Panel
+            { Parent = pnlFilter, Dock = DockStyle.Top, Name = "pnlCheckBox", AutoSize = true };
+
+            Panel pnldtpTo = new Panel
+            { Parent = pnlFilter, Dock = DockStyle.Top, Name = "pnldtpTo", Height = 50 };
+            DateTimePicker dtpTo = new DateTimePicker
             {
-                Func<ChartPoint, string> labelPoint = chartPoint => string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
-
-                repform = new Form
-                    { WindowState = FormWindowState.Maximized, AutoScaleDimensions = new SizeF(6F, 13F), Name = "Charts", Text = "Charts", BackColor = System.Drawing.Color.FromArgb(61, 73, 85) };
-                repform.FormClosed += FormClosed;
-
-                Panel pnlChart = new Panel
-                    { Parent = repform, Dock = DockStyle.Fill, Name = "pnlChart" };
-                Panel pnlFilter = new Panel
-                    { Parent = repform, Dock = DockStyle.Right, Width = 200, Name = "pnlFilter" };
-                LiveCharts.WinForms.CartesianChart cartesianChart = new LiveCharts.WinForms.CartesianChart
-                    { Parent = pnlChart, Dock = DockStyle.Fill, LegendLocation = LegendLocation.Bottom, Name = "cartesianChart" };
-
-                Panel pnlCheckBox = new Panel
-                    { Parent = pnlFilter, Dock = DockStyle.Top, Name = "pnlCheckBox", AutoSize = true };
-
-                Panel pnldtpTo = new Panel
-                    { Parent = pnlFilter, Dock = DockStyle.Top, Name = "pnldtpTo", Height = 50 };
-                DateTimePicker dtpTo = new DateTimePicker
-                    { Parent = pnldtpTo, Format = DateTimePickerFormat.Short, Dock = DockStyle.Top,
-                    Name = "dtpTo", ForeColor = System.Drawing.Color.Gainsboro };
-                dtpTo.CloseUp += dtpOnCloseUp;
-                Label lblTo = new Label
-                    { Parent = pnldtpTo, Dock = DockStyle.Top, Name = "lblFrom", Text = "Дата по:", ForeColor = System.Drawing.Color.Gainsboro };
+                Parent = pnldtpTo,
+                Format = DateTimePickerFormat.Short,
+                Dock = DockStyle.Top,
+                Name = "dtpTo"
+            };
+            dtpTo.CloseUp += dtpOnCloseUp;
+            Label lblTo = new Label
+            { Parent = pnldtpTo, Dock = DockStyle.Top, Name = "lblFrom", Text = "Дата по:" };
 
 
-                Panel pnldtpFrom = new Panel
-                    { Parent = pnlFilter, Dock = DockStyle.Top, Name = "pnldtpFrom", Height = 50 };
-                DateTimePicker dtpFrom = new DateTimePicker
-                    { Parent = pnldtpFrom, Format = DateTimePickerFormat.Short, Dock = DockStyle.Top,
-                    Name = "dtpFrom", ForeColor = System.Drawing.Color.Gainsboro };
-                dtpFrom.CloseUp += dtpOnCloseUp;
-                Label lblFrom = new Label
-                    { Parent = pnldtpFrom, Dock = DockStyle.Top, Name = "lblFrom", Text = "Дата с:", ForeColor = System.Drawing.Color.Gainsboro };
+            Panel pnldtpFrom = new Panel
+            { Parent = pnlFilter, Dock = DockStyle.Top, Name = "pnldtpFrom", Height = 50 };
+            DateTimePicker dtpFrom = new DateTimePicker
+            {
+                Parent = pnldtpFrom,
+                Format = DateTimePickerFormat.Short,
+                Dock = DockStyle.Top,
+                Name = "dtpFrom"
+            };
+            dtpFrom.CloseUp += dtpOnCloseUp;
+            Label lblFrom = new Label
+            { Parent = pnldtpFrom, Dock = DockStyle.Top, Name = "lblFrom", Text = "Дата с:" };
 
-                Button btnFilter = new Button
-                    { Parent = pnlFilter, Name = "btnFilterTE", Text = "FILTER", Dock = DockStyle.Top,
-                    ForeColor = System.Drawing.Color.Gainsboro, Height = 30, FlatStyle = FlatStyle.Flat };
-                btnFilter.FlatAppearance.BorderSize = 0;
+            Button btnFilter = new Button
+            {
+                Parent = pnlFilter,
+                Name = "btnFilterTE",
+                Text = "FILTER",
+                Dock = DockStyle.Top,
+                Height = 30,
+                FlatStyle = FlatStyle.Flat
+            };
+            btnFilter.FlatAppearance.BorderSize = 0;
 
-                btnFilter.Click += btnFilterOnClick;
-                cartesianChart.DataClick += CartesianChartOnDataClick;
+            btnFilter.Click += btnFilterOnClick;
+            cartesianChart.DataClick += CartesianChartOnDataClick;
 
-                repform.Show();
-            }
+            repform.Show();
+
         }
 
         private void btnFilterClick()
+        {
+
+            if ((repform.Controls.Find("cbByTracker", true).FirstOrDefault() as CheckBox).Checked == false)
+            {
+                cartesianChartColumns();
+            }
+            else
+            {
+                cartesianChartStackedColumns();
+            }
+                
+        }
+
+        private void cartesianChartStackedColumns()
+        {
+            DateTimePicker dtpFrom = repform.Controls.Find("dtpFrom", true).FirstOrDefault() as DateTimePicker;
+            DateTimePicker dtpTo = repform.Controls.Find("dtpTo", true).FirstOrDefault() as DateTimePicker;
+
+            List<RadioButton> rbList = new List<RadioButton>
+            {
+                repform.Controls.Find("rbDay", true).FirstOrDefault() as RadioButton,
+                repform.Controls.Find("rbMonth", true).FirstOrDefault() as RadioButton,
+                repform.Controls.Find("rbYear", true).FirstOrDefault() as RadioButton
+            };
+
+            DBman.GroupFormat groupFormat = DBman.GroupFormat.Month;
+
+            foreach (var rb in rbList)
+            {
+                if (rb.Checked == true)
+                    groupFormat = (DBman.GroupFormat)rb.Tag;
+            }
+
+            Control cnt = repform.Controls.Find("cartesianChart", true).FirstOrDefault();
+
+            string GroupingFormat = "%Y";
+
+            switch (groupFormat)
+            {
+                case (DBman.GroupFormat.Day):
+                    {
+                        GroupingFormat = "%Y-%m-%d";
+                        break;
+                    }
+                case (DBman.GroupFormat.Month):
+                    {
+                        GroupingFormat = "%Y-%m";
+                        break;
+                    }
+                case (DBman.GroupFormat.Year):
+                    {
+                        GroupingFormat = "%Y";
+                        break;
+                    }
+            }
+
+
+            if (cnt is LiveCharts.WinForms.CartesianChart cartesianChart)
+            {
+                string query = $@"SELECT count(*) as number, TrackerName, strftime('{GroupingFormat}', CreatedOn) as CreatedOn FROM Issues 
+                                WHERE TrackerId in (1,2,3) AND CreatedOn >= '{dtpFrom.Value.ToString("yyyy-MM-dd HH:mm:ss,fff")}' 
+                                AND CreatedOn < '{dtpTo.Value.ToString("yyyy-MM-dd HH:mm:ss,fff")}' and ProjectId in (26,220) 
+                                GROUP BY strftime('{GroupingFormat}', CreatedOn), TrackerId ORDER BY CreatedOn, TrackerId";
+
+
+                DataTable dt = DBman.OpenQuery(query);
+
+                DataRow[] dr = dt.Select("");
+
+                SeriesCollection col = new SeriesCollection();
+
+                List<string> ListTrackerName = dr.Select(p => p[1].ToString()).Distinct().ToList();
+                List<string> DateList = dr.Select(p => p[2].ToString().Split(' ')[0]).Distinct().ToList();
+                ListTrackerName.Sort();
+
+                foreach (var item in ListTrackerName)
+                {
+                    StackedColumnSeries columnSeries = new StackedColumnSeries
+                    {
+                        Title = item,
+                        Values = new ChartValues<int>(),
+                        LabelPoint = point => point.Y.ToString(),
+                        DataLabels = true,
+                        Foreground = System.Windows.Media.Brushes.Black
+                    };
+                    col.Add(columnSeries);
+                }
+                int rowiterator = 0;
+                foreach (string Name in DateList)
+                {
+                    for (int i = 0; i < col.Count; i++)
+                    {
+                        if (col[i].Title == dr[rowiterator][1].ToString())
+                        {
+                            col[i].Values.Add(Convert.ToInt32(dr[rowiterator][0]));
+                            if (rowiterator < dr.Length - 1)
+                            {
+                                rowiterator++;
+                            }
+                            else
+                            {
+                                continue;
+                            }
+                        }
+                        else
+                        {
+                            col[i].Values.Add(0);
+                        }
+                    }
+                }
+
+                Axis ax = new Axis
+                {
+                    Separator = new Separator { Step = 1, IsEnabled = false },
+                    Labels = DateList,
+                    LabelsRotation = 70,
+                    Foreground = System.Windows.Media.Brushes.Black
+                };
+
+                cartesianChart.AxisX.Clear();
+                cartesianChart.AxisY.Clear();
+
+                cartesianChart.Series = col;
+                cartesianChart.AxisX.Add(ax);
+                cartesianChart.LegendLocation = LegendLocation.Top;
+            }
+        }
+
+        private void cartesianChartColumns()
         {
             DateTimePicker dtpFrom = repform.Controls.Find("dtpFrom", true).FirstOrDefault() as DateTimePicker;
             DateTimePicker dtpTo = repform.Controls.Find("dtpTo", true).FirstOrDefault() as DateTimePicker;
@@ -328,13 +494,13 @@ namespace TrackerHelper
             List<string[]> createdList = DBman.GetIssuesCountGroupedByDay(
                 dtpFrom.Value.ToString("yyyy-MM-dd hh:mm:ss:fff"),
                 dtpTo.Value.ToString("yyyy-MM-dd hh:mm:ss:fff"),
-                "26",
+                "26,220",
                 groupFormat,
                 DBman.IssueType.Created);
             List<string[]> closedList = DBman.GetIssuesCountGroupedByDay(
                 dtpFrom.Value.ToString("yyyy-MM-dd hh:mm:ss:fff"),
                 dtpTo.Value.ToString("yyyy-MM-dd hh:mm:ss:fff"),
-                "26",
+                "26,220",
                 groupFormat,
                 DBman.IssueType.Closed);
 
@@ -346,8 +512,8 @@ namespace TrackerHelper
                 cartesianChart.AxisX.Clear();
                 cartesianChart.AxisY.Clear();
 
-                Axis ax = new Axis { Labels = new List<string>(), Separator = new Separator { Step = 1, IsEnabled = false }, LabelsRotation = 50 };
-                Axis ay = new Axis { LabelFormatter = value => value.ToString(), Separator = new Separator(), MinValue = 0 };
+                Axis ax = new Axis { Labels = new List<string>(), Separator = new Separator { Step = 1, IsEnabled = false }, LabelsRotation = 50, Foreground = System.Windows.Media.Brushes.Black };
+                Axis ay = new Axis { LabelFormatter = value => value.ToString(), Separator = new Separator(), MinValue = 0, Foreground = System.Windows.Media.Brushes.Black };
 
 
                 ColumnSeries csCreated = new ColumnSeries
@@ -356,7 +522,7 @@ namespace TrackerHelper
                     Values = new ChartValues<int>(),
                     LabelPoint = point => point.Y.ToString(),
                     DataLabels = true,
-                    Foreground = System.Windows.Media.Brushes.Gainsboro,
+                    Foreground = System.Windows.Media.Brushes.Black,
                     Fill = System.Windows.Media.Brushes.Red
                 };
 
@@ -366,7 +532,7 @@ namespace TrackerHelper
                     Values = new ChartValues<int>(),
                     LabelPoint = point => point.Y.ToString(),
                     DataLabels = true,
-                    Foreground = System.Windows.Media.Brushes.Gainsboro,
+                    Foreground = System.Windows.Media.Brushes.Black,
                     Fill = System.Windows.Media.Brushes.Gray
                 };
 
@@ -389,7 +555,6 @@ namespace TrackerHelper
                 cartesianChart.LegendLocation = LegendLocation.Top;
             }
         }
-
         private void btnFilterTEClick()
         {
             DateTimePicker dtpFrom = repform.Controls.Find("dtpFrom", true).FirstOrDefault() as DateTimePicker;
@@ -405,9 +570,14 @@ namespace TrackerHelper
 
             Axis ax = new Axis { Labels = new List<string>(), Separator = new Separator { Step = 5, IsEnabled = false }, LabelsRotation = 25 };
             Axis ay = new Axis { LabelFormatter = value => value.ToString(), Separator = new Separator(), MinValue = 0 };
-                    
 
-            DataTable dt = DBman.OpenQuery("select cast(sum(hours) as int) as Hours, username from TimeEntries2Line where SpentOn > '2017-11-21 00:00:00:000' group by username order by hours");
+            string query = $@"SELECT sum(hours) AS Hours, UserName FROM TimeEntries WHERE userid IN (2361,2374,1830,2233,1240,1383,2886,2235,1521,2232,1537,2535,551,894,3713,328) 
+                            AND spenton > '{dtpFrom.Value.ToString("yyyy-MM-dd 00:00:00,001")}' 
+                            AND spenton < '{dtpTo.Value.ToString("yyyy-MM-dd  00:00:00,000")}' 
+                            GROUP BY userid
+                            ORDER BY Hours";
+            DataTable dt = DBman.OpenQuery(query);
+
             DataRow[] dr = dt.Select("");
             List<string> ls = dr.Select(p => p[0].ToString()).ToList();
             for (int i = 0; i < dr.Length; i++)
@@ -453,8 +623,29 @@ namespace TrackerHelper
         {
             dashForm = new Dashboard();
             //dashForm.WindowState = FormWindowState.Maximized;
-            dashForm.Show();
-            
+            dashForm.Show();            
+        }
+
+        private void groupsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form GroupsForm = new Form
+            {
+                MdiParent = this,
+                Text = "Groups",
+                WindowState = FormWindowState.Maximized,
+            };
+            ComboBox cbGroups = new ComboBox();
+
+
+            GroupsForm.Show();
+        }
+
+        private void usersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form settings = new Settings();
+            settings.MdiParent = this;
+            settings.WindowState = FormWindowState.Maximized;
+            settings.Show();
         }
     }
 }

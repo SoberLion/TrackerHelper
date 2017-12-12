@@ -830,7 +830,7 @@ namespace TrackerHelper.DB
                         //    cmd.CommandText = "SELECT * FROM Issues WHERE CreatedOn >= '@DateFrom' AND CreatedOn < '@DateTo' @ProjectId";
                         if (ProjectId != "")
                         {
-                            ProjectId = string.Format("and ProjectId = {0}", ProjectId);
+                            ProjectId = $"and ProjectId in ({ProjectId})";
                         }
                         else
                             ProjectId = "";

@@ -8,6 +8,7 @@ using LiveCharts;
 using LiveCharts.Wpf;
 using TrackerHelper.DB;
 using System.Text;
+using System.Threading;
 
 namespace TrackerHelper.Controls
 {
@@ -40,18 +41,16 @@ namespace TrackerHelper.Controls
             cartesianChart.DataTooltip.Background = Brushes.Gainsboro;
             pieChartProjects.DataTooltip.Background = Brushes.Gainsboro;
             pieChartStatus.DataTooltip.Background = Brushes.Gainsboro;
-            pieChartCategory.DataTooltip.Background = Brushes.Gainsboro;            
+            pieChartCategory.DataTooltip.Background = Brushes.Gainsboro;
 
         }
 
         private void TSDashboard_Load(object sender, EventArgs e)
         {
-
-        }
-
-        public void updateTSPieChartProjects(LiveCharts.WinForms.PieChart pieChart)
-        {
-            
+            // Thread UpdateThread = new Thread(new ThreadStart(UpdateTSDashboard));
+            //UpdateThread.Start(); // запускаем поток
+            UpdateTSDashboard();
+            tmrSplash.Enabled = true;
         }
 
         private void btnUpdateData_Click(object sender, EventArgs e)
@@ -82,10 +81,46 @@ namespace TrackerHelper.Controls
             CreateUsersButtons();
         }
 
+        /*
+         private async void StartButton_Click(object sender, RoutedEventArgs e)
+{
+    // ExampleMethodAsync returns a Task<int>, which means that the method
+    // eventually produces an int result. However, ExampleMethodAsync returns
+    // the Task<int> value as soon as it reaches an await.
+    ResultsTextBox.Text += "\n";
+    try
+    {
+        int length = await ExampleMethodAsync();
+        // Note that you could put "await ExampleMethodAsync()" in the next line where
+        // "length" is, but due to when '+=' fetches the value of ResultsTextBox, you
+        // would not see the global side effect of ExampleMethodAsync setting the text.
+        ResultsTextBox.Text += String.Format("Length: {0}\n", length);
+    }
+    catch (Exception)
+    {
+        // Process the exception if one occurs.
+    }
+}
+
+public async Task<int> ExampleMethodAsync()
+{
+    var httpClient = new HttpClient();
+    int exampleInt = (await httpClient.GetStringAsync("http://msdn.microsoft.com")).Length;
+    ResultsTextBox.Text += "Preparing to finish ExampleMethodAsync.\n";
+    // After the following return statement, any method that's awaiting
+    // ExampleMethodAsync (in this case, StartButton_Click) can get the 
+    // integer result.
+    return exampleInt;
+}*/
+
         private void CreateUsersButtons()
         {
             if (pnlTopRight.Controls.Count > 0)
                 return;
+
+            string todayTimeQuery = $"SELECT UserId, sum(hours) AS Hours FROM TimeEntries WHERE userid IN ({UserIdList}) AND spenton LIKE '{DateTime.Now.ToString("yyyy-MM-dd")}%' GROUP BY userid";
+
+            DataTable TimeTable = DBman.OpenQuery(todayTimeQuery);
 
             string query = $"SELECT DISTINCT AssignedToName, AssignedToId FROM Issues WHERE AssignedToId IN ({UserIdList}) ORDER BY AssignedToName desc";
 
@@ -93,11 +128,12 @@ namespace TrackerHelper.Controls
             DataRow[] dr = dt.Select("");
             for(int i = 0; i < dr.Length; i++)
             {
+                string s = TimeTable.Select($"UserId={dr[i][1].ToString()}").Length > 0 ? TimeTable.Select($"UserId={dr[i][1].ToString()}")[0][1].ToString() : "0,00";
                 CheckedButton btn = new CheckedButton
-                {
+                {                    
                     Name = "btn" + dr[i][0].ToString(),
                     Parent = pnlTopRight,
-                    Text = dr[i][0].ToString(),
+                    Text = dr[i][0].ToString() + $" ({s})",
                     Tag = dr[i][1],
                     Dock = DockStyle.Top,
                     Height = 30,
@@ -152,7 +188,9 @@ namespace TrackerHelper.Controls
                 CheckStatusOverdue(lblStatusNeedInfoEmplOverduedValue, pnlStatusNeedInfoEmpl, 10, 18, 8, "18", id);
                 CheckStatusOverdue(lblStatusEscalatedOverduedValue, pnlStatusEscalated, 10, 18, 1, "22", id);
 
-                CartesianChartColumns(id);
+                string query = $@"SELECT count (*) as StatusCount, StatusName FROM Issues WHERE AssignedToId IN ({id}) 
+                            AND statusId NOT IN ({StatusIdList}) GROUP BY StatusName ORDER BY StatusCount DESC";
+                CartesianChartColumns(query);
             }            
         }
 
@@ -378,10 +416,10 @@ namespace TrackerHelper.Controls
             cartesianChart.AxisX.Add(ax);
         }
 
-        private void CartesianChartColumns(string userIdList)
+        private void CartesianChartColumns(string query)
         {
-            string query = $@"SELECT count (*) as StatusCount, StatusName FROM Issues WHERE AssignedToId IN ({userIdList}) 
-                            AND statusId NOT IN ({StatusIdList}) GROUP BY StatusName ORDER BY StatusCount DESC";
+           // string query = $@"SELECT count (*) as StatusCount, StatusName FROM Issues WHERE AssignedToId IN ({userIdList}) 
+            //                AND statusId NOT IN ({StatusIdList}) GROUP BY StatusName ORDER BY StatusCount DESC";
             DataTable dt = DBman.OpenQuery(query);
             DataRow[] dr = dt.Select("");
 
@@ -544,6 +582,9 @@ namespace TrackerHelper.Controls
         private void pieChartProjects_DataClick(object sender, ChartPoint chartPoint)
         {
             PieChartOtherProjects(UserIdList);
+          //  string query = $@"SELECT count (*) as ProjectCount, ProjectName FROM Issues WHERE AssignedToId IN ({UserIdList}) 
+                          //  AND statusId NOT IN ({StatusIdList}) GROUP BY ProjectName ORDER BY ProjectCount";
+           // CartesianChartColumns(query);
             /*
             var chart = (LiveCharts.Wpf.PieChart)chartPoint.ChartView;
             var selectedSeries = (PieSeries)chartPoint.SeriesView;  
@@ -622,10 +663,15 @@ namespace TrackerHelper.Controls
             StatusPanelClick(sender);
         }
 
-
         private void pnlStatusEscalated_Click(object sender, EventArgs e)
         {
             StatusPanelClick(sender);
+        }
+
+        private void tmrSplash_Tick(object sender, EventArgs e)
+        {
+            tmrSplash.Enabled = false;
+            pnlSplash.Visible = false;
         }
     }
 }

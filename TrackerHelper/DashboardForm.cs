@@ -100,35 +100,45 @@ namespace TrackerHelper
         private void btnTechSupp_Click(object sender, EventArgs e)
         {
             Toggle(sender);
-            lblCaption.Text = "TECH SUPPORT";
-            //this.SuspendLayout();
-            DashboardIssues newTSDashboard = new DashboardIssues
+            lblCaption.Text = "ISSUES";
+
+
+            DashboardIssues tsdb = Controls.Find("DashboardIssues", true).FirstOrDefault() as DashboardIssues;
+            tsdb?.Dispose();
+
+            DashboardTime udb = Controls.Find("Users", true).FirstOrDefault() as DashboardTime;
+            udb?.Dispose();
+
+            DashboardIssues DashboardIssues = new DashboardIssues
             {
                 Parent = this.pnlDashboard,
                 Dock = DockStyle.Fill,
                 BackColor = Color.FromArgb(41, 53, 65),
                 Name = "DashboardIssues"
             };
-            
+
             //newTSDashboard.UpdateTSDashboard();
-            //this.ResumeLayout();
         }
 
         private void btn1_Click(object sender, EventArgs e)
         {
             lblCaption.Text = "USERS";
             Toggle(sender);
+
+
             DashboardIssues tsdb = Controls.Find("DashboardIssues", true).FirstOrDefault() as DashboardIssues;
             tsdb?.Dispose();
 
-            DashboardTime dbTime = new DashboardTime
+            DashboardTime udb = Controls.Find("Users", true).FirstOrDefault() as DashboardTime;
+            udb?.Dispose();
+
+            DashboardTime Users = new DashboardTime
             {
                 Parent = this.pnlDashboard,
                 Dock = DockStyle.Fill,
-                BackColor = Color.FromArgb(41, 53, 65),
+                BackColor = Color.FromArgb(255, 53, 65),
                 Name = "Users"
             };
-
         }
 
         private void Toggle(object sender)
