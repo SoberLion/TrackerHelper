@@ -42,9 +42,10 @@
             this.pnl_listbox = new System.Windows.Forms.Panel();
             this.listbox_IssueJournal = new System.Windows.Forms.ListBox();
             this.pnl_tools = new System.Windows.Forms.Panel();
-            this.tbNumOfDays = new System.Windows.Forms.TextBox();
-            this.btnGetIssuesJournals = new System.Windows.Forms.Button();
             this.btnUpdateTE = new System.Windows.Forms.Button();
+            this.tbNumOfDays = new System.Windows.Forms.TextBox();
+            this.bgWorker = new System.ComponentModel.BackgroundWorker();
+            this.pbBGWork = new System.Windows.Forms.ProgressBar();
             this.tControl.SuspendLayout();
             this.tP_IssueList.SuspendLayout();
             this.pnl_TreeView.SuspendLayout();
@@ -60,10 +61,10 @@
             this.tControl.Controls.Add(this.tP_IssueList);
             this.tControl.Controls.Add(this.tp_IssueJournal);
             this.tControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tControl.Location = new System.Drawing.Point(0, 0);
+            this.tControl.Location = new System.Drawing.Point(0, 10);
             this.tControl.Name = "tControl";
             this.tControl.SelectedIndex = 0;
-            this.tControl.Size = new System.Drawing.Size(334, 612);
+            this.tControl.Size = new System.Drawing.Size(334, 602);
             this.tControl.TabIndex = 1;
             // 
             // tP_IssueList
@@ -165,7 +166,7 @@
             this.tp_IssueJournal.Location = new System.Drawing.Point(4, 25);
             this.tp_IssueJournal.Name = "tp_IssueJournal";
             this.tp_IssueJournal.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_IssueJournal.Size = new System.Drawing.Size(326, 583);
+            this.tp_IssueJournal.Size = new System.Drawing.Size(326, 573);
             this.tp_IssueJournal.TabIndex = 0;
             this.tp_IssueJournal.Text = "Issue #";
             this.tp_IssueJournal.UseVisualStyleBackColor = true;
@@ -176,7 +177,7 @@
             this.pnl_listbox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnl_listbox.Location = new System.Drawing.Point(3, 33);
             this.pnl_listbox.Name = "pnl_listbox";
-            this.pnl_listbox.Size = new System.Drawing.Size(320, 547);
+            this.pnl_listbox.Size = new System.Drawing.Size(320, 537);
             this.pnl_listbox.TabIndex = 2;
             // 
             // listbox_IssueJournal
@@ -185,19 +186,28 @@
             this.listbox_IssueJournal.FormattingEnabled = true;
             this.listbox_IssueJournal.Location = new System.Drawing.Point(0, 0);
             this.listbox_IssueJournal.Name = "listbox_IssueJournal";
-            this.listbox_IssueJournal.Size = new System.Drawing.Size(320, 547);
+            this.listbox_IssueJournal.Size = new System.Drawing.Size(320, 537);
             this.listbox_IssueJournal.TabIndex = 0;
             // 
             // pnl_tools
             // 
             this.pnl_tools.Controls.Add(this.btnUpdateTE);
             this.pnl_tools.Controls.Add(this.tbNumOfDays);
-            this.pnl_tools.Controls.Add(this.btnGetIssuesJournals);
             this.pnl_tools.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnl_tools.Location = new System.Drawing.Point(3, 3);
             this.pnl_tools.Name = "pnl_tools";
             this.pnl_tools.Size = new System.Drawing.Size(320, 30);
             this.pnl_tools.TabIndex = 1;
+            // 
+            // btnUpdateTE
+            // 
+            this.btnUpdateTE.Location = new System.Drawing.Point(60, 4);
+            this.btnUpdateTE.Name = "btnUpdateTE";
+            this.btnUpdateTE.Size = new System.Drawing.Size(90, 23);
+            this.btnUpdateTE.TabIndex = 3;
+            this.btnUpdateTE.Text = "Update";
+            this.btnUpdateTE.UseVisualStyleBackColor = true;
+            this.btnUpdateTE.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // tbNumOfDays
             // 
@@ -207,25 +217,21 @@
             this.tbNumOfDays.TabIndex = 2;
             this.tbNumOfDays.Text = "1";
             // 
-            // btnGetIssuesJournals
+            // bgWorker
             // 
-            this.btnGetIssuesJournals.Location = new System.Drawing.Point(76, 4);
-            this.btnGetIssuesJournals.Name = "btnGetIssuesJournals";
-            this.btnGetIssuesJournals.Size = new System.Drawing.Size(90, 23);
-            this.btnGetIssuesJournals.TabIndex = 1;
-            this.btnGetIssuesJournals.Text = "Update Issues";
-            this.btnGetIssuesJournals.UseVisualStyleBackColor = true;
-            this.btnGetIssuesJournals.Click += new System.EventHandler(this.btnGetIssuesJournals_Click);
+            this.bgWorker.WorkerReportsProgress = true;
+            this.bgWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgWorker_DoWork);
+            this.bgWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgWorker_ProgressChanged);
+            this.bgWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgWorker_RunWorkerCompleted);
             // 
-            // btnUpdateTE
+            // pbBGWork
             // 
-            this.btnUpdateTE.Location = new System.Drawing.Point(172, 4);
-            this.btnUpdateTE.Name = "btnUpdateTE";
-            this.btnUpdateTE.Size = new System.Drawing.Size(90, 23);
-            this.btnUpdateTE.TabIndex = 3;
-            this.btnUpdateTE.Text = "Update TE";
-            this.btnUpdateTE.UseVisualStyleBackColor = true;
-            this.btnUpdateTE.Click += new System.EventHandler(this.button1_Click_1);
+            this.pbBGWork.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pbBGWork.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(53)))), ((int)(((byte)(65)))));
+            this.pbBGWork.Location = new System.Drawing.Point(0, 0);
+            this.pbBGWork.Name = "pbBGWork";
+            this.pbBGWork.Size = new System.Drawing.Size(334, 10);
+            this.pbBGWork.TabIndex = 3;
             // 
             // WorkForm
             // 
@@ -233,6 +239,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(334, 612);
             this.Controls.Add(this.tControl);
+            this.Controls.Add(this.pbBGWork);
             this.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Name = "WorkForm";
             this.Text = "WorkForm";
@@ -264,8 +271,9 @@
         private System.Windows.Forms.DateTimePicker dtPicker_IssuesFrom;
         private System.Windows.Forms.Button btn_UpdateIssues;
         private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.Button btnGetIssuesJournals;
         private System.Windows.Forms.TextBox tbNumOfDays;
         private System.Windows.Forms.Button btnUpdateTE;
+        private System.ComponentModel.BackgroundWorker bgWorker;
+        private System.Windows.Forms.ProgressBar pbBGWork;
     }
 }

@@ -9,8 +9,9 @@ namespace TrackerHelper.DB
     public class DBController
     {
         public delegate void Message(string message);
-
+        public delegate void Progress(int percent);
         public static event Message onError;
+        public static event Progress onProgressChange;
 
 
         private static User _user = new User();
@@ -67,7 +68,8 @@ namespace TrackerHelper.DB
                     {
                         _timeEntries = XML.Deserialize<Time_entries>(resultModel.Results);
                     } // IncOffset увеличивает offset на величину limit при каждом вызове.
-                    _timeEntries.IncOffset();
+                    onProgressChange?.Invoke(Convert.ToInt32(_timeEntries.offset) * 100 / Convert.ToInt32(_timeEntries.total_count));
+                    _timeEntries.IncOffset();                    
                 }
                 else
                 {// в случае если запрос к redmine не был успешным сделать повторный запрос с теми же параметрами
@@ -106,6 +108,7 @@ namespace TrackerHelper.DB
                         _rmIssues = XML.Deserialize<Issues>(resultModel.Results);
                     } // IncOffset увеличивает offset на величину limit при каждом вызове.
                     _rmIssues.IncOffset();
+                    onProgressChange?.Invoke(Convert.ToInt32(_rmIssues.offset) * 100 / Convert.ToInt32(_rmIssues.total_count));
                 }
                 else
                 {// в случае если запрос к redmine не был успешным сделать повторный запрос с теми же параметрами                    
@@ -135,6 +138,8 @@ namespace TrackerHelper.DB
                 issue = Issue.GetIssue(url);
                 if (issue != null)
                     _user.IssuesUpdated.issue.Add(issue);
+
+                onProgressChange?.Invoke(i * 100 / _user.Issues.issue.Count);
             }
         }
     }

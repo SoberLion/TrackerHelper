@@ -99,73 +99,23 @@ namespace TrackerHelper
             MessageBox.Show(message);
         }
 
-        private void btnGetIssuesJournals_Click(object sender, EventArgs e)
-        {
-            user = new User
-            {
-                Id = "751",
-                ApiKey = "1287ca3310be20d6992a764b57f9c8bcfbb05664",
-            };
-            DBController dbController = new DBController(user);
-
-            int numOfDays =1;
-
-            int.TryParse(tbNumOfDays.Text, out numOfDays);
-
-            tbNumOfDays.Text = numOfDays.ToString();
-            dbController.UpdateIssues(3, numOfDays);
-
-            /* user = new User
-             {
-                 Id = "751",
-                 ApiKey = "1287ca3310be20d6992a764b57f9c8bcfbb05664",
-             };
-             user.FetchUpdatedIssues(3, 2);
-             /*for (int i = 0; i < user.IssuesUpdated.issue.Count; i++)
-             {
-                 string url = $@"{user.BaseAddress}issues/{user.IssuesUpdated.issue[i].id}.xml?include=journals&key={user.ApiKey}";
-                 Issue issue = new Issue();
-                 issue = Issue.GetIssue(url);
-                 if (issue != null)
-                     user.IssuesUpdated.issue[i] = issue;
-             }
-             DBman.InsertIssues(user.IssuesUpdated);*/
-            /* Issues issues = new Issues();
-             for (int i = 124601; i <= 125657; i++)
-             {                
-                 string url = $@"{user.BaseAddress}issues/{i.ToString()}.xml?include=journals&key={user.ApiKey}";
-                 Issue issue = new Issue();
-                 issue = Issue.GetIssue(url);
-                 if (issue != null)
-                     issues.issue.Add(issue);
-
-                 if (i % 100 == 0)
-                 {
-                     DBman.InsertIssues(issues);
-                     issues.issue.Clear();
-                 }
-             }
-             DBman.InsertIssues(issues);*/
-
-            /* for (int i = 0; i < user.IssuesUpdated.issue.Count; i++)
-             {
-                 string url = $@"{user.BaseAddress}issues/{user.IssuesUpdated.issue[i].id}.xml?include=journals&key={user.ApiKey}";
-                 Issue issue = new Issue();
-                 issue = Issue.GetIssue(url);
-                 if (issue != null)
-                     user.IssuesUpdated.issue[i] = issue;
-             }
-             DBman.InsertIssues(user.IssuesUpdated);*/
-        }
-
         private void button1_Click_1(object sender, EventArgs e)
         {
+            if (bgWorker.IsBusy != true)
+            {
+                bgWorker.RunWorkerAsync();
+            }
+        }
+
+        private void bgWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
             user = new User
             {
                 Id = "751",
                 ApiKey = "1287ca3310be20d6992a764b57f9c8bcfbb05664",
             };
             DBController dbController = new DBController(user);
+            DBController.onProgressChange += bgWorker.ReportProgress;
 
             int numOfDays = 1;
 
@@ -173,7 +123,28 @@ namespace TrackerHelper
 
             tbNumOfDays.Text = numOfDays.ToString();
 
-            dbController.UpdateTimeEntries(3, numOfDays);
+            dbController.UpdateIssues(3, numOfDays);
+            dbController.UpdateTimeEntries(3, numOfDays);            
+        }
+
+        private void bgWorker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        {
+            pbBGWork.Value = e.ProgressPercentage <= 100 ? e.ProgressPercentage : 100;
+        }
+
+        private void bgWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            if ((e.Cancelled == true))
+            {
+            }
+
+            else if (!(e.Error == null))
+            {
+            }
+            else
+            {
+                pbBGWork.Value = 100;
+            }
         }
     }
 }
