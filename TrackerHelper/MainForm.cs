@@ -137,53 +137,30 @@ namespace TrackerHelper
             { Parent = repform, Dock = DockStyle.Fill, Name = "pnlChart" };
             Panel pnlFilter = new Panel
             { Parent = repform, Dock = DockStyle.Right, Width = 200, Name = "pnlFilter" };
+
             LiveCharts.WinForms.CartesianChart cartesianChart = new LiveCharts.WinForms.CartesianChart
             { Parent = pnlChart, Dock = DockStyle.Fill, LegendLocation = LegendLocation.Bottom, Name = "cartesianChart" };
 
             Panel pnlRadioButton = new Panel
             { Parent = pnlFilter, Dock = DockStyle.Top, Name = "pnlRadioButton", Height = 150 };
+
             RadioButton rbYear = new RadioButton
-            {
-                Parent = pnlRadioButton,
-                Dock = DockStyle.Top,
-                Name = "rbYear",
-                Text = "Год",
-                Tag = DBman.GroupFormat.Year
-            };
+            { Parent = pnlRadioButton, Dock = DockStyle.Top, Name = "rbYear", Text = "Год", Tag = DBman.GroupFormat.Year };
             RadioButton rbMonth = new RadioButton
-            {
-                Parent = pnlRadioButton,
-                Dock = DockStyle.Top,
-                Name = "rbMonth",
-                Text = "Месяц",
-                Checked = true,
-                Tag = DBman.GroupFormat.Month
-            };
+            { Parent = pnlRadioButton, Dock = DockStyle.Top, Name = "rbMonth", Text = "Месяц", Checked = true, Tag = DBman.GroupFormat.Month };
             RadioButton rbDay = new RadioButton
-            {
-                Parent = pnlRadioButton,
-                Dock = DockStyle.Top,
-                Name = "rbDay",
-                Text = "День",
-                Tag = DBman.GroupFormat.Day
-            };
+            { Parent = pnlRadioButton, Dock = DockStyle.Top, Name = "rbDay", Text = "День", Tag = DBman.GroupFormat.Day };
+
             Label lblrbGroup = new Label
             { Parent = pnlRadioButton, Dock = DockStyle.Top, Name = "lblrbGroup", Text = "Группировка" };
 
             Panel pnlCheckBox = new Panel
-            {
-                Parent = pnlFilter,
-                Dock = DockStyle.Top,
-                Name = "pnlCheckBox",
-                Height = 60
-            };
+            { Parent = pnlFilter, Dock = DockStyle.Top, Name = "pnlCheckBox", Height = 60 };
+
             CheckBox cbByTracker = new CheckBox
-            {
-                Parent = pnlCheckBox,
-                Dock = DockStyle.Fill,
-                Name = "cbByTracker",
-                Text = "Разрез: Трекер"               
-            };
+            { Parent = pnlCheckBox, Dock = DockStyle.Fill, Name = "cbByTracker", Text = "Разрез: Трекер" };
+
+            cbByTracker.CheckedChanged += cbByTrackerCheckedChanged;
 
             Panel pnldtpTo = new Panel
             { Parent = pnlFilter, Dock = DockStyle.Top, Name = "pnldtpTo", Height = 50 };
@@ -194,7 +171,6 @@ namespace TrackerHelper
 
             Label lblTo = new Label
             { Parent = pnldtpTo, Dock = DockStyle.Top, Name = "lblFrom", Text = "Дата по:" };
-
 
             Panel pnldtpFrom = new Panel
             { Parent = pnlFilter, Dock = DockStyle.Top, Name = "pnldtpFrom", Height = 50 };
@@ -208,14 +184,7 @@ namespace TrackerHelper
 
 
             Button btnFilter = new Button
-            {
-                Parent = pnlFilter,
-                Name = "btnFilter",
-                Text = "FILTER",
-                Dock = DockStyle.Top,
-                Height = 30,
-                FlatStyle = FlatStyle.Flat
-            };
+            { Parent = pnlFilter, Name = "btnFilter", Text = "FILTER", Dock = DockStyle.Top, Height = 30, FlatStyle = FlatStyle.Flat };
             btnFilter.FlatAppearance.BorderSize = 0;
 
             btnFilter.Click += btnFilterOnClick;
@@ -377,7 +346,6 @@ namespace TrackerHelper
                     groupFormat = (DBman.GroupFormat)rb.Tag;
             }
 
-            Control cnt = repform.Controls.Find("cartesianChart", true).FirstOrDefault();
 
             string GroupingFormat = "%Y";
 
@@ -400,75 +368,176 @@ namespace TrackerHelper
                     }
             }
 
+            if (repform.Controls.Find("cartesianChart2", true).FirstOrDefault() is LiveCharts.WinForms.CartesianChart cartesianChart2)
+            {
+                string query = $@"SELECT count(*) as number, TrackerName, strftime('{GroupingFormat}', ClosedOn) as ClosedOn FROM Issues 
+                                WHERE TrackerId in (1,2,3) AND ClosedOn >= '{dtpFrom.Value.ToString("yyyy-MM-dd HH:mm:ss,fff")}' 
+                                AND ClosedOn < '{dtpTo.Value.ToString("yyyy-MM-dd HH:mm:ss,fff")}' and ProjectId in (26,220) 
+                                GROUP BY strftime('{GroupingFormat}', ClosedOn), TrackerId ORDER BY ClosedOn, TrackerId";
+                DataTable dt = DBman.OpenQuery(query);
 
-            if (cnt is LiveCharts.WinForms.CartesianChart cartesianChart)
+                FillCartesianChartStackedColumns(cartesianChart2, dt);
+            }
+
+            if (repform.Controls.Find("cartesianChart", true).FirstOrDefault() is LiveCharts.WinForms.CartesianChart cartesianChart)
             {
                 string query = $@"SELECT count(*) as number, TrackerName, strftime('{GroupingFormat}', CreatedOn) as CreatedOn FROM Issues 
                                 WHERE TrackerId in (1,2,3) AND CreatedOn >= '{dtpFrom.Value.ToString("yyyy-MM-dd HH:mm:ss,fff")}' 
                                 AND CreatedOn < '{dtpTo.Value.ToString("yyyy-MM-dd HH:mm:ss,fff")}' and ProjectId in (26,220) 
                                 GROUP BY strftime('{GroupingFormat}', CreatedOn), TrackerId ORDER BY CreatedOn, TrackerId";
-
-
                 DataTable dt = DBman.OpenQuery(query);
 
-                DataRow[] dr = dt.Select("");
+                FillCartesianChartStackedColumns(cartesianChart, dt);
+            }
+        }
 
-                SeriesCollection col = new SeriesCollection();
+        private void FillCartesianChartStackedColumns(LiveCharts.WinForms.CartesianChart cartesianChart, DataTable dt)
+        {
+            DataRow[] dr = dt.Select("");
 
-                List<string> ListTrackerName = dr.Select(p => p[1].ToString()).Distinct().ToList();
-                List<string> DateList = dr.Select(p => p[2].ToString().Split(' ')[0]).Distinct().ToList();
-                ListTrackerName.Sort();
+            SeriesCollection col = new SeriesCollection();
 
-                foreach (var item in ListTrackerName)
+            List<string> ListSeries = dr.Select(p => p[1].ToString()).Distinct().ToList();
+            List<string> ListLabels = dr.Select(p => p[2].ToString().Split(' ')[0]).Distinct().ToList();
+            ListSeries.Sort();
+
+            (repform.Controls.Find("pnl"+cartesianChart.Name, true).FirstOrDefault() as Panel)?.Dispose();
+
+            Panel pnlSeriesCheckBox = new Panel
+            {
+                Parent = repform.Controls.Find("pnlFilter", true).FirstOrDefault() as Panel,
+                Dock = DockStyle.Top,
+                Height = 32 * ListSeries.Count,
+                Name = "pnl" + cartesianChart.Name
+            };
+            
+
+            pnlSeriesCheckBox.Controls.Clear();
+
+            foreach (var item in ListSeries)
+            {
+                StackedColumnSeries columnSeries = new StackedColumnSeries
                 {
-                    StackedColumnSeries columnSeries = new StackedColumnSeries
-                    {
-                        Title = item,
-                        Values = new ChartValues<int>(),
-                        LabelPoint = point => point.Y.ToString(),
-                        DataLabels = true,
-                        Foreground = System.Windows.Media.Brushes.Black
-                    };
-                    col.Add(columnSeries);
-                }
-                int rowiterator = 0;
-                foreach (string Name in DateList)
+                    Title = item,
+                    Values = new ChartValues<int>(),
+                    LabelPoint = point => point.Y.ToString(),
+                    DataLabels = true,
+                    Foreground = System.Windows.Media.Brushes.Black,
+                    Name = cartesianChart.Text
+                };
+                col.Add(columnSeries);
+
+                CheckBox cb = new CheckBox
                 {
-                    for (int i = 0; i < col.Count; i++)
+                    Parent = pnlSeriesCheckBox,
+                    Text = columnSeries.Title,
+                    Tag = columnSeries,
+                    Dock = DockStyle.Top,
+                    Checked = true
+                };
+                cb.CheckedChanged += SeriesCheckBoxCheckedChanged;
+            }
+
+            Label lbl = new Label
+            {
+                Text = cartesianChart.Text,
+                Parent = pnlSeriesCheckBox,
+                Dock = DockStyle.Top,
+                Padding = new Padding(5),
+                Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(204))),
+                AutoSize = true
+            };
+
+            int rowiterator = 0;
+            foreach (string Name in ListLabels)
+            {
+                for (int i = 0; i < col.Count; i++)
+                {
+                    if (col[i].Title == dr[rowiterator][1].ToString())
                     {
-                        if (col[i].Title == dr[rowiterator][1].ToString())
+                        col[i].Values.Add(Convert.ToInt32(dr[rowiterator][0]));
+                        if (rowiterator < dr.Length - 1)
                         {
-                            col[i].Values.Add(Convert.ToInt32(dr[rowiterator][0]));
-                            if (rowiterator < dr.Length - 1)
-                            {
-                                rowiterator++;
-                            }
-                            else
-                            {
-                                continue;
-                            }
+                            rowiterator++;
                         }
                         else
                         {
-                            col[i].Values.Add(0);
+                            continue;
                         }
                     }
+                    else
+                    {
+                        col[i].Values.Add(0);
+                    }
                 }
+            }
 
-                Axis ax = new Axis
+            Axis ax = new Axis
+            {
+                Separator = new Separator { Step = 1, IsEnabled = false },
+                Labels = ListLabels,
+                LabelsRotation = 70,
+                Foreground = System.Windows.Media.Brushes.Black,
+                Name = cartesianChart.Text,           
+            };
+
+            cartesianChart.AxisX.Clear();
+            cartesianChart.AxisY.Clear();
+
+            cartesianChart.Series = col;
+            cartesianChart.AxisX.Add(ax);
+            cartesianChart.LegendLocation = LegendLocation.Right;
+
+        }
+
+
+
+        private void cbByTrackerCheckedChanged(object sender, EventArgs e)
+        {
+            if (sender is CheckBox cb)
+            {
+                LiveCharts.WinForms.CartesianChart cartesianChart = repform.Controls.Find("cartesianChart", true).FirstOrDefault() as LiveCharts.WinForms.CartesianChart;
+
+                if (cb.Checked != false)
                 {
-                    Separator = new Separator { Step = 1, IsEnabled = false },
-                    Labels = DateList,
-                    LabelsRotation = 70,
-                    Foreground = System.Windows.Media.Brushes.Black
-                };
+                    Panel pnlChart = repform.Controls.Find("pnlChart", true).FirstOrDefault() as Panel;
+                    cartesianChart.Dock = DockStyle.None;
+                    cartesianChart.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
+                    cartesianChart.Size = new Size(pnlChart.Size.Width - 5, pnlChart.Size.Height / 2 - 5);
+                    cartesianChart.Top = 5;
+                    cartesianChart.Left = 5;
+                    cartesianChart.Text = "Открыто";
 
-                cartesianChart.AxisX.Clear();
-                cartesianChart.AxisY.Clear();
+                    LiveCharts.WinForms.CartesianChart cartesianChart2 = new LiveCharts.WinForms.CartesianChart
+                    {
+                        Parent = pnlChart,
+                        Dock = DockStyle.None,
+                        Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom,
+                        Size = new Size(pnlChart.Size.Width - 10, pnlChart.Size.Height / 2 -10),
+                        Top = pnlChart.Size.Height / 2 + 5,
+                        Left = 5,
+                        Name = "cartesianChart2",
+                        Text = "Закрыто"
+                    };
+                }
+                else
+                {
+                    LiveCharts.WinForms.CartesianChart cartesianChart2 = repform.Controls.Find("cartesianChart2", true).FirstOrDefault() as LiveCharts.WinForms.CartesianChart;
+                    cartesianChart2?.Dispose();
 
-                cartesianChart.Series = col;
-                cartesianChart.AxisX.Add(ax);
-                cartesianChart.LegendLocation = LegendLocation.Top;
+                    cartesianChart.Dock = DockStyle.Fill;
+                }
+            }
+        }
+
+        private void SeriesCheckBoxCheckedChanged(object sender, EventArgs e)
+        {
+            if (sender is CheckBox cb)
+            {
+                StackedColumnSeries scs = cb.Tag as StackedColumnSeries;
+                scs.Visibility = cb.Checked == false ? System.Windows.Visibility.Hidden : System.Windows.Visibility.Visible;
+                scs.LabelPoint = point => point.Y.ToString();
+                scs.DataLabels = true;
             }
         }
 
