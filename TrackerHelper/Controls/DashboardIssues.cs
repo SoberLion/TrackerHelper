@@ -49,8 +49,8 @@ namespace TrackerHelper.Controls
         {
             // Thread UpdateThread = new Thread(new ThreadStart(UpdateTSDashboard));
             //UpdateThread.Start(); // запускаем поток
-            UpdateTSDashboard();
-            tmrSplash.Enabled = true;
+
+
         }
 
         private void btnUpdateData_Click(object sender, EventArgs e)
@@ -79,6 +79,7 @@ namespace TrackerHelper.Controls
             CheckStatusOverdue(lblStatusEscalatedOverduedValue, pnlStatusEscalated, 10, 18, 1, "22", UserIdList);
 
             CreateUsersButtons();
+            tmrSplash.Enabled = true;
         }
 
         /*

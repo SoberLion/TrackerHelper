@@ -109,11 +109,11 @@
     </Compile>
     <Compile Include="DB\DBman.cs" />
     <Compile Include="StickyWindow.cs" />
-    <Compile Include="Controls\DashboardTime.cs">
+    <Compile Include="Controls\DashboardIssuesStatus.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\DashboardTime.Designer.cs">
-      <DependentUpon>DashboardTime.cs</DependentUpon>
+    <Compile Include="Controls\DashboardIssuesStatus.Designer.cs">
+      <DependentUpon>DashboardIssuesStatus.cs</DependentUpon>
     </Compile>
     <Compile Include="TreeViewMethods.cs" />
     <Compile Include="Controls\DashboardIssues.cs">
@@ -133,8 +133,8 @@
     <EmbeddedResource Include="DashboardForm.resx">
       <DependentUpon>DashboardForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\DashboardTime.resx">
-      <DependentUpon>DashboardTime.cs</DependentUpon>
+    <EmbeddedResource Include="Controls\DashboardIssuesStatus.resx">
+      <DependentUpon>DashboardIssuesStatus.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

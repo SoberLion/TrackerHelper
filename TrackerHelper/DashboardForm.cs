@@ -18,9 +18,9 @@ namespace TrackerHelper
     {
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
-        [DllImportAttribute("user32.dll")]
+        [DllImport("user32.dll")]
         private static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
-        [DllImportAttribute("user32.dll")]
+        [DllImport("user32.dll")]
         private static extern bool ReleaseCapture();
 
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
@@ -49,11 +49,6 @@ namespace TrackerHelper
 
         }
 
-        private void Charts_Shown(object sender, EventArgs e)
-        {
-            
-        }
-
         private void panel3_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -63,21 +58,7 @@ namespace TrackerHelper
             }
         }
 
-        private void Dashboard_Paint(object sender, PaintEventArgs e)
-        {       
-        }
-
         private void btnClose_Click(object sender, EventArgs e)
-        {
-            this.WindowState = FormWindowState.Minimized;
-        }
-
-        private void pnlLogo_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
         {
             Close();
         }
@@ -87,10 +68,6 @@ namespace TrackerHelper
            // e.Cancel = false;
         }
 
-        private void tsDashboard1_Load(object sender, EventArgs e)
-        {
-
-        }
 
         private void pnlHeader_MouseDoubleClick(object sender, MouseEventArgs e)
         {
@@ -102,61 +79,141 @@ namespace TrackerHelper
             Toggle(sender);
             lblCaption.Text = "ISSUES";
 
+            DashboardIssues dash = Controls.Find("DashboardIssues", true).FirstOrDefault() as DashboardIssues;
 
-            DashboardIssues tsdb = Controls.Find("DashboardIssues", true).FirstOrDefault() as DashboardIssues;
-            tsdb?.Dispose();
-
-            DashboardTime udb = Controls.Find("Users", true).FirstOrDefault() as DashboardTime;
-            udb?.Dispose();
-
-            DashboardIssues DashboardIssues = new DashboardIssues
+            if (dash != null)
             {
-                Parent = this.pnlDashboard,
-                Dock = DockStyle.Fill,
-                BackColor = Color.FromArgb(41, 53, 65),
-                Name = "DashboardIssues"
-            };
-
-            //newTSDashboard.UpdateTSDashboard();
+                dash.BringToFront();
+            }
+            else
+            {
+                DashboardIssues newDash = new DashboardIssues
+                {
+                    Parent = this.pnlDashboard,
+                    Dock = DockStyle.Fill,
+                    BackColor = Color.FromArgb(41, 53, 65),
+                    Name = "DashboardIssues"
+                };
+                newDash.UpdateTSDashboard();
+                newDash.BringToFront();
+            }
         }
 
         private void btn1_Click(object sender, EventArgs e)
         {
-            lblCaption.Text = "USERS";
+            lblCaption.Text = "Новые";
             Toggle(sender);
 
-
-            DashboardIssues tsdb = Controls.Find("DashboardIssues", true).FirstOrDefault() as DashboardIssues;
-            tsdb?.Dispose();
-
-            DashboardTime udb = Controls.Find("Users", true).FirstOrDefault() as DashboardTime;
-            udb?.Dispose();
-
-            DashboardTime Users = new DashboardTime
+            DashboardIssuesStatus dash = Controls.Find("Новые", true).FirstOrDefault() as DashboardIssuesStatus;
+            if (dash != null)
             {
-                Parent = this.pnlDashboard,
-                Dock = DockStyle.Fill,
-                BackColor = Color.FromArgb(255, 53, 65),
-                Name = "Users"
-            };
+                dash.BringToFront();
+            }
+            else
+            {
+                DashboardIssuesStatus newDash = new DashboardIssuesStatus
+                {
+                    Parent = this.pnlDashboard,
+                    Dock = DockStyle.Fill,
+                    BackColor = Color.FromArgb(255, 53, 65),
+                    Name = "Новые",
+                    StatusIdList = new int[] { 1 }
+                };
+                newDash.GetDataTable();
+                newDash.BringToFront();
+            }
         }
 
         private void Toggle(object sender)
         {
             btnTechSupp.Check = false;
             btnTechSupp.BackColor = Color.FromArgb(41, 53, 65);
-            btn1.Check = false;
-            btn1.BackColor = Color.FromArgb(41, 53, 65);
-            btn2.Check = false;
-            btn2.BackColor = Color.FromArgb(41, 53, 65);
-            btn3.Check = false;
-            btn3.BackColor = Color.FromArgb(41, 53, 65);
-            btn4.Check = false;
-            btn4.BackColor = Color.FromArgb(41, 53, 65);
+            btnNew.Check = false;
+            btnNew.BackColor = Color.FromArgb(41, 53, 65);
+            btnAssigned.Check = false;
+            btnAssigned.BackColor = Color.FromArgb(41, 53, 65);
+            btnNeedInfoEmpl.Check = false;
+            btnNeedInfoEmpl.BackColor = Color.FromArgb(41, 53, 65);
+            btnEscalated.Check = false;
+            btnEscalated.BackColor = Color.FromArgb(41, 53, 65);
 
             (sender as CheckedButton).Check = true;
             (sender as CheckedButton).BackColor = Color.FromArgb(21, 33, 45);
+        }
 
+        private void btnAssigned_Click(object sender, EventArgs e)
+        {
+            lblCaption.Text = "Назначена";
+            Toggle(sender);
+
+            DashboardIssuesStatus dash = Controls.Find("Назначена", true).FirstOrDefault() as DashboardIssuesStatus;
+            if (dash != null)
+            {
+                dash.BringToFront();
+            }
+            else
+            {
+                DashboardIssuesStatus newDash = new DashboardIssuesStatus
+                {
+                    Parent = this.pnlDashboard,
+                    Dock = DockStyle.Fill,
+                    BackColor = Color.FromArgb(41, 53, 65),
+                    Name = "Назначена",
+                    StatusIdList = new int[] { 9 }
+                };
+                newDash.GetDataTable();
+                newDash.BringToFront();
+            }
+        }
+
+        private void btnNeedInfoEmpl_Click(object sender, EventArgs e)
+        {
+            lblCaption.Text = "Нужна информация (сотрудники)";
+            Toggle(sender);
+
+            DashboardIssuesStatus dash = Controls.Find("Нужна информация (сотрудники)", true).FirstOrDefault() as DashboardIssuesStatus;
+            if (dash != null)
+            {
+                dash.BringToFront();
+            }
+            else
+            {
+                DashboardIssuesStatus newDash = new DashboardIssuesStatus
+                {
+                    Parent = this.pnlDashboard,
+                    Dock = DockStyle.Fill,
+                    BackColor = Color.FromArgb(41, 53, 65),
+                    Name = "Нужна информация (сотрудники)",
+                    StatusIdList = new int[] { 18 }
+                };
+                newDash.GetDataTable();
+                newDash.BringToFront();
+            }
+        }
+
+        private void btnEscalated_Click(object sender, EventArgs e)
+        {
+            lblCaption.Text = "Эскалирована";
+            Toggle(sender);
+
+            DashboardIssuesStatus dash = Controls.Find("Эскалирована", true).FirstOrDefault() as DashboardIssuesStatus;
+            if (dash != null)
+            {
+                dash.BringToFront();
+            }
+            else
+            {
+                DashboardIssuesStatus newDash = new DashboardIssuesStatus
+                {
+                    Parent = this.pnlDashboard,
+                    Dock = DockStyle.Fill,
+                    BackColor = Color.FromArgb(41, 53, 65),
+                    Name = "Эскалирована",
+                    StatusIdList = new int[] { 22 }
+                };
+                newDash.GetDataTable();
+                newDash.BringToFront();
+            }
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace TrackerHelper.Controls
 {
-    partial class DashboardTime
+    partial class DashboardIssuesStatus
     {
         /// <summary> 
         /// Обязательная переменная конструктора.
@@ -28,8 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.pnlLayoutBot = new System.Windows.Forms.Panel();
             this.pnlLayoutMain = new System.Windows.Forms.Panel();
+            this.dgvIssuesStatus = new System.Windows.Forms.DataGridView();
+            this.pnlLayoutMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvIssuesStatus)).BeginInit();
             this.SuspendLayout();
             // 
             // pnlLayoutBot
@@ -44,21 +48,45 @@
             // pnlLayoutMain
             // 
             this.pnlLayoutMain.BackColor = System.Drawing.Color.Transparent;
+            this.pnlLayoutMain.Controls.Add(this.dgvIssuesStatus);
             this.pnlLayoutMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlLayoutMain.Location = new System.Drawing.Point(0, 0);
             this.pnlLayoutMain.Name = "pnlLayoutMain";
             this.pnlLayoutMain.Size = new System.Drawing.Size(1200, 630);
             this.pnlLayoutMain.TabIndex = 1;
             // 
-            // DashboardTime
+            // dgvIssuesStatus
+            // 
+            this.dgvIssuesStatus.AllowUserToOrderColumns = true;
+            this.dgvIssuesStatus.AllowUserToResizeRows = false;
+            this.dgvIssuesStatus.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvIssuesStatus.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.dgvIssuesStatus.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvIssuesStatus.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.dgvIssuesStatus.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dgvIssuesStatus.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvIssuesStatus.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvIssuesStatus.Location = new System.Drawing.Point(0, 0);
+            this.dgvIssuesStatus.MultiSelect = false;
+            this.dgvIssuesStatus.Name = "dgvIssuesStatus";
+            this.dgvIssuesStatus.ReadOnly = true;
+            this.dgvIssuesStatus.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            this.dgvIssuesStatus.RowHeadersVisible = false;
+            this.dgvIssuesStatus.RowTemplate.ReadOnly = true;
+            this.dgvIssuesStatus.Size = new System.Drawing.Size(1200, 630);
+            this.dgvIssuesStatus.TabIndex = 0;
+            // 
+            // DashboardIssuesStatus
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.WindowFrame;
             this.Controls.Add(this.pnlLayoutMain);
             this.Controls.Add(this.pnlLayoutBot);
-            this.Name = "DashboardTime";
+            this.Name = "DashboardIssuesStatus";
             this.Size = new System.Drawing.Size(1200, 800);
+            this.pnlLayoutMain.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvIssuesStatus)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -67,5 +95,6 @@
 
         private System.Windows.Forms.Panel pnlLayoutBot;
         private System.Windows.Forms.Panel pnlLayoutMain;
+        private System.Windows.Forms.DataGridView dgvIssuesStatus;
     }
 }

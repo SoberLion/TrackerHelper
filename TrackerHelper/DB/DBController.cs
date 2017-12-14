@@ -6,10 +6,28 @@ using System.Threading.Tasks;
 
 namespace TrackerHelper.DB
 {
+    public class EventProgressArgs
+    {
+        private int _Percents = 0;
+        private string _Message = string.Empty;
+
+
+        public int Percents
+        {
+            get { return _Percents; }
+            set { _Percents = value; }
+        }
+        public string Message
+        {
+            get { return _Message; }
+            set { _Message = value; }
+        }
+    }
+
     public class DBController
     {
         public delegate void Message(string message);
-        public delegate void Progress(int percent);
+        public delegate void Progress(EventProgressArgs e);
         public static event Message onError;
         public static event Progress onProgressChange;
 
@@ -68,8 +86,14 @@ namespace TrackerHelper.DB
                     {
                         _timeEntries = XML.Deserialize<Time_entries>(resultModel.Results);
                     } // IncOffset увеличивает offset на величину limit при каждом вызове.
-                    onProgressChange?.Invoke(Convert.ToInt32(_timeEntries.offset) * 100 / Convert.ToInt32(_timeEntries.total_count));
-                    _timeEntries.IncOffset();                    
+                    _timeEntries.IncOffset();
+                    onProgressChange?.Invoke(new EventProgressArgs
+                    {
+                        Percents = Convert.ToInt32(_timeEntries.offset) * 100 / Convert.ToInt32(_timeEntries.total_count),
+                        Message = Convert.ToInt32(_timeEntries.offset) < Convert.ToInt32(_timeEntries.total_count) ? 
+                                                  $@"Получение трудозатрат: {_timeEntries.offset}/{_timeEntries.total_count}" : 
+                                                  $@"Получение трудозатрат: {_timeEntries.total_count}/{_timeEntries.total_count}"
+                    });
                 }
                 else
                 {// в случае если запрос к redmine не был успешным сделать повторный запрос с теми же параметрами
@@ -108,7 +132,14 @@ namespace TrackerHelper.DB
                         _rmIssues = XML.Deserialize<Issues>(resultModel.Results);
                     } // IncOffset увеличивает offset на величину limit при каждом вызове.
                     _rmIssues.IncOffset();
-                    onProgressChange?.Invoke(Convert.ToInt32(_rmIssues.offset) * 100 / Convert.ToInt32(_rmIssues.total_count));
+
+                    onProgressChange?.Invoke(new EventProgressArgs
+                    {
+                        Percents = Convert.ToInt32(_rmIssues.offset) * 100 / Convert.ToInt32(_rmIssues.total_count),
+                        Message = Convert.ToInt32(_rmIssues.offset) < Convert.ToInt32(_rmIssues.total_count) ? 
+                                                  $@"Получение списка задач: {_rmIssues.offset}/{_rmIssues.total_count}" : 
+                                                  $@"Получение списка задач: {_rmIssues.total_count}/{_rmIssues.total_count}"
+                    });                                        
                 }
                 else
                 {// в случае если запрос к redmine не был успешным сделать повторный запрос с теми же параметрами                    
@@ -139,7 +170,12 @@ namespace TrackerHelper.DB
                 if (issue != null)
                     _user.IssuesUpdated.issue.Add(issue);
 
-                onProgressChange?.Invoke(i * 100 / _user.Issues.issue.Count);
+                onProgressChange?.Invoke(new EventProgressArgs
+                {
+                    Percents = i * 100 / _user.Issues.issue.Count,
+                    Message = $@"Обновление задачи: {i + 1}/{_user.Issues.issue.Count}"
+                });
+
             }
         }
     }

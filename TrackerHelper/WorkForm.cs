@@ -9,6 +9,8 @@ namespace TrackerHelper
 {
     public partial class WorkForm : Form
     {
+        delegate void Message(string message);
+
         User user = null;
         public WorkForm()
         {
@@ -115,7 +117,12 @@ namespace TrackerHelper
                 ApiKey = "1287ca3310be20d6992a764b57f9c8bcfbb05664",
             };
             DBController dbController = new DBController(user);
-            DBController.onProgressChange += bgWorker.ReportProgress;
+
+            DBController.onProgressChange += delegate (EventProgressArgs args)
+            {
+                bgWorker.ReportProgress(args.Percents);
+                lblPBarSetText(args.Message);
+            };
 
             int numOfDays = 1;
 
@@ -144,6 +151,20 @@ namespace TrackerHelper
             else
             {
                 pbBGWork.Value = 100;
+                lblPBarSetText("Updated.");
+            }
+        }
+
+        private void lblPBarSetText(string message)
+        {
+            if (lblPBar.InvokeRequired)
+            {
+                Message lblup = new Message(lblPBarSetText);
+                Invoke(lblup, new object[] { message });
+            }
+            else
+            {
+                lblPBar.Text = message;
             }
         }
     }

@@ -46,6 +46,7 @@
             this.tbNumOfDays = new System.Windows.Forms.TextBox();
             this.bgWorker = new System.ComponentModel.BackgroundWorker();
             this.pbBGWork = new System.Windows.Forms.ProgressBar();
+            this.lblPBar = new System.Windows.Forms.Label();
             this.tControl.SuspendLayout();
             this.tP_IssueList.SuspendLayout();
             this.pnl_TreeView.SuspendLayout();
@@ -61,10 +62,10 @@
             this.tControl.Controls.Add(this.tP_IssueList);
             this.tControl.Controls.Add(this.tp_IssueJournal);
             this.tControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tControl.Location = new System.Drawing.Point(0, 10);
+            this.tControl.Location = new System.Drawing.Point(0, 23);
             this.tControl.Name = "tControl";
             this.tControl.SelectedIndex = 0;
-            this.tControl.Size = new System.Drawing.Size(334, 602);
+            this.tControl.Size = new System.Drawing.Size(334, 589);
             this.tControl.TabIndex = 1;
             // 
             // tP_IssueList
@@ -74,7 +75,7 @@
             this.tP_IssueList.Location = new System.Drawing.Point(4, 25);
             this.tP_IssueList.Name = "tP_IssueList";
             this.tP_IssueList.Padding = new System.Windows.Forms.Padding(3);
-            this.tP_IssueList.Size = new System.Drawing.Size(326, 583);
+            this.tP_IssueList.Size = new System.Drawing.Size(326, 560);
             this.tP_IssueList.TabIndex = 1;
             this.tP_IssueList.Text = "Issues";
             this.tP_IssueList.UseVisualStyleBackColor = true;
@@ -85,7 +86,7 @@
             this.pnl_TreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnl_TreeView.Location = new System.Drawing.Point(3, 34);
             this.pnl_TreeView.Name = "pnl_TreeView";
-            this.pnl_TreeView.Size = new System.Drawing.Size(320, 546);
+            this.pnl_TreeView.Size = new System.Drawing.Size(320, 523);
             this.pnl_TreeView.TabIndex = 2;
             // 
             // treeView_Issues
@@ -93,7 +94,7 @@
             this.treeView_Issues.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView_Issues.Location = new System.Drawing.Point(0, 0);
             this.treeView_Issues.Name = "treeView_Issues";
-            this.treeView_Issues.Size = new System.Drawing.Size(320, 546);
+            this.treeView_Issues.Size = new System.Drawing.Size(320, 523);
             this.treeView_Issues.TabIndex = 0;
             this.treeView_Issues.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView_Issues_NodeMouseDoubleClick);
             // 
@@ -226,12 +227,23 @@
             // 
             // pbBGWork
             // 
+            this.pbBGWork.BackColor = System.Drawing.Color.Lime;
             this.pbBGWork.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pbBGWork.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(53)))), ((int)(((byte)(65)))));
+            this.pbBGWork.ForeColor = System.Drawing.SystemColors.WindowText;
             this.pbBGWork.Location = new System.Drawing.Point(0, 0);
             this.pbBGWork.Name = "pbBGWork";
             this.pbBGWork.Size = new System.Drawing.Size(334, 10);
             this.pbBGWork.TabIndex = 3;
+            // 
+            // lblPBar
+            // 
+            this.lblPBar.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblPBar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.lblPBar.Location = new System.Drawing.Point(0, 10);
+            this.lblPBar.Name = "lblPBar";
+            this.lblPBar.Size = new System.Drawing.Size(334, 13);
+            this.lblPBar.TabIndex = 5;
+            this.lblPBar.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // WorkForm
             // 
@@ -239,6 +251,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(334, 612);
             this.Controls.Add(this.tControl);
+            this.Controls.Add(this.lblPBar);
             this.Controls.Add(this.pbBGWork);
             this.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Name = "WorkForm";
@@ -275,5 +288,6 @@
         private System.Windows.Forms.Button btnUpdateTE;
         private System.ComponentModel.BackgroundWorker bgWorker;
         private System.Windows.Forms.ProgressBar pbBGWork;
+        private System.Windows.Forms.Label lblPBar;
     }
 }
