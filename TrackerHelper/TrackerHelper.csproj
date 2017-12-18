@@ -71,12 +71,25 @@
       <DependentUpon>CheckedButton.cs</DependentUpon>
     </Compile>
     <Compile Include="Controller.cs" />
+    <Compile Include="Controls\DashboardSettingsInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DashboardSettingsInfo.Designer.cs">
+      <DependentUpon>DashboardSettingsInfo.cs</DependentUpon>
+    </Compile>
     <Compile Include="DashboardForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="DashboardForm.Designer.cs">
       <DependentUpon>DashboardForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\DashboardSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DashboardSettings.Designer.cs">
+      <DependentUpon>DashboardSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DashboardPresets.cs" />
     <Compile Include="DB\DBController.cs" />
     <Compile Include="Http.cs" />
     <Compile Include="Language.cs" />
@@ -130,11 +143,17 @@
       <DependentUpon>WorkForm.cs</DependentUpon>
     </Compile>
     <Compile Include="XML.cs" />
+    <EmbeddedResource Include="Controls\DashboardSettingsInfo.resx">
+      <DependentUpon>DashboardSettingsInfo.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DashboardForm.resx">
       <DependentUpon>DashboardForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\DashboardIssuesStatus.resx">
       <DependentUpon>DashboardIssuesStatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DashboardSettings.resx">
+      <DependentUpon>DashboardSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

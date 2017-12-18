@@ -8,9 +8,6 @@ namespace TrackerHelper.DB
     public delegate void MessageDelegate(string message);
     public class DBman
     {
-        // Date of time entry "SELECT MIN(SpentOn) FROM TimeEntries where UserId = @UserId"
-
-
         private static string _dbName = "TrackerHelper.db";
 
         public static void SetDbName(string dbName)
@@ -248,6 +245,42 @@ namespace TrackerHelper.DB
                 }                
             }
         }
+
+        private static void CreatePresetsTable()
+        {
+            using (SQLiteConnection conn = new SQLiteConnection($"Data Source={_dbName}; Version=3;"))
+            {
+                conn.Open();
+
+                using (SQLiteCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = string.Format("CREATE TABLE IF NOT EXISTS Presets({0},{1},{2},{3},{4},{5},{6},{7},{8});",
+                                         "ID INTEGER PRIMARY KEY",
+                                         "Name TEXT",
+                                         "EmployeeId INTEGER",
+                                         "EmployeeName TEXT",
+                                         "ProjectId INTEGER",
+                                         "ProjectName TEXT",
+                                         "StatusId INTEGER",
+                                         "StatusName INTEGER",
+                                         "isActive INTEGER");
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (SQLiteException sqlex)
+                    {
+                        onError?.Invoke($"Error: {sqlex.Message}");
+                    }
+                    catch (Exception ex)
+                    {
+                        onError?.Invoke($"Error: {ex.Message}");
+                    }
+                }
+            }
+        }
+
+
         #endregion
 
         #region ------------------------- Insert methods ---------------------------

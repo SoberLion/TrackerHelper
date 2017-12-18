@@ -45,6 +45,7 @@
             this.btnAssigned = new TrackerHelper.CheckedButton();
             this.btnNew = new TrackerHelper.CheckedButton();
             this.btnTechSupp = new TrackerHelper.CheckedButton();
+            this.chbtn_Settings = new TrackerHelper.CheckedButton();
             this.pnlLayoutLeft.SuspendLayout();
             this.pnlBtns.SuspendLayout();
             this.pnlHeader.SuspendLayout();
@@ -64,6 +65,7 @@
             // pnlBtns
             // 
             this.pnlBtns.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(53)))), ((int)(((byte)(65)))));
+            this.pnlBtns.Controls.Add(this.chbtn_Settings);
             this.pnlBtns.Controls.Add(this.btnEscalated);
             this.pnlBtns.Controls.Add(this.btnNeedInfoEmpl);
             this.pnlBtns.Controls.Add(this.btnAssigned);
@@ -273,6 +275,26 @@
             this.btnTechSupp.UseVisualStyleBackColor = false;
             this.btnTechSupp.Click += new System.EventHandler(this.btnTechSupp_Click);
             // 
+            // chbtn_Settings
+            // 
+            this.chbtn_Settings.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(53)))), ((int)(((byte)(65)))));
+            this.chbtn_Settings.Check = false;
+            this.chbtn_Settings.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.chbtn_Settings.FlatAppearance.BorderSize = 0;
+            this.chbtn_Settings.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(184)))), ((int)(((byte)(92)))));
+            this.chbtn_Settings.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(33)))), ((int)(((byte)(45)))));
+            this.chbtn_Settings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.chbtn_Settings.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.chbtn_Settings.ForeColor = System.Drawing.Color.White;
+            this.chbtn_Settings.Location = new System.Drawing.Point(0, 576);
+            this.chbtn_Settings.Name = "chbtn_Settings";
+            this.chbtn_Settings.Size = new System.Drawing.Size(200, 46);
+            this.chbtn_Settings.TabIndex = 5;
+            this.chbtn_Settings.Text = "      Настройки";
+            this.chbtn_Settings.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.chbtn_Settings.UseVisualStyleBackColor = false;
+            this.chbtn_Settings.Click += new System.EventHandler(this.chbtn_Settings_Click);
+            // 
             // Dashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -312,5 +334,6 @@
         private System.Windows.Forms.Panel pnlHorizDivider;
         private System.Windows.Forms.Panel pnlLayoutRight;
         private System.Windows.Forms.Label lblCaption;
+        private CheckedButton chbtn_Settings;
     }
 }

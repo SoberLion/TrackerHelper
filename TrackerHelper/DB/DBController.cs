@@ -70,8 +70,8 @@ namespace TrackerHelper.DB
             string filter = $"from={DateTime.Now.AddDays(-numofDays).ToString("yyyy-MM-dd")}&to={DateTime.Now.ToString("yyyy-MM-dd")}";
             int _retries = 0;
             do
-            {//http://tracker.ucs.ru/time_entries.xml?limit=100&key=1287ca3310be20d6992a764b57f9c8bcfbb05664&from=2017-01-01&to=2017-12-31
-                string url = $@"{_user.BaseAddress}time_entries.xml?&offset={_timeEntries.offset}&limit=100&key=1287ca3310be20d6992a764b57f9c8bcfbb05664&{filter}";
+            {
+                string url = $@"{_user.BaseAddress}time_entries.xml?&offset={_timeEntries.offset}&limit=100&key={_user.ApiKey}&{filter}";
                 resultModel.IsSuccess = false;
 
                 resultModel = Http.Get(url);
@@ -89,10 +89,10 @@ namespace TrackerHelper.DB
                     _timeEntries.IncOffset();
                     onProgressChange?.Invoke(new EventProgressArgs
                     {
-                        Percents = Convert.ToInt32(_timeEntries.offset) * 100 / Convert.ToInt32(_timeEntries.total_count),
-                        Message = Convert.ToInt32(_timeEntries.offset) < Convert.ToInt32(_timeEntries.total_count) ? 
-                                                  $@"Получение трудозатрат: {_timeEntries.offset}/{_timeEntries.total_count}" : 
-                                                  $@"Получение трудозатрат: {_timeEntries.total_count}/{_timeEntries.total_count}"
+                        Percents = _timeEntries.offset * 100 / _timeEntries.total_count,
+                        Message = _timeEntries.offset < _timeEntries.total_count ? 
+                                  $@"Получение трудозатрат: {_timeEntries.offset}/{_timeEntries.total_count}" : 
+                                  $@"Получение трудозатрат: {_timeEntries.total_count}/{_timeEntries.total_count}"
                     });
                 }
                 else
@@ -105,7 +105,7 @@ namespace TrackerHelper.DB
                     }
                 }
             }// счётчик - tracker.ucs.ru возвращает максимум 100 элементов, если кол-во total_count больше, необходимо сделать повторные запросы со смещением
-            while (int.Parse(_timeEntries.offset) < int.Parse(_timeEntries.total_count));
+            while (_timeEntries.offset < _timeEntries.total_count);
         }
 
         private void GetRmIssues(int Retries, int NumofDaysSinceLastUpdate)
@@ -135,11 +135,11 @@ namespace TrackerHelper.DB
 
                     onProgressChange?.Invoke(new EventProgressArgs
                     {
-                        Percents = Convert.ToInt32(_rmIssues.offset) * 100 / Convert.ToInt32(_rmIssues.total_count),
-                        Message = Convert.ToInt32(_rmIssues.offset) < Convert.ToInt32(_rmIssues.total_count) ? 
-                                                  $@"Получение списка задач: {_rmIssues.offset}/{_rmIssues.total_count}" : 
-                                                  $@"Получение списка задач: {_rmIssues.total_count}/{_rmIssues.total_count}"
-                    });                                        
+                        Percents = _rmIssues.offset * 100 / _rmIssues.total_count,
+                        Message = _rmIssues.offset < _rmIssues.total_count ?
+                                  $@"Получение списка задач: {_rmIssues.offset}/{_rmIssues.total_count}" :
+                                  $@"Получение списка задач: {_rmIssues.total_count}/{_rmIssues.total_count}"
+                    });
                 }
                 else
                 {// в случае если запрос к redmine не был успешным сделать повторный запрос с теми же параметрами                    
@@ -150,8 +150,8 @@ namespace TrackerHelper.DB
                     }
                     retries++;
                 }
-            }// счётчик - tracker.ucs.ru возвращает максимум 100 элементов, если кол-во total_count больше, необходимо сделать повторные запросы со смещением
-            while (int.Parse(_rmIssues.offset) < int.Parse(_rmIssues.total_count));          
+            }// счётчик - tracker.ucs.ru возвращает максимум 100 элементов, если кол-во total_count больше, сделать повторные запросы со смещением
+            while (_rmIssues.offset < _rmIssues.total_count);
         }
 
 
@@ -175,7 +175,6 @@ namespace TrackerHelper.DB
                     Percents = i * 100 / _user.Issues.issue.Count,
                     Message = $@"Обновление задачи: {i + 1}/{_user.Issues.issue.Count}"
                 });
-
             }
         }
     }

@@ -26,6 +26,22 @@ namespace TrackerHelper
         }
     }
 
+    public class IdNameComparer : IEqualityComparer<IdName>
+    {
+        public bool Equals(IdName x, IdName y)
+        {
+            return x.id.Equals(y.id) && x.name.Equals(y.name);
+        }
+
+        public int GetHashCode(IdName obj)
+        {
+            if (object.ReferenceEquals(obj, null))
+                return 0;
+
+            return obj.id.GetHashCode();
+        }
+    }
+
     #region ---------------------------------- time_entries -------------------------------------
 
     [XmlRoot("time_entries", IsNullable = false)]
@@ -34,9 +50,9 @@ namespace TrackerHelper
         public Time_entries() { }
 
         private List<Time_entry> _time_entry = new List<Time_entry>();
-        private string _total_count;
-        private string _offset;
-        private string _limit;
+        private int _total_count;
+        private int _offset;
+        private int _limit;
         private string _type;
 
         [XmlElement("time_entry")]
@@ -50,21 +66,21 @@ namespace TrackerHelper
         }
 
         [XmlAttribute]
-        public string total_count
+        public int total_count
         {
             get { return _total_count; }
             set { _total_count = value; }
         }
 
         [XmlAttribute]
-        public string offset
+        public int offset
         {
             get { return _offset; }
             set { _offset = value; }
         }
 
         [XmlAttribute]
-        public string limit
+        public int limit
         {
             get { return _limit; }
             set { _limit = value; }
@@ -79,7 +95,7 @@ namespace TrackerHelper
 
         public void IncOffset()
         {
-            _offset = (int.Parse(_offset) + int.Parse(_limit)).ToString();
+            offset = total_count - offset < limit ? total_count : offset + limit;
         }
     }
 
@@ -201,28 +217,28 @@ namespace TrackerHelper
     [XmlRoot("issues", IsNullable = false)]
     public class Issues
     {
-        private string _total_count = "0";
-        private string _offset = "0";
-        private string _limit = "100";
+        private int _total_count = 0;
+        private int _offset = 0;
+        private int _limit = 100;
         private string _type = string.Empty;
         private List<Issue> issueField = new List<Issue>();
 
         [XmlAttribute]
-        public string total_count
+        public int total_count
         {
             get { return _total_count; }
             set { _total_count = value; }
         }
 
         [XmlAttribute]
-        public string offset
+        public int offset
         {
             get { return _offset; }
             set { _offset = value; }
         }
 
         [XmlAttribute]
-        public string limit
+        public int limit
         {
             get { return _limit; }
             set { _limit = value; }
@@ -244,7 +260,7 @@ namespace TrackerHelper
 
         public void IncOffset()
         {
-            _offset = (int.Parse(_offset) + int.Parse(_limit)).ToString();
+            offset = total_count - offset < limit ? total_count : offset + limit;
         }
     }
 

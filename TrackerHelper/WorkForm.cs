@@ -17,10 +17,6 @@ namespace TrackerHelper
             InitializeComponent();                  
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void btn_GetIssues_Click(object sender, EventArgs e)
         {
@@ -30,12 +26,7 @@ namespace TrackerHelper
                 Id = "751",
                 ApiKey = "1287ca3310be20d6992a764b57f9c8bcfbb05664",
             };
-            user.onError += ShowMessage;
-
-            //user.GetAllIssues(1);
-            // Redmine.GetUserIssueList(user);
-
-            
+            user.onError += ShowMessage;            
 
             if (DBman.Exist("Issues"))
             {
@@ -44,7 +35,6 @@ namespace TrackerHelper
 
             if (user.Issues.issue.Count > 0)
                 TreeViewMethods.populateTreeView(user.Issues.issue, treeView_Issues);
-
         }
 
         private void treeView_Issues_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -83,18 +73,13 @@ namespace TrackerHelper
             {
                 user.FetchUpdatedIssues(3, 2);
             }
-                //user.GetUpdatedIssues(1, 50);
                    if (DBman.Exist("Issues"))
                    {
                        DBman.InsertIssues(user.IssuesUpdated);
                    }
 
-                if (user.IssuesUpdated.issue.Count > 0)
-                      TreeViewMethods.populateTreeView(user.IssuesUpdated.issue, treeView_Issues);
-             
-
-           // user.GetOpenedIssuesFromDb();
-         //   SQLiteClass.GetDict("StatusId", "StatusName");
+            if (user.IssuesUpdated.issue.Count > 0)
+                TreeViewMethods.populateTreeView(user.IssuesUpdated.issue, treeView_Issues);
         }
         public void ShowMessage(string message)
         {
@@ -136,7 +121,7 @@ namespace TrackerHelper
 
         private void bgWorker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
-            pbBGWork.Value = e.ProgressPercentage <= 100 ? e.ProgressPercentage : 100;
+            pbBGWork.Value = e.ProgressPercentage;
         }
 
         private void bgWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
@@ -144,7 +129,6 @@ namespace TrackerHelper
             if ((e.Cancelled == true))
             {
             }
-
             else if (!(e.Error == null))
             {
             }

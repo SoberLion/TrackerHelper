@@ -167,7 +167,7 @@
             this.tp_IssueJournal.Location = new System.Drawing.Point(4, 25);
             this.tp_IssueJournal.Name = "tp_IssueJournal";
             this.tp_IssueJournal.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_IssueJournal.Size = new System.Drawing.Size(326, 573);
+            this.tp_IssueJournal.Size = new System.Drawing.Size(326, 560);
             this.tp_IssueJournal.TabIndex = 0;
             this.tp_IssueJournal.Text = "Issue #";
             this.tp_IssueJournal.UseVisualStyleBackColor = true;
@@ -178,7 +178,7 @@
             this.pnl_listbox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnl_listbox.Location = new System.Drawing.Point(3, 33);
             this.pnl_listbox.Name = "pnl_listbox";
-            this.pnl_listbox.Size = new System.Drawing.Size(320, 537);
+            this.pnl_listbox.Size = new System.Drawing.Size(320, 524);
             this.pnl_listbox.TabIndex = 2;
             // 
             // listbox_IssueJournal
@@ -187,7 +187,7 @@
             this.listbox_IssueJournal.FormattingEnabled = true;
             this.listbox_IssueJournal.Location = new System.Drawing.Point(0, 0);
             this.listbox_IssueJournal.Name = "listbox_IssueJournal";
-            this.listbox_IssueJournal.Size = new System.Drawing.Size(320, 537);
+            this.listbox_IssueJournal.Size = new System.Drawing.Size(320, 524);
             this.listbox_IssueJournal.TabIndex = 0;
             // 
             // pnl_tools
@@ -221,6 +221,7 @@
             // bgWorker
             // 
             this.bgWorker.WorkerReportsProgress = true;
+            this.bgWorker.WorkerSupportsCancellation = true;
             this.bgWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgWorker_DoWork);
             this.bgWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgWorker_ProgressChanged);
             this.bgWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgWorker_RunWorkerCompleted);

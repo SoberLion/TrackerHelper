@@ -20,11 +20,7 @@ namespace TrackerHelper
         public static event Message onError;
 
         public static void GetUserIssueList(User user)
-        {
-            /* string url = string.Format("{0}issues.xml?assigned_to_id=2232&limit=100&key={1}",
-                                         user.BaseAddress,
-                                         user.ApiKey);*/
-            
+        {           
             //string url = @"http://test-tracker.ucs.ru/issues.xml?utf8=%E2%9C%93&set_filter=1&f[]=&c[]=project&c[]=tracker&c[]=status&c[]=priority&c[]=author&c[]=subject&c[]=assigned_to&c[]=updated_on&c[]=category&group_by=&t[]=&key=1287ca3310be20d6992a764b57f9c8bcfbb05664";
             string url = @"http://test-tracker.ucs.ru/issues.xml?utf8=%E2%9C%93&set_filter=1&f[]=project_id&op[project_id]==&v[project_id][]=26&f[]=&c[]=tracker&c[]=status&c[]=priority&c[]=author&c[]=subject&c[]=assigned_to&c[]=updated_on&c[]=category&group_by=&t[]=&key=1287ca3310be20d6992a764b57f9c8bcfbb05664";
 
@@ -46,7 +42,7 @@ namespace TrackerHelper
             {
             }
             // счётчик - redmine возвращает максимум 100 элементов, если кол-во total_count больше, необходимо сделать повторные запросы со смещением
-            int cnt = int.Parse(user.Issues.total_count) / 100;
+            int cnt = user.Issues.total_count / 100;
             if (cnt > 0)
             {
                 for (int i = 1; i <= cnt; i++)
@@ -102,7 +98,7 @@ namespace TrackerHelper
                     }
                 }
             }// счётчик - tracker.ucs.ru возвращает максимум 100 элементов, если кол-во total_count больше, необходимо сделать повторные запросы со смещением
-            while (int.Parse(te.offset) < int.Parse(te.total_count));
+            while (te.offset < te.total_count);
             return te = te.time_entry_list.Count > 0 ? te : null;
         }
     }

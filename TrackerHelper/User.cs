@@ -168,7 +168,7 @@ namespace TrackerHelper
                     }
                 }
             }// счётчик - tracker.ucs.ru возвращает максимум 100 элементов, если кол-во total_count больше, необходимо сделать повторные запросы со смещением
-            while (int.Parse(_IssuesUpdated.offset) < int.Parse(_IssuesUpdated.total_count));
+            while (_IssuesUpdated.offset < _IssuesUpdated.total_count);
         }
 
         public void Update()

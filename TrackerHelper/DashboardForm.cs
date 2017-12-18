@@ -1,6 +1,4 @@
-﻿using LiveCharts;
-using LiveCharts.Wpf;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
@@ -16,6 +14,7 @@ namespace TrackerHelper
 {
     public partial class Dashboard : Form
     {
+
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
         [DllImport("user32.dll")]
@@ -136,6 +135,8 @@ namespace TrackerHelper
             btnNeedInfoEmpl.BackColor = Color.FromArgb(41, 53, 65);
             btnEscalated.Check = false;
             btnEscalated.BackColor = Color.FromArgb(41, 53, 65);
+            chbtn_Settings.Check = false;
+            chbtn_Settings.BackColor = Color.FromArgb(41, 53, 65);
 
             (sender as CheckedButton).Check = true;
             (sender as CheckedButton).BackColor = Color.FromArgb(21, 33, 45);
@@ -212,6 +213,31 @@ namespace TrackerHelper
                     StatusIdList = new int[] { 22 }
                 };
                 newDash.GetDataTable();
+                newDash.BringToFront();
+            }
+        }
+
+        private void chbtn_Settings_Click(object sender, EventArgs e)
+        {
+            lblCaption.Text = "Настройки";
+            Toggle(sender);
+
+            DashboardSettings dash = Controls.Find("Настройки", true).FirstOrDefault() as DashboardSettings;
+            if (dash != null)
+            {
+                dash.BringToFront();
+            }
+            else
+            {
+                DashboardSettings newDash = new DashboardSettings
+                {
+                    Parent = this.pnlDashboard,
+                    Dock = DockStyle.Fill,
+                    BackColor = Color.FromArgb(41, 53, 65),
+                    Name = "Настройки",
+                    //StatusIdList = new int[] { 22 }
+                };
+                //newDash.GetDataTable();
                 newDash.BringToFront();
             }
         }
