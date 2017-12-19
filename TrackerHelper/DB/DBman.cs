@@ -254,15 +254,9 @@ namespace TrackerHelper.DB
 
                 using (SQLiteCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = string.Format("CREATE TABLE IF NOT EXISTS Presets({0},{1},{2},{3},{4},{5},{6},{7},{8});",
+                    cmd.CommandText = string.Format("CREATE TABLE IF NOT EXISTS Presets({0},{1},{2});",
                                          "ID INTEGER PRIMARY KEY",
                                          "Name TEXT",
-                                         "EmployeeId INTEGER",
-                                         "EmployeeName TEXT",
-                                         "ProjectId INTEGER",
-                                         "ProjectName TEXT",
-                                         "StatusId INTEGER",
-                                         "StatusName INTEGER",
                                          "isActive INTEGER");
                     try
                     {
@@ -495,34 +489,34 @@ namespace TrackerHelper.DB
                                             journalsCmd.ExecuteNonQuery();
                                         }
                                     }
-
-                                    cmd.Parameters["@IssueId"].Value = issue.id;
-                                    cmd.Parameters["@ProjectId"].Value = issue.project.id;
-                                    cmd.Parameters["@ProjectName"].Value = issue.project.name;
-                                    cmd.Parameters["@TrackerId"].Value = issue.tracker.id;
-                                    cmd.Parameters["@TrackerName"].Value = issue.tracker.name;
-                                    cmd.Parameters["@StatusId"].Value = issue.status.id;
-                                    cmd.Parameters["@StatusName"].Value = issue.status.name;
-                                    cmd.Parameters["@PriorityId"].Value = issue.priority.id;
-                                    cmd.Parameters["@PriorityName"].Value = issue.priority.name;
-                                    cmd.Parameters["@AuthorId"].Value = issue.author.id;
-                                    cmd.Parameters["@AuthorName"].Value = issue.author.name;
-                                    cmd.Parameters["@AssignedToId"].Value = issue.assigned_to.id;
-                                    cmd.Parameters["@AssignedToName"].Value = issue.assigned_to.name;
-                                    cmd.Parameters["@CategoryId"].Value = issue.category.id;
-                                    cmd.Parameters["@CategoryName"].Value = issue.category.name;
-                                    cmd.Parameters["@Subject"].Value = issue.subject;
-                                    cmd.Parameters["@Description"].Value = issue.description;
-                                    cmd.Parameters["@StartDate"].Value = issue.startDate;
-                                    cmd.Parameters["@DueDate"].Value = issue.dueDate;
-                                    cmd.Parameters["@DoneRatio"].Value = issue.doneRatio;
-                                    cmd.Parameters["@IsPrivate"].Value = issue.IsPrivate == true ? 1 : 0;
-                                    cmd.Parameters["@EstimatedHours"].Value = issue.estimatedHours;
-                                    cmd.Parameters["@CreatedOn"].Value = issue.createdOn;
-                                    cmd.Parameters["@UpdatedOn"].Value = issue.updatedOn;
-                                    cmd.Parameters["@ClosedOn"].Value = issue.closedOn;
-                                    cmd.ExecuteNonQuery();
                                 }
+                                cmd.Parameters["@IssueId"].Value = issue.id;
+                                cmd.Parameters["@ProjectId"].Value = issue.project.id;
+                                cmd.Parameters["@ProjectName"].Value = issue.project.name;
+                                cmd.Parameters["@TrackerId"].Value = issue.tracker.id;
+                                cmd.Parameters["@TrackerName"].Value = issue.tracker.name;
+                                cmd.Parameters["@StatusId"].Value = issue.status.id;
+                                cmd.Parameters["@StatusName"].Value = issue.status.name;
+                                cmd.Parameters["@PriorityId"].Value = issue.priority.id;
+                                cmd.Parameters["@PriorityName"].Value = issue.priority.name;
+                                cmd.Parameters["@AuthorId"].Value = issue.author.id;
+                                cmd.Parameters["@AuthorName"].Value = issue.author.name;
+                                cmd.Parameters["@AssignedToId"].Value = issue.assigned_to.id;
+                                cmd.Parameters["@AssignedToName"].Value = issue.assigned_to.name;
+                                cmd.Parameters["@CategoryId"].Value = issue.category.id;
+                                cmd.Parameters["@CategoryName"].Value = issue.category.name;
+                                cmd.Parameters["@Subject"].Value = issue.subject;
+                                cmd.Parameters["@Description"].Value = issue.description;
+                                cmd.Parameters["@StartDate"].Value = issue.startDate;
+                                cmd.Parameters["@DueDate"].Value = issue.dueDate;
+                                cmd.Parameters["@DoneRatio"].Value = issue.doneRatio;
+                                cmd.Parameters["@IsPrivate"].Value = issue.IsPrivate == true ? 1 : 0;
+                                cmd.Parameters["@EstimatedHours"].Value = issue.estimatedHours;
+                                cmd.Parameters["@CreatedOn"].Value = issue.createdOn;
+                                cmd.Parameters["@UpdatedOn"].Value = issue.updatedOn;
+                                cmd.Parameters["@ClosedOn"].Value = issue.closedOn;
+                                cmd.ExecuteNonQuery();
+
                             }
                             catch (SQLiteException sqlex)
                             {
@@ -533,7 +527,19 @@ namespace TrackerHelper.DB
                                 onError?.Invoke($"Error: {ex.Message}");
                             }
                         }
-                        transaction.Commit();
+                        try
+                        {
+                            transaction.Commit();
+                        }
+                        catch (SQLiteException sqlex)
+                        {
+                            onError?.Invoke($"Error: {sqlex.Message}");
+                        }
+                        catch (Exception ex)
+                        {
+                            onError?.Invoke($"Error: {ex.Message}");
+                        }
+
                     }
                 }
             }

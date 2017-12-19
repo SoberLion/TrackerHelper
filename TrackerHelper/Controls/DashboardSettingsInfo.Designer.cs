@@ -89,6 +89,7 @@
             // 
             // clbStatus
             // 
+            this.clbStatus.CheckOnClick = true;
             this.clbStatus.Dock = System.Windows.Forms.DockStyle.Fill;
             this.clbStatus.FormattingEnabled = true;
             this.clbStatus.Location = new System.Drawing.Point(0, 0);

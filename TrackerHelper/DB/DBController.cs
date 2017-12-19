@@ -154,12 +154,6 @@ namespace TrackerHelper.DB
             while (_rmIssues.offset < _rmIssues.total_count);
         }
 
-
-        private void GetUpdatedIssues()
-        {
-
-        }
-
         private void GetJournals()
         {
             for (int i = 0; i < _user.Issues.issue.Count; i++)

@@ -21,9 +21,9 @@ namespace TrackerHelper.Controls
             set { _preset = value; }
         }
 
-        public List<IdName> dbEmp = new List<IdName>();
+       /* public List<IdName> dbEmp = new List<IdName>();
         public List<IdName> dbProj { get; set; } = new List<IdName>();
-        public List<Status> dbStatus { get; set; } = new List<Status>();
+        public List<Status> dbStatus { get; set; } = new List<Status>();*/
 
         public DashboardSettingsInfo()
         {
@@ -50,66 +50,65 @@ namespace TrackerHelper.Controls
                 id = 1223,
                 name = "AA SS"
             };
-            _preset.Employees.Add(newIdname);
+            Preset.Employees.Add(newIdname);
 
-            List<IdName> IntersectEmplList = emplList.Intersect(_preset.Employees, new IdNameComparer()).ToList();
-            List<IdName> ExceptEmplList = emplList.Except(_preset.Employees, new IdNameComparer()).ToList();
+            List<IdName> IntersectEmplList = emplList.Intersect(Preset.Employees, new IdNameComparer()).ToList();
+            List<IdName> ExceptEmplList = emplList.Except(Preset.Employees, new IdNameComparer()).ToList();
 
             for (int i = 0; i < IntersectEmplList.Count; i++)
             {
-                clbEmployees.Items.Add($"{IntersectEmplList[i].name} ({IntersectEmplList[i].id})", true);
+                clbEmployees.Items.Add($"{IntersectEmplList[i].name} <{IntersectEmplList[i].id}>", true);
             }
             for (int i = 0; i < ExceptEmplList.Count; i++)
             {
-                clbEmployees.Items.Add($"{ExceptEmplList[i].name} ({ExceptEmplList[i].id})", false);
+                clbEmployees.Items.Add($"{ExceptEmplList[i].name} <{ExceptEmplList[i].id}>", false);
             }
 
 
-            List<IdName> IntersectProjList = projList.Intersect(_preset.Projects).ToList();
-            List<IdName> ExceptProjList = projList.Except(_preset.Projects).ToList();
+            List<IdName> IntersectProjList = projList.Intersect(Preset.Projects).ToList();
+            List<IdName> ExceptProjList = projList.Except(Preset.Projects).ToList();
 
             for (int i = 0; i < IntersectProjList.Count; i++)
             {
-                clbProjects.Items.Add($"{IntersectProjList[i].name} ({IntersectProjList[i].id})", true);
+                clbProjects.Items.Add($"{IntersectProjList[i].name} <{IntersectProjList[i].id}>", true);
             }
             for (int i = 0; i < ExceptProjList.Count; i++)
             {
-                clbProjects.Items.Add($"{ExceptProjList[i].name} ({ExceptProjList[i].id})", false);
+                clbProjects.Items.Add($"{ExceptProjList[i].name} <{ExceptProjList[i].id}>", false);
             }
 
-            List<Status> IntersectStatList = statList.Intersect(_preset.Statuses).ToList();
-            List<Status> ExceptStatList = statList.Except(_preset.Statuses).ToList();
+            List<Status> IntersectStatList = statList.Intersect(Preset.Statuses).ToList();
+            List<Status> ExceptStatList = statList.Except(Preset.Statuses).ToList();
 
             for (int i = 0; i < IntersectStatList.Count; i++)
             {
-                clbStatus.Items.Add($"{IntersectStatList[i].Name} ({IntersectStatList[i].ID})", true);
+                clbStatus.Items.Add($"{IntersectStatList[i].Name} <{IntersectStatList[i].ID}>", true);
             }
             for (int i = 0; i < ExceptStatList.Count; i++)
             {
-                clbStatus.Items.Add($"{ExceptStatList[i].Name} ({ExceptStatList[i].ID})", false);
+                clbStatus.Items.Add($"{ExceptStatList[i].Name} <{ExceptStatList[i].ID}>", false);
             }
 
-        }
-
-        private void Dict(CheckedListBox clb, string query)
-        {           
-            DataRow[] dr = DBman.OpenQuery(query).Select("");
-            for (int i = 0; i < dr.Length; i++)
-            {
-                IdName newIdName = new IdName
-                {
-                    id = Convert.ToInt32(dr[i][0]),
-                    name = dr[i][1].ToString()
-                };
-                clb.Items.Add($"{dr[i][1]} ({dr[i][0].ToString()})");
-                //list.Add()
-            }    
-            
         }
 
         private void clbStatus_ItemCheck(object sender, ItemCheckEventArgs e)
         {
-            List<string> ls = new List<string>();
-        }
+            string[] str = clbStatus.Items[e.Index].ToString().Split('<');
+            str[0] = str[0].Trim();
+            str[1] = str[1].Replace(">", "").Trim();
+            if (str.Length > 1)
+            {
+                if (e.CurrentValue == CheckState.Unchecked)
+                {
+                    Preset.Statuses.Add(new Status { Name = str[0], ID = Convert.ToInt32(str[1]) });
+                }
+                else if (e.CurrentValue== CheckState.Checked)
+                {
+                    Status st = Preset.Statuses.Find(p => p.ID == Convert.ToInt32(str[1]));
+                    if (st != null)
+                        Preset.Statuses.RemoveAt(Preset.Statuses.IndexOf(st));
+                }                
+            }
+        }      
     }
 }

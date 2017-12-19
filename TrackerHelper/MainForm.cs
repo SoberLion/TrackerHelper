@@ -225,21 +225,24 @@ namespace TrackerHelper
             }
 
             TimeSpan ts = dtpTo.Value - dtpFrom.Value;
-            if (Math.Abs(ts.Days) > 60)
+            if (rbDay != null && rbMonth != null && rbYear != null)
             {
-                rbDay.Enabled = false;
-                rbMonth.Checked = true;
-            }
-            if (Math.Abs(ts.Days) > 1800)
-            {
-                rbDay.Enabled = false;
-                rbMonth.Enabled = false;
-                rbYear.Checked = true;
-            }
-            if (Math.Abs(ts.Days) < 60)
-            {
-                rbDay.Enabled = true;
-                rbMonth.Enabled = true;
+                if (Math.Abs(ts.Days) > 60)
+                {
+                    rbDay.Enabled = false;
+                    rbMonth.Checked = true;
+                }
+                if (Math.Abs(ts.Days) > 1800)
+                {
+                    rbDay.Enabled = false;
+                    rbMonth.Enabled = false;
+                    rbYear.Checked = true;
+                }
+                if (Math.Abs(ts.Days) < 60)
+                {
+                    rbDay.Enabled = true;
+                    rbMonth.Enabled = true;
+                }
             }
         }
 
