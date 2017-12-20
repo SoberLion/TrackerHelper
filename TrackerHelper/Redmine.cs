@@ -36,6 +36,7 @@ namespace TrackerHelper
                 }
                 catch (Exception ex)
                 {
+
                 }
             }
             else

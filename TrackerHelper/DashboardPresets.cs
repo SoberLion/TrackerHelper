@@ -30,6 +30,8 @@ namespace TrackerHelper
     }
     public class DashboardPreset
     {
+        private static int _counter = 0;
+
         private int _id = 0;
         private string _name = string.Empty;
         private List<IdName> _employees = new List<IdName>();
@@ -67,5 +69,14 @@ namespace TrackerHelper
             get { return _isActive; }
             set { _isActive = value; }
         }
+
+        public DashboardPreset()
+        {
+            _counter++;
+            ID = _counter;
+        }
+        
+        public void SetCounter(int counter) => _counter = counter;
+
     }
 }

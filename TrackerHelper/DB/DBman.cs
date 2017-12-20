@@ -814,7 +814,7 @@ namespace TrackerHelper.DB
                 }
             }
         }
-        private static void InsertPreset(DashboardPreset preset)
+        public static void InsertPreset(DashboardPreset preset)
         {
             using (SQLiteConnection conn = new SQLiteConnection($"Data Source={_dbName}; Version=3;"))
             {
@@ -876,7 +876,7 @@ namespace TrackerHelper.DB
                             {
                                 using (SQLiteCommand statusCmd = conn.CreateCommand())
                                 {
-                                    statusCmd.CommandText = @"INSERT OR REPLACE INTO PresetsProjects(PresetID, StatusId, StatusName, MaxHours) 
+                                    statusCmd.CommandText = @"INSERT OR REPLACE INTO PresetsStatus(PresetID, StatusId, StatusName, MaxHours) 
                                                              VALUES (@PresetID, @StatusId, @StatusName, @MaxHours)";
                                     // create command parameters
                                     statusCmd.Parameters.AddWithValue("@PresetID", "");
@@ -886,7 +886,7 @@ namespace TrackerHelper.DB
                                     foreach (Status status in preset.Statuses)
                                     {
                                         statusCmd.Parameters["@PresetID"].Value = preset.ID;
-                                        statusCmd.Parameters["@StatusId"].Value = status.ID;
+                                        statusCmd.Parameters["@StatusID"].Value = status.ID;
                                         statusCmd.Parameters["@StatusName"].Value = status.Name;
                                         statusCmd.Parameters["@MaxHours"].Value = status.MaxHours;
                                         statusCmd.ExecuteNonQuery();

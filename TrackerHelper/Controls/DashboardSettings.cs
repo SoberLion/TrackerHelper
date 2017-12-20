@@ -27,11 +27,7 @@ namespace TrackerHelper
             string query = $@"select issueid from issues where issueid = 112546";
             DataRow[] rows = DBman.OpenQuery(query).Select("");
             IList<string> list = rows.Select(p => p[0].ToString()).ToArray();
-            cbPresets.DataSource = list;
-
-
-            
-
+            cbPresets.DataSource = list;         
         }
 
         private void btnNew_Click(object sender, EventArgs e)
@@ -40,11 +36,14 @@ namespace TrackerHelper
             DashboardSettingsInfo newSettings = new DashboardSettingsInfo
             {
                 Parent = this.pnlSettings,
-                Preset = newPreset
+                Preset = newPreset,
+                Name = "newSettings"
             };
-            newSettings.GetDict();
-            
+            newSettings.GetDict();           
+        }
 
+        private void btnSave_Click(object sender, EventArgs e)
+        {
         }
     }
 }

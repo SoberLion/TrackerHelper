@@ -21,10 +21,6 @@ namespace TrackerHelper.Controls
             set { _preset = value; }
         }
 
-       /* public List<IdName> dbEmp = new List<IdName>();
-        public List<IdName> dbProj { get; set; } = new List<IdName>();
-        public List<Status> dbStatus { get; set; } = new List<Status>();*/
-
         public DashboardSettingsInfo()
         {
             InitializeComponent();
@@ -109,6 +105,31 @@ namespace TrackerHelper.Controls
                         Preset.Statuses.RemoveAt(Preset.Statuses.IndexOf(st));
                 }                
             }
-        }      
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {            
+            if (tbName.Text.Length > 0)
+            {
+                foreach (char c in tbName.Text)
+                {
+                    if (!char.IsLetterOrDigit(c) && !Char.IsWhiteSpace(c))
+                    {
+                        tbName.Text = $"{c.ToString()} isnt a letter or digit";
+                        return;
+                    }
+                }
+                // name duplicates not allowed
+                string query = $"Select PresetName from Presets where PresetName = '{tbName.Text}'";
+                if (DBman.OpenQuery(query) != null)
+                {
+                    tbName.Text = $"Name ({tbName.Text}) already occupied";
+                    return;
+                }
+
+                Preset.Name = tbName.Text;
+                DBman.InsertPreset(Preset);
+            }
+        }
     }
 }
