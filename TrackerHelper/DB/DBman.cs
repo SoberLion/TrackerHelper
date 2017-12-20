@@ -338,10 +338,11 @@ namespace TrackerHelper.DB
 
                 using (SQLiteCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = string.Format("CREATE TABLE IF NOT EXISTS PresetsStatus({0},{1},{2});",
+                    cmd.CommandText = string.Format("CREATE TABLE IF NOT EXISTS PresetsStatus({0},{1},{2},{3});",
                                          "PresetID INTEGER",
                                          "StatusID INTEGER",
-                                         "StatusName TEXT");
+                                         "StatusName TEXT",
+                                         "MaxHours INTEGER");
                     try
                     {
                         cmd.ExecuteNonQuery();
@@ -718,97 +719,200 @@ namespace TrackerHelper.DB
         }
         private static void InsertJournals(Issue issue)
         {
-            SQLiteConnection conn = new SQLiteConnection($"Data Source={_dbName}; Version=3;");
+            using (SQLiteConnection conn = new SQLiteConnection($"Data Source={_dbName}; Version=3;"))
+            { 
+                if (issue.JournalList.Count > 0)
+                {
+                    InsertDetails(issue);
+                }
 
-            if (issue.JournalList.Count > 0)
-            {
-                InsertDetails(issue);
-            }
+                conn.Open();
 
-            conn.Open();
-
-            // if connection established create sqlite command and begin transaction
-            if (conn.State == ConnectionState.Open)
-            {
-                SQLiteCommand cmd = conn.CreateCommand();
-                SQLiteTransaction transaction = conn.BeginTransaction();
-
-                cmd.CommandText = "INSERT OR IGNORE INTO Journals(Id, IssueId, UserId, UserName, CreatedOn, Notes) "
-                                   + "VALUES (@Id, @IssueId, @UserId, @UserName, @CreatedOn, @Notes)";
-                // create command parameters
-                cmd.Parameters.AddWithValue("@Id", "");
-                cmd.Parameters.AddWithValue("@IssueId", "");
-                cmd.Parameters.AddWithValue("@UserId", "");
-                cmd.Parameters.AddWithValue("@UserName", "");
-                cmd.Parameters.AddWithValue("@CreatedOn", "");
-                cmd.Parameters.AddWithValue("@Notes", "");
-                try
-                {   // cycle writing data in table
-                    foreach (Issue.IssueJournalItem Item in issue.JournalList)
+                // if connection established create sqlite command and begin transaction
+                if (conn.State == ConnectionState.Open)
+                {
+                    using (SQLiteCommand cmd = conn.CreateCommand())
                     {
-                        cmd.Parameters["@id"].Value = Item.Id;
-                        cmd.Parameters["@IssueId"].Value = issue.id;
-                        cmd.Parameters["@UserId"].Value = Item.User.id;
-                        cmd.Parameters["@UserName"].Value = Item.User.name;
-                        cmd.Parameters["@Notes"].Value = Item.Notes;
-                        cmd.Parameters["@CreatedOn"].Value = Item.CreatedOn;
-                        cmd.ExecuteNonQuery();
+                        SQLiteTransaction transaction = conn.BeginTransaction();
+
+                        cmd.CommandText = "INSERT OR IGNORE INTO Journals(Id, IssueId, UserId, UserName, CreatedOn, Notes) "
+                                           + "VALUES (@Id, @IssueId, @UserId, @UserName, @CreatedOn, @Notes)";
+                        // create command parameters
+                        cmd.Parameters.AddWithValue("@Id", "");
+                        cmd.Parameters.AddWithValue("@IssueId", "");
+                        cmd.Parameters.AddWithValue("@UserId", "");
+                        cmd.Parameters.AddWithValue("@UserName", "");
+                        cmd.Parameters.AddWithValue("@CreatedOn", "");
+                        cmd.Parameters.AddWithValue("@Notes", "");
+                        try
+                        {   // cycle writing data in table
+                            foreach (Issue.IssueJournalItem Item in issue.JournalList)
+                            {
+                                cmd.Parameters["@id"].Value = Item.Id;
+                                cmd.Parameters["@IssueId"].Value = issue.id;
+                                cmd.Parameters["@UserId"].Value = Item.User.id;
+                                cmd.Parameters["@UserName"].Value = Item.User.name;
+                                cmd.Parameters["@Notes"].Value = Item.Notes;
+                                cmd.Parameters["@CreatedOn"].Value = Item.CreatedOn;
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+                        catch (SQLiteException sqlex)
+                        {
+                            onError?.Invoke($"Error: {sqlex.Message}");
+                        }
+                        catch (Exception ex)
+                        {
+                            onError?.Invoke($"Error: {ex.Message}");
+                        }
+                        transaction.Commit();
                     }
                 }
-                catch (SQLiteException sqlex)
-                {
-                    onError?.Invoke($"Error: {sqlex.Message}");
-                }
-                transaction.Commit();
-                cmd.Dispose();
-                conn.Dispose();
             }
         }
         private static void InsertDetails(Issue issue)
         {
-            SQLiteConnection conn = new SQLiteConnection($"Data Source={_dbName}; Version=3;");
+            using (SQLiteConnection conn = new SQLiteConnection($"Data Source={_dbName}; Version=3;"))
+            { 
+                conn.Open();
 
-            conn.Open();
-
-            // if connection established create sqlite command and begin transaction
-            if (conn.State == ConnectionState.Open)
-            {
-                SQLiteCommand cmd = conn.CreateCommand();
-                SQLiteTransaction transaction = conn.BeginTransaction();
-
-                cmd.CommandText = "INSERT OR IGNORE INTO JournalDetails(JournalId, Property, Name, OldValue, NewValue) "
-                                   + "VALUES (@JournalId, @Property, @Name, @OldValue, @NewValue)";
-                // create command parameters
-                cmd.Parameters.AddWithValue("@JournalId", "");
-                cmd.Parameters.AddWithValue("@Property", "");
-                cmd.Parameters.AddWithValue("@Name", "");
-                cmd.Parameters.AddWithValue("@OldValue", "");
-                cmd.Parameters.AddWithValue("@NewValue", "");
-
-                try
-                {   // cycle writing data in table
-                    foreach (Issue.IssueJournalItem JournalItem in issue.JournalList)
+                if (conn.State == ConnectionState.Open)
+                {
+                    SQLiteCommand cmd = conn.CreateCommand();
+                    using (SQLiteTransaction transaction = conn.BeginTransaction())
                     {
-                        foreach (Issue.IssueJournalItem.Detail DetailItem in JournalItem.Details)
-                        {
-                            cmd.Parameters["@JournalId"].Value = JournalItem.Id;
-                            cmd.Parameters["@Property"].Value = DetailItem.Property;
-                            cmd.Parameters["@Name"].Value = DetailItem.Name;
-                            cmd.Parameters["@OldValue"].Value = DetailItem.OldValue;
-                            cmd.Parameters["@NewValue"].Value = DetailItem.NewValue;
-                            cmd.ExecuteNonQuery();
+                        cmd.CommandText = "INSERT OR IGNORE INTO JournalDetails(JournalId, Property, Name, OldValue, NewValue) "
+                                           + "VALUES (@JournalId, @Property, @Name, @OldValue, @NewValue)";
+                        // create command parameters
+                        cmd.Parameters.AddWithValue("@JournalId", "");
+                        cmd.Parameters.AddWithValue("@Property", "");
+                        cmd.Parameters.AddWithValue("@Name", "");
+                        cmd.Parameters.AddWithValue("@OldValue", "");
+                        cmd.Parameters.AddWithValue("@NewValue", "");
+
+                        try
+                        {   // cycle writing data in table
+                            foreach (Issue.IssueJournalItem JournalItem in issue.JournalList)
+                            {
+                                foreach (Issue.IssueJournalItem.Detail DetailItem in JournalItem.Details)
+                                {
+                                    cmd.Parameters["@JournalId"].Value = JournalItem.Id;
+                                    cmd.Parameters["@Property"].Value = DetailItem.Property;
+                                    cmd.Parameters["@Name"].Value = DetailItem.Name;
+                                    cmd.Parameters["@OldValue"].Value = DetailItem.OldValue;
+                                    cmd.Parameters["@NewValue"].Value = DetailItem.NewValue;
+                                    cmd.ExecuteNonQuery();
+                                }
+                            }
                         }
+                        catch (SQLiteException sqlex)
+                        {
+                            onError?.Invoke($"Error: {sqlex.Message}");
+                        }
+                        transaction.Commit();
                     }
                 }
-                catch (SQLiteException sqlex)
-                {
-                    onError?.Invoke($"Error: {sqlex.Message}");
-                }
-                transaction.Commit();
-                cmd.Dispose();
-                conn.Dispose();
             }
         }
+        private static void InsertPreset(DashboardPreset preset)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection($"Data Source={_dbName}; Version=3;"))
+            {
+                conn.Open();
+
+                if (conn.State == ConnectionState.Open)
+                {
+                    using (SQLiteCommand cmd = conn.CreateCommand())
+                    {
+                        SQLiteTransaction transaction = conn.BeginTransaction();
+
+                        cmd.CommandText = @"INSERT OR REPLACE INTO Presets(PresetId, PresetName, isActive) 
+                                            VALUES (@PresetId, @PresetName, @isActive)";
+                        // create command parameters
+                        cmd.Parameters.AddWithValue("@PresetId", "");
+                        cmd.Parameters.AddWithValue("@PresetName", "");
+                        cmd.Parameters.AddWithValue("@isActive", "");
+                        try
+                        {
+                            if (preset.Employees.Count > 0)
+                            {
+                                using (SQLiteCommand emplCmd = conn.CreateCommand())
+                                {
+                                    emplCmd.CommandText = @"INSERT OR REPLACE INTO PresetsEmployees(PresetID, EmplId, EmplName) 
+                                                             VALUES (@PresetID, @EmplId, @EmplName)";
+                                    // create command parameters
+                                    emplCmd.Parameters.AddWithValue("@PresetID", "");
+                                    emplCmd.Parameters.AddWithValue("@EmplId", "");
+                                    emplCmd.Parameters.AddWithValue("@EmplName", "");
+                                    foreach (IdName idname in preset.Employees)
+                                    {
+                                        emplCmd.Parameters["@PresetID"].Value = preset.ID;
+                                        emplCmd.Parameters["@EmplId"].Value = idname.id;
+                                        emplCmd.Parameters["@EmplName"].Value = idname.name;
+                                        emplCmd.ExecuteNonQuery();
+                                    }
+                                }
+                            }
+                            if (preset.Projects.Count > 0)
+                            {
+                                using (SQLiteCommand projCmd = conn.CreateCommand())
+                                {
+                                    projCmd.CommandText = @"INSERT OR REPLACE INTO PresetsProjects(PresetID, ProjId, ProjName) 
+                                                            VALUES (@PresetID, @ProjId, @ProjName)";
+                                    // create command parameters
+                                    projCmd.Parameters.AddWithValue("@PresetID", "");
+                                    projCmd.Parameters.AddWithValue("@ProjId", "");
+                                    projCmd.Parameters.AddWithValue("@ProjName", "");
+                                    foreach (IdName idname in preset.Projects)
+                                    {
+                                        projCmd.Parameters["@PresetID"].Value = preset.ID;
+                                        projCmd.Parameters["@ProjId"].Value = idname.id;
+                                        projCmd.Parameters["@ProjName"].Value = idname.name;
+                                        projCmd.ExecuteNonQuery();
+                                    }
+                                }
+                            }
+                            if (preset.Statuses.Count > 0)
+                            {
+                                using (SQLiteCommand statusCmd = conn.CreateCommand())
+                                {
+                                    statusCmd.CommandText = @"INSERT OR REPLACE INTO PresetsProjects(PresetID, StatusId, StatusName, MaxHours) 
+                                                             VALUES (@PresetID, @StatusId, @StatusName, @MaxHours)";
+                                    // create command parameters
+                                    statusCmd.Parameters.AddWithValue("@PresetID", "");
+                                    statusCmd.Parameters.AddWithValue("@StatusId", "");
+                                    statusCmd.Parameters.AddWithValue("@StatusName", "");
+                                    statusCmd.Parameters.AddWithValue("@MaxHours", "");
+                                    foreach (Status status in preset.Statuses)
+                                    {
+                                        statusCmd.Parameters["@PresetID"].Value = preset.ID;
+                                        statusCmd.Parameters["@StatusId"].Value = status.ID;
+                                        statusCmd.Parameters["@StatusName"].Value = status.Name;
+                                        statusCmd.Parameters["@MaxHours"].Value = status.MaxHours;
+                                        statusCmd.ExecuteNonQuery();
+                                    }
+                                }
+                            }
+
+                            cmd.Parameters["@PresetID"].Value = preset.ID;
+                            cmd.Parameters["@PresetName"].Value = preset.Name;
+                            cmd.Parameters["@isActive"].Value = preset.isActive == true ? 1 : 0;
+                            cmd.ExecuteNonQuery();
+                        }
+                        catch (SQLiteException sqlex)
+                        {
+                            onError?.Invoke($"Error: {sqlex.Message}");
+                        }
+                        catch (Exception ex)
+                        {
+                            onError?.Invoke($"Error: {ex.Message}");
+                        }
+                        transaction.Commit();
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #region ------------------------ get/calc methods---------------------------
