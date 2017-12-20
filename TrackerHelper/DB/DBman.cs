@@ -56,6 +56,10 @@ namespace TrackerHelper.DB
                 CreateJournalsTable();
                 CreateJournalDetailsTable();
                 CreateUsersTable();
+                CreateEmployeesPresetsTable();
+                CreateProjectsPresetsTable();
+                CreateStatusPresetsTable();
+                CreatePresetsTable();
                 return true;
             }
             catch (SQLiteException sqlex)
@@ -245,7 +249,6 @@ namespace TrackerHelper.DB
                 }                
             }
         }
-
         private static void CreatePresetsTable()
         {
             using (SQLiteConnection conn = new SQLiteConnection($"Data Source={_dbName}; Version=3;"))
@@ -255,8 +258,8 @@ namespace TrackerHelper.DB
                 using (SQLiteCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = string.Format("CREATE TABLE IF NOT EXISTS Presets({0},{1},{2});",
-                                         "ID INTEGER PRIMARY KEY",
-                                         "Name TEXT",
+                                         "PresetID INTEGER PRIMARY KEY",
+                                         "PresetName TEXT",
                                          "isActive INTEGER");
                     try
                     {
@@ -273,7 +276,87 @@ namespace TrackerHelper.DB
                 }
             }
         }
+        private static void CreateEmployeesPresetsTable()
+        {
+            using (SQLiteConnection conn = new SQLiteConnection($"Data Source={_dbName}; Version=3;"))
+            {
+                conn.Open();
 
+                using (SQLiteCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = string.Format("CREATE TABLE IF NOT EXISTS PresetsEmployees({0},{1},{2});",
+                                         "PresetID INTEGER ",
+                                         "EmplID INTEGER",
+                                         "EmplName TEXT");
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (SQLiteException sqlex)
+                    {
+                        onError?.Invoke($"Error: {sqlex.Message}");
+                    }
+                    catch (Exception ex)
+                    {
+                        onError?.Invoke($"Error: {ex.Message}");
+                    }
+                }
+            }
+        }
+        private static void CreateProjectsPresetsTable()
+        {
+            using (SQLiteConnection conn = new SQLiteConnection($"Data Source={_dbName}; Version=3;"))
+            {
+                conn.Open();
+
+                using (SQLiteCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = string.Format("CREATE TABLE IF NOT EXISTS PresetsProjects({0},{1},{2});",
+                                         "PresetID INTEGER",
+                                         "ProjID INTEGER",
+                                         "ProjName TEXT");
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (SQLiteException sqlex)
+                    {
+                        onError?.Invoke($"Error: {sqlex.Message}");
+                    }
+                    catch (Exception ex)
+                    {
+                        onError?.Invoke($"Error: {ex.Message}");
+                    }
+                }
+            }
+        }
+        private static void CreateStatusPresetsTable()
+        {
+            using (SQLiteConnection conn = new SQLiteConnection($"Data Source={_dbName}; Version=3;"))
+            {
+                conn.Open();
+
+                using (SQLiteCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = string.Format("CREATE TABLE IF NOT EXISTS PresetsStatus({0},{1},{2});",
+                                         "PresetID INTEGER",
+                                         "StatusID INTEGER",
+                                         "StatusName TEXT");
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (SQLiteException sqlex)
+                    {
+                        onError?.Invoke($"Error: {sqlex.Message}");
+                    }
+                    catch (Exception ex)
+                    {
+                        onError?.Invoke($"Error: {ex.Message}");
+                    }
+                }
+            }
+        }
 
         #endregion
 
