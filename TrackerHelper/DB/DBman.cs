@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.SQLite;
 using System.Collections.Generic;
+using TrackerHelper.RedmineEntities;
 
 namespace TrackerHelper.DB
 {
@@ -541,7 +542,7 @@ namespace TrackerHelper.DB
                                         journalsCmd.Parameters.AddWithValue("@Notes", "");
 
                                         // cycle writing data in table
-                                        foreach (Issue.IssueJournalItem JournalsItem in issue.JournalList)
+                                        foreach (IssueJournalItem JournalsItem in issue.JournalList)
                                         {
                                             if (JournalsItem.Details.Count > 0)
                                             {
@@ -555,7 +556,7 @@ namespace TrackerHelper.DB
                                                     detailsCmd.Parameters.AddWithValue("@OldValue", "");
                                                     detailsCmd.Parameters.AddWithValue("@NewValue", "");
 
-                                                    foreach (Issue.IssueJournalItem.Detail DetailItem in JournalsItem.Details)
+                                                    foreach (IssueJournalItem.Detail DetailItem in JournalsItem.Details)
                                                     {
                                                         detailsCmd.Parameters["@JournalId"].Value = JournalsItem.Id;
                                                         detailsCmd.Parameters["@Property"].Value = DetailItem.Property;
@@ -749,7 +750,7 @@ namespace TrackerHelper.DB
                         cmd.Parameters.AddWithValue("@Notes", "");
                         try
                         {   // cycle writing data in table
-                            foreach (Issue.IssueJournalItem Item in issue.JournalList)
+                            foreach (IssueJournalItem Item in issue.JournalList)
                             {
                                 cmd.Parameters["@id"].Value = Item.Id;
                                 cmd.Parameters["@IssueId"].Value = issue.id;
@@ -795,9 +796,9 @@ namespace TrackerHelper.DB
 
                         try
                         {   // cycle writing data in table
-                            foreach (Issue.IssueJournalItem JournalItem in issue.JournalList)
+                            foreach (IssueJournalItem JournalItem in issue.JournalList)
                             {
-                                foreach (Issue.IssueJournalItem.Detail DetailItem in JournalItem.Details)
+                                foreach (IssueJournalItem.Detail DetailItem in JournalItem.Details)
                                 {
                                     cmd.Parameters["@JournalId"].Value = JournalItem.Id;
                                     cmd.Parameters["@Property"].Value = DetailItem.Property;

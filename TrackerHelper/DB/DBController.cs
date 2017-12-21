@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TrackerHelper.RedmineEntities;
 
 namespace TrackerHelper.DB
 {
@@ -52,13 +50,11 @@ namespace TrackerHelper.DB
         }
 
         public void UpdateIssues(int Retries, int NumofDaysSinceLastUpdate)
-        {
-            IssueComparer comparer = new IssueComparer();            
-
+        {      
             GetRmIssues(Retries, NumofDaysSinceLastUpdate);
             DBman.GetOpenedIssues(_dbIssues, NumofDaysSinceLastUpdate+1);
 
-            _user.Issues.issue = _rmIssues.issue.Except(_dbIssues.issue, comparer).ToList();
+            _user.Issues.issue = _rmIssues.issue.Except(_dbIssues.issue, new IssueComparer()).ToList();
 
             GetJournals();
             DBman.InsertIssues(_user.IssuesUpdated);

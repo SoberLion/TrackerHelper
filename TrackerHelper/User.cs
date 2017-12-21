@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
 using TrackerHelper.DB;
+using TrackerHelper.RedmineEntities;
 
 namespace TrackerHelper
 {

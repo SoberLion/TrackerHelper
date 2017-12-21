@@ -105,7 +105,14 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Redmine.cs" />
-    <Compile Include="redmine_obj.cs" />
+    <Compile Include="RedmineEntities\Custom_field.cs" />
+    <Compile Include="RedmineEntities\IdName.cs" />
+    <Compile Include="RedmineEntities\Issue.cs" />
+    <Compile Include="RedmineEntities\IssueJournalItem.cs" />
+    <Compile Include="RedmineEntities\Issues.cs" />
+    <Compile Include="RedmineEntities\TimeEntry.cs" />
+    <Compile Include="RedmineEntities\Users.cs" />
+    <Compile Include="RedmineEntities\TimeEntries.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepForm.cs">

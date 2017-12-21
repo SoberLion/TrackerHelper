@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.Linq;
 using System.Collections.Generic;
 using TrackerHelper.DB;
+using TrackerHelper.RedmineEntities;
 
 
 namespace TrackerHelper
@@ -51,7 +52,7 @@ namespace TrackerHelper
 
             tControl.SelectTab(1);
 
-            foreach (Issue.IssueJournalItem item in issue.JournalList)
+            foreach (IssueJournalItem item in issue.JournalList)
             {
                 if (item.Notes != string.Empty)
                 {
