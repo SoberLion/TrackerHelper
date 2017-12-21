@@ -367,7 +367,7 @@ namespace TrackerHelper.DB
 
         #region ------------------------- Modify methods ---------------------------
         // insert time entry to table
-        public static void InsertUser(User user)
+        public static void InsertUser(Person user)
         {
             using (SQLiteConnection conn = new SQLiteConnection($"Data Source={_dbName}; Version=3;"))
             {
@@ -949,9 +949,9 @@ namespace TrackerHelper.DB
         #endregion
 
         #region ------------------------ get/calc methods---------------------------
-        public static User GetUserById(string UserId)
+        public static Person GetUserById(string UserId)
         {
-            User user = new User();
+            Person user = new Person();
             using (SQLiteConnection conn = new SQLiteConnection($"Data Source={_dbName}; Version=3;"))
             {
                 conn.Open();

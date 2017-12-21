@@ -30,7 +30,7 @@ namespace TrackerHelper.DB
         public static event Progress onProgressChange;
 
 
-        private static User _user = new User();
+        private static Person _person = new Person();
 
         private Time_entries _timeEntries = new Time_entries();
 
@@ -38,9 +38,11 @@ namespace TrackerHelper.DB
         private Issues _rmIssues = new Issues();
         private Issues _updatedIssues = new Issues();
 
-        public DBController(User user)
+        private Users _rmUsers = new Users();
+
+        public DBController(Person person)
         {
-            _user = user;
+            _person = person;
         }
 
         public void UpdateTimeEntries(int retries, int numOfDays)
@@ -54,10 +56,61 @@ namespace TrackerHelper.DB
             GetRmIssues(Retries, NumofDaysSinceLastUpdate);
             DBman.GetOpenedIssues(_dbIssues, NumofDaysSinceLastUpdate+1);
 
-            _user.Issues.issue = _rmIssues.issue.Except(_dbIssues.issue, new IssueComparer()).ToList();
+            _person.Issues.issue = _rmIssues.issue.Except(_dbIssues.issue, new IssueComparer()).ToList();
 
             GetJournals();
-            DBman.InsertIssues(_user.IssuesUpdated);
+            DBman.InsertIssues(_person.IssuesUpdated);
+        }
+
+        public void UpdateUsers(int Retries)
+        {
+         //   GetRmIssues(Retries, NumofDaysSinceLastUpdate);
+
+            GetRmUsers(Retries);
+            //DBman.InsertIssues(_person.IssuesUpdated);
+        }
+
+        private void GetRmUsers(int retries)
+        {
+            ResultModel resultModel = new ResultModel();
+            int _retries = 0;
+            do
+            {
+                string url = $@"{_person.BaseAddress}users.xml?&offset={_rmUsers.offset}&limit=100&key={_person.ApiKey}";
+                resultModel.IsSuccess = false;
+
+                resultModel = Http.Get(url);
+                if (resultModel.IsSuccess)
+                {
+                    if (_rmUsers.users.Count > 0)
+                    {
+                        XML.Deserialize<Users>(resultModel.Results).users.ForEach(p => _rmUsers.users.Add(p));
+                        _retries = 0;
+                    }
+                    else
+                    {
+                        _rmUsers = XML.Deserialize<Users>(resultModel.Results);
+                    } // IncOffset увеличивает offset на величину limit при каждом вызове.
+                    _rmUsers.IncOffset();
+                    onProgressChange?.Invoke(new EventProgressArgs
+                    {
+                        Percents = _rmUsers.offset * 100 / _rmUsers.total_count,
+                        Message = _rmUsers.offset < _rmUsers.total_count ?
+                                  $@"Обновляются профили пользователей: {_rmUsers.offset}/{_rmUsers.total_count}" :
+                                  $@"{_rmUsers.total_count}/{_rmUsers.total_count}"
+                    });
+                }
+                else
+                {// в случае если запрос к redmine не был успешным сделать повторный запрос с теми же параметрами
+                    _retries++;
+                    if (_retries == retries)
+                    {
+                        onError?.Invoke($"No reply from host. Fetched {_rmUsers.users.Count} users");
+                        break;
+                    }
+                }
+            }// счётчик - tracker.ucs.ru возвращает максимум 100 элементов, если кол-во total_count больше, необходимо сделать повторные запросы со смещением
+            while (_rmUsers.offset < _rmUsers.total_count);
         }
 
         private void GetRmTimeEntries(int retries, int numofDays)
@@ -67,7 +120,7 @@ namespace TrackerHelper.DB
             int _retries = 0;
             do
             {
-                string url = $@"{_user.BaseAddress}time_entries.xml?&offset={_timeEntries.offset}&limit=100&key={_user.ApiKey}&{filter}";
+                string url = $@"{_person.BaseAddress}time_entries.xml?&offset={_timeEntries.offset}&limit=100&key={_person.ApiKey}&{filter}";
                 resultModel.IsSuccess = false;
 
                 resultModel = Http.Get(url);
@@ -112,7 +165,7 @@ namespace TrackerHelper.DB
             int retries = 0;
             do
             {
-                string url = $@"{_user.BaseAddress}issues.xml?utf8=%E2%9C%93&limit={_rmIssues.limit}&offset={_rmIssues.offset}&key={_user.ApiKey}&{filter}";
+                string url = $@"{_person.BaseAddress}issues.xml?utf8=%E2%9C%93&limit={_rmIssues.limit}&offset={_rmIssues.offset}&key={_person.ApiKey}&{filter}";
                 resultModel.IsSuccess = false;
 
                 resultModel = Http.Get(url);
@@ -152,18 +205,18 @@ namespace TrackerHelper.DB
 
         private void GetJournals()
         {
-            for (int i = 0; i < _user.Issues.issue.Count; i++)
+            for (int i = 0; i < _person.Issues.issue.Count; i++)
             {
-                string url = $@"{_user.BaseAddress}issues/{_user.Issues.issue[i].id}.xml?include=journals&key={_user.ApiKey}";
+                string url = $@"{_person.BaseAddress}issues/{_person.Issues.issue[i].id}.xml?include=journals&key={_person.ApiKey}";
                 Issue issue = new Issue();
                 issue = Issue.GetIssue(url);
                 if (issue != null)
-                    _user.IssuesUpdated.issue.Add(issue);
+                    _person.IssuesUpdated.issue.Add(issue);
 
                 onProgressChange?.Invoke(new EventProgressArgs
                 {
-                    Percents = i * 100 / _user.Issues.issue.Count,
-                    Message = $@"Обновление задачи: {i + 1}/{_user.Issues.issue.Count}"
+                    Percents = i * 100 / _person.Issues.issue.Count,
+                    Message = $@"Обновление задачи: {i + 1}/{_person.Issues.issue.Count}"
                 });
             }
         }

@@ -12,7 +12,7 @@ namespace TrackerHelper
     {
         delegate void Message(string message);
 
-        User user = null;
+        Person user = null;
         public WorkForm()
         {
             InitializeComponent();                  
@@ -22,7 +22,7 @@ namespace TrackerHelper
         private void btn_GetIssues_Click(object sender, EventArgs e)
         {
             
-            user = new User
+            user = new Person
             {
                 Id = "751",
                 ApiKey = "1287ca3310be20d6992a764b57f9c8bcfbb05664",
@@ -63,7 +63,7 @@ namespace TrackerHelper
 
         private void btn_UpdateIssues_Click(object sender, EventArgs e)
         {
-            user = new User
+            user = new Person
             {
                 Id = "751",
                 ApiKey = "d0867cd6f5559eb738c48cd53c870ad9853999e3",//"1287ca3310be20d6992a764b57f9c8bcfbb05664",
@@ -97,7 +97,7 @@ namespace TrackerHelper
 
         private void bgWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            user = new User
+            user = new Person
             {
                 Id = "751",
                 ApiKey = "d0867cd6f5559eb738c48cd53c870ad9853999e3"//"1287ca3310be20d6992a764b57f9c8bcfbb05664",
@@ -117,7 +117,8 @@ namespace TrackerHelper
             tbNumOfDays.Text = numOfDays.ToString();
 
             dbController.UpdateIssues(3, numOfDays);
-            dbController.UpdateTimeEntries(3, numOfDays);            
+            dbController.UpdateTimeEntries(3, numOfDays);
+            dbController.UpdateUsers(3);
         }
 
         private void bgWorker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)

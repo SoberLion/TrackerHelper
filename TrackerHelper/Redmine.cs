@@ -19,7 +19,7 @@ namespace TrackerHelper
 
         public static event Message onError;
 
-        public static void GetUserIssueList(User user)
+        public static void GetUserIssueList(Person user)
         {           
             //string url = @"http://test-tracker.ucs.ru/issues.xml?utf8=%E2%9C%93&set_filter=1&f[]=&c[]=project&c[]=tracker&c[]=status&c[]=priority&c[]=author&c[]=subject&c[]=assigned_to&c[]=updated_on&c[]=category&group_by=&t[]=&key=1287ca3310be20d6992a764b57f9c8bcfbb05664";
             string url = @"http://test-tracker.ucs.ru/issues.xml?utf8=%E2%9C%93&set_filter=1&f[]=project_id&op[project_id]==&v[project_id][]=26&f[]=&c[]=tracker&c[]=status&c[]=priority&c[]=author&c[]=subject&c[]=assigned_to&c[]=updated_on&c[]=category&group_by=&t[]=&key=1287ca3310be20d6992a764b57f9c8bcfbb05664";

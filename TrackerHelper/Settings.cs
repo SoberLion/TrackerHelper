@@ -13,7 +13,7 @@ namespace TrackerHelper
 {
     public partial class Settings : Form
     {
-        User user = new User();
+        Person user = new Person();
         public Settings()
         {
             InitializeComponent();
@@ -54,7 +54,7 @@ namespace TrackerHelper
             }
             else
             {
-                user = new User();
+                user = new Person();
   //              Redmine.GetUserIssueList(user);
                 if (user.Issues.issue.Count > 0)
                 {

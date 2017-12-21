@@ -15,7 +15,7 @@ namespace TrackerHelper
     {
     }
 
-    public class User
+    public class Person
     {
         public delegate void Message(string message);
 
