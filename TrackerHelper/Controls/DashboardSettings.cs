@@ -24,10 +24,19 @@ namespace TrackerHelper
 
         private void GetPresets()
         {
-            string query = $@"select issueid from issues where issueid = 112546";
+            string query = $@"select PresetName, PresetId FROM Presets";
             DataRow[] rows = DBman.OpenQuery(query).Select("");
-            IList<string> list = rows.Select(p => p[0].ToString()).ToArray();
-            cbPresets.DataSource = list;         
+            if (rows != null)
+            {
+                IList<string> list = rows.Select(p => $"{p[0].ToString()} <{p[1].ToString()}>").ToArray();
+                cbPresets.DataSource = list;
+            }
+
+            DataRow[] presetCounter = DBman.OpenQuery("SELECT PresetId FROM Presets ORDER BY PresetId DESC LIMIT 1").Select("");
+            if (presetCounter.Length > 0)
+            {
+                DashboardPreset.SetCounter(Convert.ToInt32(presetCounter[0][0]));
+            }
         }
 
         private void btnNew_Click(object sender, EventArgs e)

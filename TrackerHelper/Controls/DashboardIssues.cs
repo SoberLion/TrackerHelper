@@ -87,7 +87,7 @@ namespace TrackerHelper.Controls
             if (pnlTopRight.Controls.Count > 0)
                 return;
 
-            string todayTimeQuery = $@"SELECT UserId, sum(hours) AS Hours FROM TimeEntries WHERE userid IN ({UserIdList}) 
+            string todayTimeQuery = $@"SELECT UserId, ROUND(sum(hours),2) AS Hours FROM TimeEntries WHERE userid IN ({UserIdList}) 
                                     AND spenton LIKE '{DateTime.Now.ToString("yyyy-MM-dd")}%' GROUP BY userid";
 
             DataTable TimeTable = DBman.OpenQuery(todayTimeQuery);

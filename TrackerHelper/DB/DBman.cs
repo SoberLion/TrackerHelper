@@ -284,10 +284,11 @@ namespace TrackerHelper.DB
 
                 using (SQLiteCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = string.Format("CREATE TABLE IF NOT EXISTS PresetsEmployees({0},{1},{2});",
-                                         "PresetID INTEGER REFERENCES Presets(PresetId) ON DELETE CASCADE",
+                    cmd.CommandText = string.Format("CREATE TABLE IF NOT EXISTS PresetsEmployees({0},{1},{2},{3});",
+                                         "PresetId INTEGER",
                                          "EmplID INTEGER",
-                                         "EmplName TEXT");
+                                         "EmplName TEXT",
+                                         "FOREIGN KEY(PresetID) REFERENCES Presets(PresetID) ON DELETE CASCADE");
                     try
                     {
                         cmd.ExecuteNonQuery();
@@ -311,10 +312,11 @@ namespace TrackerHelper.DB
 
                 using (SQLiteCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = string.Format("CREATE TABLE IF NOT EXISTS PresetsProjects({0},{1},{2});",
-                                         "PresetID INTEGER REFERENCES Presets(PresetId) ON DELETE CASCADE",
-                                         "ProjID INTEGER",
-                                         "ProjName TEXT");
+                    cmd.CommandText = string.Format("CREATE TABLE IF NOT EXISTS PresetsProjects({0},{1},{2},{3});",
+                                         "PresetId INTEGER ",
+                                         "ProjID INTEGER ",
+                                         "ProjName TEXT ",
+                                         "FOREIGN KEY(PresetID) REFERENCES Presets(PresetID) ON DELETE CASCADE");
                     try
                     {
                         cmd.ExecuteNonQuery();
@@ -338,11 +340,12 @@ namespace TrackerHelper.DB
 
                 using (SQLiteCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = string.Format("CREATE TABLE IF NOT EXISTS PresetsStatus({0},{1},{2},{3});",
-                                         "PresetID INTEGER REFERENCES Presets(PresetId) ON DELETE CASCADE",
+                    cmd.CommandText = string.Format("CREATE TABLE IF NOT EXISTS PresetsStatus({0},{1},{2},{3},{4});",
+                                         "PresetID INTEGER",
                                          "StatusID INTEGER",
                                          "StatusName TEXT",
-                                         "MaxHours INTEGER");
+                                         "MaxHours INTEGER",
+                                         "FOREIGN KEY(PresetID) REFERENCES Presets(PresetID) ON DELETE CASCADE");
                     try
                     {
                         cmd.ExecuteNonQuery();
@@ -920,9 +923,12 @@ namespace TrackerHelper.DB
 
                 using (SQLiteCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "DELEETE FROM Presets WHERE PresetId = @PresetId";
+                    cmd.CommandText = @"PRAGMA foreign_keys = ""1"";";
 
-                    cmd.Parameters.AddWithValue("@PresetId", PresetId);
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = $"DELETE FROM Presets WHERE PresetId = {PresetId.ToString()}";
+
                     try
                     {
                         cmd.ExecuteNonQuery();
@@ -936,48 +942,46 @@ namespace TrackerHelper.DB
                         onError?.Invoke($"Error: {ex.Message}");
                     }
                 }
-            }        
+            }
         }
-    
+
         #endregion
 
         #region ------------------------ get/calc methods---------------------------
         public static User GetUserById(string UserId)
         {
             User user = new User();
-            SQLiteConnection conn = new SQLiteConnection($"Data Source={_dbName}; Version=3;");
-
-            conn.Open();
-
-            if (conn.State == ConnectionState.Open)
+            using (SQLiteConnection conn = new SQLiteConnection($"Data Source={_dbName}; Version=3;"))
             {
-                SQLiteCommand cmd = conn.CreateCommand();
-                cmd.CommandText = "SELECT * FROM Users WHERE Id = @UserId LIMIT 1";
-                cmd.Parameters.AddWithValue("@UserId", UserId);
+                conn.Open();
 
-                try
+                using (SQLiteCommand cmd = conn.CreateCommand())
                 {
-                    SQLiteDataReader r = cmd.ExecuteReader();
-                    while (r.Read())
+                    cmd.CommandText = "SELECT * FROM Users WHERE Id = @UserId LIMIT 1";
+                    cmd.Parameters.AddWithValue("@UserId", UserId);
+
+                    try
                     {
-                        user.Id = r["Id"].ToString();
-                        user.Name = r["Name"].ToString();
-                        user.CompanyName = r["CompanyName"].ToString();
-                        user.Position = r["Position"].ToString();
-                        user.Telephone = r["Telephone"].ToString();
-                        user.InternalPhone = r["InternalPhone"].ToString();
-                        //    user.Language = (Language)r["Language"].ToString();
-                        user.BaseAddress = r["BaseAddress"].ToString();
-                        user.ApiKey = r["ApiKey"].ToString();
+                        SQLiteDataReader r = cmd.ExecuteReader();
+                        while (r.Read())
+                        {
+                            user.Id = r["Id"].ToString();
+                            user.Name = r["Name"].ToString();
+                            user.CompanyName = r["CompanyName"].ToString();
+                            user.Position = r["Position"].ToString();
+                            user.Telephone = r["Telephone"].ToString();
+                            user.InternalPhone = r["InternalPhone"].ToString();
+                            //    user.Language = (Language)r["Language"].ToString();
+                            user.BaseAddress = r["BaseAddress"].ToString();
+                            user.ApiKey = r["ApiKey"].ToString();
+                        }
+                        r.Close();
                     }
-                    r.Close();
+                    catch (SQLiteException sqlex)
+                    {
+                        onError?.Invoke($"Error: {sqlex.Message}");
+                    }
                 }
-                catch (SQLiteException sqlex)
-                {
-                    onError?.Invoke($"Error: {sqlex.Message}");
-                }
-                cmd.Dispose();
-                conn.Dispose();
             }
             return (user.Name != string.Empty) ? user : null;
         }
@@ -1208,7 +1212,7 @@ namespace TrackerHelper.DB
                 cmd.Dispose();
                 conn.Dispose();
             }
-            return (obj.ToString() == "") ? "0,00" : Math.Round(double.Parse(obj.ToString()),2).ToString();
+            return (obj.ToString() == "") ? "0,00" : Math.Round(double.Parse(obj.ToString()), 2).ToString();
         }
 
         public static void GetOpenedIssues(Issues issues, int NumOfDays)
@@ -1261,7 +1265,7 @@ namespace TrackerHelper.DB
                         {
                             onError?.Invoke($"SQLiteException: {sqlex.Message}");
                         }
-                        catch(Exception ex)
+                        catch (Exception ex)
                         {
                             onError?.Invoke($"Exception: {ex.Message}");
                         }
@@ -1281,7 +1285,7 @@ namespace TrackerHelper.DB
 
             if (conn.State == ConnectionState.Open)
             {
-                SQLiteCommand cmd = conn.CreateCommand();                
+                SQLiteCommand cmd = conn.CreateCommand();
                 cmd.CommandText = $"SELECT Count({name}) as {id}, {name} FROM Issues WHERE ProjectId = 26 and StatusId not in (3,5,6,19,26,27,29,30) GROUP BY {name} ORDER BY {name} DESC";
 
                 try
@@ -1356,6 +1360,11 @@ namespace TrackerHelper.DB
                 conn.Dispose();
             }
         }
+
+
+        /*public static List<DashboardPreset> GetPresetLIst()
+        {
+        }*/
         #endregion
     }
 }

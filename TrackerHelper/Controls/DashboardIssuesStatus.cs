@@ -14,7 +14,7 @@ namespace TrackerHelper.Controls
     public partial class DashboardIssuesStatus : UserControl
     {
         static string _dateFormat = "yyyy-MM-dd HH:mm:ss:fff";
-        private int[] _userIdList = new int[] { 2361, 2374, 1830, 2233, 1240, 1383, 2886, 2235, 1521, 2232, 1537, 2535, 551, 894, 3713, 328 };
+        private int[] _userIdList = new int[] { 2361, 2374, 1830, 2233, 1240, 1383, 2886, 2235, 1521, 2232, 1537, 2535, 551, 894, 3713, 328, 751, 2270 };
         private int[] _statusIdList = new int[] { 1 };
         private DataTable _issuesTable = new DataTable();
         private int[] _projectId = new int[]{ 26, 220 };

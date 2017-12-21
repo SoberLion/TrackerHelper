@@ -65,7 +65,7 @@ namespace TrackerHelper
             user = new User
             {
                 Id = "751",
-                ApiKey = "1287ca3310be20d6992a764b57f9c8bcfbb05664",
+                ApiKey = "d0867cd6f5559eb738c48cd53c870ad9853999e3",//"1287ca3310be20d6992a764b57f9c8bcfbb05664",
             };
             user.onError += ShowMessage;
             IssueComparer comparer = new IssueComparer();
@@ -99,7 +99,7 @@ namespace TrackerHelper
             user = new User
             {
                 Id = "751",
-                ApiKey = "1287ca3310be20d6992a764b57f9c8bcfbb05664",
+                ApiKey = "d0867cd6f5559eb738c48cd53c870ad9853999e3"//"1287ca3310be20d6992a764b57f9c8bcfbb05664",
             };
             DBController dbController = new DBController(user);
 

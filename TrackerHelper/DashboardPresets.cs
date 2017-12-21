@@ -76,7 +76,7 @@ namespace TrackerHelper
             ID = _counter;
         }
         
-        public void SetCounter(int counter) => _counter = counter;
+        public static void SetCounter(int counter) => _counter = counter;
 
     }
 }

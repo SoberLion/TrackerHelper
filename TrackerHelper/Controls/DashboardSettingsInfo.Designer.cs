@@ -57,6 +57,7 @@
             this.clbEmployees.Name = "clbEmployees";
             this.clbEmployees.Size = new System.Drawing.Size(300, 915);
             this.clbEmployees.TabIndex = 0;
+            this.clbEmployees.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbEmployees_ItemCheck);
             // 
             // pnlEmployees
             // 
@@ -140,7 +141,7 @@
             // 
             this.label1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.label1.ForeColor = System.Drawing.SystemColors.Window;
-            this.label1.Location = new System.Drawing.Point(212, 9);
+            this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(194, 13);
             this.label1.TabIndex = 3;
@@ -149,18 +150,19 @@
             // 
             // tbName
             // 
+            this.tbName.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbName.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.tbName.Location = new System.Drawing.Point(212, 25);
+            this.tbName.Location = new System.Drawing.Point(12, 25);
             this.tbName.Name = "tbName";
-            this.tbName.Size = new System.Drawing.Size(194, 20);
+            this.tbName.Size = new System.Drawing.Size(194, 13);
             this.tbName.TabIndex = 2;
             // 
             // btnSave
             // 
             this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSave.Location = new System.Drawing.Point(106, 0);
+            this.btnSave.Location = new System.Drawing.Point(215, 0);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(100, 50);
+            this.btnSave.Size = new System.Drawing.Size(85, 50);
             this.btnSave.TabIndex = 1;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
@@ -168,9 +170,9 @@
             // 
             // btnClose
             // 
-            this.btnClose.Dock = System.Windows.Forms.DockStyle.Left;
+            this.btnClose.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnClose.Location = new System.Drawing.Point(0, 0);
+            this.btnClose.Location = new System.Drawing.Point(1616, 0);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(100, 50);
             this.btnClose.TabIndex = 0;
