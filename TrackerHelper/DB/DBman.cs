@@ -42,7 +42,7 @@ namespace TrackerHelper.DB
                         onError?.Invoke($"Error: {ex.Message}");
                         return false;
                     }
-                }                
+                }
             }
         }
 
@@ -219,7 +219,7 @@ namespace TrackerHelper.DB
         private static void CreateUsersTable()
         {
             using (SQLiteConnection conn = new SQLiteConnection($"Data Source={_dbName}; Version=3;"))
-            { 
+            {
                 conn.Open();
 
                 using (SQLiteCommand cmd = conn.CreateCommand())
@@ -246,7 +246,7 @@ namespace TrackerHelper.DB
                     {
                         onError?.Invoke($"Error: {ex.Message}");
                     }
-                }                
+                }
             }
         }
         private static void CreatePresetsTable()
@@ -285,7 +285,7 @@ namespace TrackerHelper.DB
                 using (SQLiteCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = string.Format("CREATE TABLE IF NOT EXISTS PresetsEmployees({0},{1},{2});",
-                                         "PresetID INTEGER ",
+                                         "PresetID INTEGER REFERENCES Presets(PresetId) ON DELETE CASCADE",
                                          "EmplID INTEGER",
                                          "EmplName TEXT");
                     try
@@ -312,7 +312,7 @@ namespace TrackerHelper.DB
                 using (SQLiteCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = string.Format("CREATE TABLE IF NOT EXISTS PresetsProjects({0},{1},{2});",
-                                         "PresetID INTEGER",
+                                         "PresetID INTEGER REFERENCES Presets(PresetId) ON DELETE CASCADE",
                                          "ProjID INTEGER",
                                          "ProjName TEXT");
                     try
@@ -339,7 +339,7 @@ namespace TrackerHelper.DB
                 using (SQLiteCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = string.Format("CREATE TABLE IF NOT EXISTS PresetsStatus({0},{1},{2},{3});",
-                                         "PresetID INTEGER",
+                                         "PresetID INTEGER REFERENCES Presets(PresetId) ON DELETE CASCADE",
                                          "StatusID INTEGER",
                                          "StatusName TEXT",
                                          "MaxHours INTEGER");
@@ -361,7 +361,7 @@ namespace TrackerHelper.DB
 
         #endregion
 
-        #region ------------------------- Insert methods ---------------------------
+        #region ------------------------- Modify methods ---------------------------
         // insert time entry to table
         public static void InsertUser(User user)
         {
@@ -409,14 +409,14 @@ namespace TrackerHelper.DB
                             onError?.Invoke($"Error: {sqlex.Message}");
                         }
                         transaction.Commit();
-                    }                
+                    }
                 }
             }
         }
         public static void InsertTE(Time_entries TE)
         {
             using (SQLiteConnection conn = new SQLiteConnection($"Data Source={_dbName}; Version=3;"))
-            { 
+            {
 
                 conn.Open();
 
@@ -631,7 +631,7 @@ namespace TrackerHelper.DB
         public static void InsertIssue(Issue issue)
         {
             using (SQLiteConnection conn = new SQLiteConnection($"Data Source={_dbName}; Version=3;"))
-            { 
+            {
                 if (issue.JournalList.Count > 0)
                 {
                     InsertJournals(issue);
@@ -720,7 +720,7 @@ namespace TrackerHelper.DB
         private static void InsertJournals(Issue issue)
         {
             using (SQLiteConnection conn = new SQLiteConnection($"Data Source={_dbName}; Version=3;"))
-            { 
+            {
                 if (issue.JournalList.Count > 0)
                 {
                     InsertDetails(issue);
@@ -773,7 +773,7 @@ namespace TrackerHelper.DB
         private static void InsertDetails(Issue issue)
         {
             using (SQLiteConnection conn = new SQLiteConnection($"Data Source={_dbName}; Version=3;"))
-            { 
+            {
                 conn.Open();
 
                 if (conn.State == ConnectionState.Open)
@@ -912,7 +912,33 @@ namespace TrackerHelper.DB
                 }
             }
         }
+        public static void DeletePreset(int PresetId)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection($"Data Source={_dbName}; Version=3;"))
+            {
+                conn.Open();
 
+                using (SQLiteCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "DELEETE FROM Presets WHERE PresetId = @PresetId";
+
+                    cmd.Parameters.AddWithValue("@PresetId", PresetId);
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                    catch (SQLiteException sqlex)
+                    {
+                        onError?.Invoke($"Error: {sqlex.Message}");
+                    }
+                    catch (Exception ex)
+                    {
+                        onError?.Invoke($"Error: {ex.Message}");
+                    }
+                }
+            }        
+        }
+    
         #endregion
 
         #region ------------------------ get/calc methods---------------------------

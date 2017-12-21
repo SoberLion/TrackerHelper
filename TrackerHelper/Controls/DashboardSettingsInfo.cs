@@ -119,16 +119,29 @@ namespace TrackerHelper.Controls
                         return;
                     }
                 }
-                // name duplicates not allowed
-                string query = $"Select PresetName from Presets where PresetName = '{tbName.Text}'";
-                if (DBman.OpenQuery(query) != null)
-                {
-                    tbName.Text = $"Name ({tbName.Text}) already occupied";
-                    return;
-                }
 
                 Preset.Name = tbName.Text;
                 DBman.InsertPreset(Preset);
+            }
+        }
+
+        private void clbProjects_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            string[] str = clbProjects.Items[e.Index].ToString().Split('<');
+            str[0] = str[0].Trim();
+            str[1] = str[1].Replace(">", "").Trim();
+            if (str.Length > 1)
+            {
+                if (e.CurrentValue == CheckState.Unchecked)
+                {
+                    Preset.Projects.Add(new IdName { name = str[0], id = Convert.ToInt32(str[1]) });
+                }
+                else if (e.CurrentValue == CheckState.Checked)
+                {
+                    IdName st = Preset.Projects.Find(p => p.id == Convert.ToInt32(str[1]));
+                    if (st != null)
+                        Preset.Projects.RemoveAt(Preset.Projects.IndexOf(st));
+                }
             }
         }
     }

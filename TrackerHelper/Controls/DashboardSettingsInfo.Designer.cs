@@ -37,10 +37,10 @@
             this.pnlStatusPreset = new System.Windows.Forms.Panel();
             this.plnLayoutRight = new System.Windows.Forms.Panel();
             this.pnlLayoutRightButtons = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.tbName = new System.Windows.Forms.TextBox();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
-            this.tbName = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.pnlEmployees.SuspendLayout();
             this.pnlProjects.SuspendLayout();
             this.pnlStatus.SuspendLayout();
@@ -85,6 +85,7 @@
             this.clbProjects.Name = "clbProjects";
             this.clbProjects.Size = new System.Drawing.Size(300, 915);
             this.clbProjects.TabIndex = 0;
+            this.clbProjects.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbProjects_ItemCheck);
             // 
             // pnlStatus
             // 
@@ -135,8 +136,28 @@
             this.pnlLayoutRightButtons.Size = new System.Drawing.Size(1716, 50);
             this.pnlLayoutRightButtons.TabIndex = 1;
             // 
+            // label1
+            // 
+            this.label1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.label1.ForeColor = System.Drawing.SystemColors.Window;
+            this.label1.Location = new System.Drawing.Point(212, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(194, 13);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Название предустановки";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // tbName
+            // 
+            this.tbName.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.tbName.Location = new System.Drawing.Point(212, 25);
+            this.tbName.Name = "tbName";
+            this.tbName.Size = new System.Drawing.Size(194, 20);
+            this.tbName.TabIndex = 2;
+            // 
             // btnSave
             // 
+            this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSave.Location = new System.Drawing.Point(106, 0);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(100, 50);
@@ -148,28 +169,13 @@
             // btnClose
             // 
             this.btnClose.Dock = System.Windows.Forms.DockStyle.Left;
+            this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnClose.Location = new System.Drawing.Point(0, 0);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(100, 50);
             this.btnClose.TabIndex = 0;
             this.btnClose.Text = "Close";
             this.btnClose.UseVisualStyleBackColor = true;
-            // 
-            // tbName
-            // 
-            this.tbName.Location = new System.Drawing.Point(212, 25);
-            this.tbName.Name = "tbName";
-            this.tbName.Size = new System.Drawing.Size(194, 20);
-            this.tbName.TabIndex = 2;
-            // 
-            // label1
-            // 
-            this.label1.Location = new System.Drawing.Point(212, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(194, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Название предустановки";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // DashboardSettingsInfo
             // 
