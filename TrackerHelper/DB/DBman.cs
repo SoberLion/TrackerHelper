@@ -374,8 +374,90 @@ namespace TrackerHelper.DB
         #endregion
 
         #region ------------------------- Modify methods ---------------------------
-        // insert time entry to table
-        public static void InsertUser(Person user)
+        public static void InsertPersons(List<Person> persons)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection($"Data Source={_dbName}; Version=3;"))
+            {
+                conn.Open();
+
+                // if connection established create sqlite command and begin transaction
+                if (conn.State == ConnectionState.Open)
+                {
+                    using (SQLiteCommand cmd = conn.CreateCommand())
+                    {
+                        SQLiteTransaction transaction = conn.BeginTransaction();
+
+                        cmd.CommandText = @"INSERT OR IGNORE INTO Users(Id, Firstname, Secondname, Lastname, EMail, CompanyName, City, OfficeNo, 
+                                            PhoneNo, InternalPnoneNo, Department, Position, RK7Assesment, Language, BaseAddress, ApiKey) 
+                                          VALUES (@Id, @Firstname, @Secondname, @Lastname, @EMail, @CompanyName, @City, @OfficeNo, 
+                                            @PhoneNo, @InternalPnoneNo, @Department, @Position, @RK7Assesment, @Language, @BaseAddress, @ApiKey)";
+
+                        // create command parameters
+                        cmd.Parameters.AddWithValue("@Id", "");
+                        cmd.Parameters.AddWithValue("@Firstname", "");
+                        cmd.Parameters.AddWithValue("@Secondname", "");
+                        cmd.Parameters.AddWithValue("@Lastname", "");
+                        cmd.Parameters.AddWithValue("@EMail", "");
+                        cmd.Parameters.AddWithValue("@CompanyName", "");
+                        cmd.Parameters.AddWithValue("@City", "");
+                        cmd.Parameters.AddWithValue("@OfficeNo", "");
+                        cmd.Parameters.AddWithValue("@PhoneNo", "");
+                        cmd.Parameters.AddWithValue("@InternalPnoneNo", "");
+                        cmd.Parameters.AddWithValue("@Department", "");
+                        cmd.Parameters.AddWithValue("@Position", "");
+                        cmd.Parameters.AddWithValue("@RK7Assesment", "");
+                        cmd.Parameters.AddWithValue("@Language", "");
+                        cmd.Parameters.AddWithValue("@BaseAddress", "");
+                        cmd.Parameters.AddWithValue("@ApiKey", "");
+
+                        for (int i = 0; i < persons.Count; i++)
+                        {
+                            try
+                            {   // cycle writing data in table
+                                cmd.Parameters["@Id"].Value = persons[i].Id;
+                                cmd.Parameters["@Firstname"].Value = persons[i].Firstname;
+                                cmd.Parameters["@Secondname"].Value = persons[i].Secondname;
+                                cmd.Parameters["@Lastname"].Value = persons[i].Lastname;
+                                cmd.Parameters["@EMail"].Value = persons[i].EMail;
+                                cmd.Parameters["@CompanyName"].Value = persons[i].CompanyName;
+                                cmd.Parameters["@City"].Value = persons[i].City;
+                                cmd.Parameters["@OfficeNo"].Value = persons[i].OfficeNo;
+                                cmd.Parameters["@PhoneNo"].Value = persons[i].PhoneNo;
+                                cmd.Parameters["@InternalPnoneNo"].Value = persons[i].InternalPhoneNo;
+                                cmd.Parameters["@Department"].Value = persons[i].Department;
+                                cmd.Parameters["@Position"].Value = persons[i].Position;
+                                cmd.Parameters["@RK7Assesment"].Value = persons[i].RK7Assessment;
+                                cmd.Parameters["@Language"].Value = persons[i].Language;
+                                cmd.Parameters["@BaseAddress"].Value = persons[i].BaseAddress;
+                                cmd.Parameters["@APiKey"].Value = persons[i].ApiKey;
+                                cmd.ExecuteNonQuery();
+                            }
+                            catch (SQLiteException sqlex)
+                            {
+                                onError?.Invoke($"Error: {sqlex.Message}");
+                            }
+                            catch (Exception ex)
+                            {
+                                onError?.Invoke($"Error: {ex.Message}");
+                            }
+                        }
+                        try
+                        {
+                            transaction.Commit();
+                        }
+                        catch (SQLiteException sqlex)
+                        {
+                            onError?.Invoke($"Error: {sqlex.Message}");
+                        }
+                        catch (Exception ex)
+                        {
+                            onError?.Invoke($"Error: {ex.Message}");
+                        }
+                    }
+                }
+            }
+        }
+        public static void InsertPerson(Person person)
         {
             using (SQLiteConnection conn = new SQLiteConnection($"Data Source={_dbName}; Version=3;"))
             {
@@ -414,22 +496,22 @@ namespace TrackerHelper.DB
 
                         try
                         {   // cycle writing data in table
-                            cmd.Parameters["@Id"].Value = user.Id;
-                            cmd.Parameters["@Firstname"].Value = user.Firstname;
-                            cmd.Parameters["@Secondname"].Value = user.Secondname;
-                            cmd.Parameters["@Lastname"].Value = user.Lastname;
-                            cmd.Parameters["@EMail"].Value = user.EMail;
-                            cmd.Parameters["@CompanyName"].Value = user.CompanyName;
-                            cmd.Parameters["@City"].Value = user.City;
-                            cmd.Parameters["@OfficeNo"].Value = user.OfficeNo;
-                            cmd.Parameters["@PhoneNo"].Value = user.PhoneNo;
-                            cmd.Parameters["@InternalPnoneNo"].Value = user.InternalPhoneNo;
-                            cmd.Parameters["@Department"].Value = user.Department;
-                            cmd.Parameters["@Position"].Value = user.Position;
-                            cmd.Parameters["@RK7Assesment"].Value = user.RK7Assessment;
-                            cmd.Parameters["@Language"].Value = user.Language;
-                            cmd.Parameters["@BaseAddress"].Value = user.BaseAddress;
-                            cmd.Parameters["@APiKey"].Value = user.ApiKey;
+                            cmd.Parameters["@Id"].Value = person.Id;
+                            cmd.Parameters["@Firstname"].Value = person.Firstname;
+                            cmd.Parameters["@Secondname"].Value = person.Secondname;
+                            cmd.Parameters["@Lastname"].Value = person.Lastname;
+                            cmd.Parameters["@EMail"].Value = person.EMail;
+                            cmd.Parameters["@CompanyName"].Value = person.CompanyName;
+                            cmd.Parameters["@City"].Value = person.City;
+                            cmd.Parameters["@OfficeNo"].Value = person.OfficeNo;
+                            cmd.Parameters["@PhoneNo"].Value = person.PhoneNo;
+                            cmd.Parameters["@InternalPnoneNo"].Value = person.InternalPhoneNo;
+                            cmd.Parameters["@Department"].Value = person.Department;
+                            cmd.Parameters["@Position"].Value = person.Position;
+                            cmd.Parameters["@RK7Assesment"].Value = person.RK7Assessment;
+                            cmd.Parameters["@Language"].Value = person.Language;
+                            cmd.Parameters["@BaseAddress"].Value = person.BaseAddress;
+                            cmd.Parameters["@APiKey"].Value = person.ApiKey;
                             cmd.ExecuteNonQuery();
                         }
                         catch (SQLiteException sqlex)
@@ -444,6 +526,7 @@ namespace TrackerHelper.DB
                 }
             }
         }
+        // insert time entry to table
         public static void InsertTE(Time_entries TE)
         {
             using (SQLiteConnection conn = new SQLiteConnection($"Data Source={_dbName}; Version=3;"))

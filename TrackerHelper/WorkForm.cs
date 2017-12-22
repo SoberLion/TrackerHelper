@@ -118,7 +118,7 @@ namespace TrackerHelper
 
             dbController.UpdateIssues(3, numOfDays);
             dbController.UpdateTimeEntries(3, numOfDays);
-            dbController.UpdateUsers(3);
+           // dbController.UpdateUsers(3);
         }
 
         private void bgWorker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)

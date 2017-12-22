@@ -70,6 +70,7 @@ namespace TrackerHelper.DB
 
             GetRmUsers(Retries);
             UsersToPersons(_rmUsers);
+            DBman.InsertPersons(_personList);
             //DBman.InsertIssues(_person.IssuesUpdated);
         }
 
