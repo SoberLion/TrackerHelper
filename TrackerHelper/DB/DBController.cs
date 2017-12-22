@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 using TrackerHelper.RedmineEntities;
 
 namespace TrackerHelper.DB
@@ -39,6 +40,7 @@ namespace TrackerHelper.DB
         private Issues _updatedIssues = new Issues();
 
         private Users _rmUsers = new Users();
+        private List<Person> _personList = new List<Person>();
 
         public DBController(Person person)
         {
@@ -67,6 +69,7 @@ namespace TrackerHelper.DB
          //   GetRmIssues(Retries, NumofDaysSinceLastUpdate);
 
             GetRmUsers(Retries);
+            UsersToPersons(_rmUsers);
             //DBman.InsertIssues(_person.IssuesUpdated);
         }
 
@@ -105,7 +108,7 @@ namespace TrackerHelper.DB
                     _retries++;
                     if (_retries == retries)
                     {
-                        onError?.Invoke($"No reply from host. Fetched {_rmUsers.users.Count} users");
+                        onError?.Invoke($"No reply from host. Fetch|ed {_rmUsers.users.Count} users");
                         break;
                     }
                 }
@@ -219,6 +222,27 @@ namespace TrackerHelper.DB
                     Message = $@"Обновление задачи: {i + 1}/{_person.Issues.issue.Count}"
                 });
             }
+        }
+        private void UsersToPersons(Users users)
+        {
+            for (int i = 0; i < users.users.Count; i++)
+            {
+                _personList.Add(new Person
+                {
+                    Id = users.users[i].id.ToString(),
+                    Firstname = users.users[i].firstname,
+                    Lastname = users.users[i].lastname,
+                    EMail = users.users[i].mail,
+                    CompanyName = users.users[i].custom_fields.Find(p => p.id == 17).value.Select(p => p.value).FirstOrDefault(),
+                    City = users.users[i].custom_fields.Find(p => p.id == 18).value.Select(p => p.value).FirstOrDefault(),
+                    OfficeNo = users.users[i].custom_fields.Find(p => p.id == 29).value.Select(p => p.value).FirstOrDefault(),
+                    InternalPhoneNo = users.users[i].custom_fields.Find(p => p.id == 28).value.Select(p => p.value).FirstOrDefault(),
+                    Department = users.users[i].custom_fields.Find(p => p.id == 33).value.Select(p => p.value).FirstOrDefault(),
+                    Position = users.users[i].custom_fields.Find(p => p.id == 30).value.Select(p => p.value).FirstOrDefault(),
+                    PhoneNo = users.users[i].custom_fields.Find(p => p.id == 58).value.Select(p => p.value).FirstOrDefault(),
+                    RK7Assessment = Convert.ToInt32(users.users[i].custom_fields.Find(p => p.id == 61).value.Select(p => p.value).FirstOrDefault()),
+                });
+            }          
         }
     }
 }

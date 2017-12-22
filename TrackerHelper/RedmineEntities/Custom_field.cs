@@ -3,6 +3,7 @@ using System.Xml.Serialization;
 
 namespace TrackerHelper.RedmineEntities
 {
+    [XmlRoot("custom_field")]
     public class custom_field
     {
         public custom_field() { }
@@ -32,32 +33,31 @@ namespace TrackerHelper.RedmineEntities
             set { multipleField = value; }
         }
 
-        [XmlArray("value")]
-        [XmlArrayItem("value")]
-        public List<Value> values
+        [XmlElement("value")]
+        public List<Value> value
         {
             get { return valueField; }
             set { valueField = value; }
         }
+    }
+    [XmlRoot("value")]
+    public class Value
+    {
+        private string V_type;
+        private string valueField;
 
-        public class Value
+        [XmlAttribute("type")]
+        public string type
         {
-            private string V_type;
-            private string valueField;
-
-            [XmlAttribute("type")]
-            public string type
-            {
-                get { return V_type; }
-                set { V_type = value; }
-            }
-            [XmlText]
-            public string value
-            {
-                get { return valueField; }
-                set { valueField = value; }
-            }
-            public Value() { }
+            get { return V_type; }
+            set { V_type = value; }
         }
+        [XmlText]
+        public string value
+        {
+            get { return valueField; }
+            set { valueField = value; }
+        }
+        public Value() { }
     }
 }

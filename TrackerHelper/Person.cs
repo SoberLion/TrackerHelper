@@ -23,30 +23,51 @@ namespace TrackerHelper
         public event Message onMessage;
 
 
-        private string _Id = string.Empty;
-        private string _Name = string.Empty;
+        private string _id = string.Empty;
+        private string _firstName = string.Empty;
+        private string _secondName = string.Empty;
+        private string _lastName = string.Empty;
+        private string _email = string.Empty; 
         //private Role _Role;
-        private string _CompanyName = string.Empty;
-        private string _Position = string.Empty;
-        private string _Telephone = string.Empty;
-        private string _InternalPhone = string.Empty;
+        private string _companyName = string.Empty;
+        private string _city = string.Empty;
+        private string _officeNo = string.Empty;        
+        private string _phoneNo = string.Empty;
+        private string _internalPhoneNo = string.Empty;
+        private string _department = string.Empty;
+        private string _position = string.Empty;
+        private int _rk7Assessment = 0;
         private List<Vacation> _Vacations = new List<Vacation>();
-        //private Language _Language = new Language;
-        private string _BaseAddress = @"http://tracker.ucs.ru/";
-        private Issues _Issues = new Issues();
-        private Issues _IssuesUpdated = new Issues();
-        private string _ApiKey = "1287ca3310be20d6992a764b57f9c8bcfbb05664";
+        private string _language = string.Empty;
+        private string _baseAddress = @"http://tracker.ucs.ru/";
+        private Issues _issues = new Issues();
+        private Issues _issuesUpdated = new Issues();
+        private string _apiKey = string.Empty;
 
         public string Id
         {
-            get { return _Id; }
-            set { _Id = value; }
+            get { return _id; }
+            set { _id = value; }
         }
-
-        public string Name
+        public string Firstname
         {
-            get { return _Name; }
-            set { _Name = value; }
+            get { return _firstName; }
+            set { _firstName = value; }
+        }
+        public string Secondname
+        {
+            get { return _secondName; }
+            set { _secondName = value; }
+        }
+        public string Lastname
+        {
+            get { return _lastName; }
+            set { _lastName = value; }
+        }
+        public string EMail
+        {
+            get { return _email; }
+            set { _email = value; }
         }
         /*public Role Role
         {
@@ -55,60 +76,81 @@ namespace TrackerHelper
         }*/
         public string CompanyName
         {
-            get { return _CompanyName; }
-            set { _CompanyName = value; }
+            get { return _companyName; }
+            set { _companyName = value; }
+        }
+        public string City
+        {
+            get { return _city; }
+            set { _city = value; }
+        }
+        public string OfficeNo
+        {
+            get { return _officeNo; }
+            set { _officeNo = value; }
+        }
+        public string PhoneNo
+        {
+            get { return _phoneNo; }
+            set { _phoneNo = value; }
+        }
+        public string InternalPhoneNo
+        {
+            get { return _internalPhoneNo; }
+            set { _internalPhoneNo = value; }
+        }
+        public string Department
+        {
+            get { return _department; }
+            set { _department = value; }
         }
         public string Position
         {
-            get { return _Position; }
-            set { _Position = value; }
+            get { return _position; }
+            set { _position = value; }
         }
-        public string Telephone
+        public int RK7Assessment
         {
-            get { return _Telephone; }
-            set { _Telephone = value; }
+            get { return _rk7Assessment; }
+            set { _rk7Assessment = value; }
         }
-        public string InternalPhone
-        {
-            get { return _InternalPhone; }
-            set { _InternalPhone = value; }
-        }
+
         public List<Vacation> Vacations
         {
             get { return _Vacations; }
             set { _Vacations = value; }
         }
-      /*  public Language Language
+        public string Language
         {
-            get { return _Language; }
-            set { _Language = value; }
-        }*/
+            get { return _language; }
+            set { _language = value; }
+        }
         public string BaseAddress
         {
-            get { return _BaseAddress; }
+            get { return _baseAddress; }
             set
             {
                 onMessage?.Invoke("BaseAddress = " + value);
-                _BaseAddress = value;
+                _baseAddress = value;
             }
         }
         public Issues Issues
         {
-            get { return _Issues; }
-            set { _Issues = value; }
+            get { return _issues; }
+            set { _issues = value; }
         }
         public Issues IssuesUpdated
         {
-            get { return _IssuesUpdated; }
-            set { _IssuesUpdated = value; }
+            get { return _issuesUpdated; }
+            set { _issuesUpdated = value; }
         }
         public string ApiKey
         {
-            get { return _ApiKey; }
+            get { return _apiKey; }
             set
             {
                 onMessage?.Invoke("ApiKey = " + value);
-                _ApiKey = value;
+                _apiKey = value;
             }
         }
 
@@ -132,7 +174,7 @@ namespace TrackerHelper
             FetchIssuesFiltered(Retries, filter);
         }
 
-        public void GetOpenedIssuesFromDb() => DBman.GetIssuesListByUserId(_Id, _Issues);
+        public void GetOpenedIssuesFromDb() => DBman.GetIssuesListByUserId(Id, Issues);
 
         public void FetchIssuesFiltered(int Retries, string filter)
         {
@@ -140,34 +182,34 @@ namespace TrackerHelper
             int retries = 0;
             do
             {
-                string url = $@"{_BaseAddress}issues.xml?utf8=%E2%9C%93&limit={_IssuesUpdated.limit}&offset={_IssuesUpdated.offset}&key={_ApiKey}&{filter}";
+                string url = $@"{BaseAddress}issues.xml?utf8=%E2%9C%93&limit={IssuesUpdated.limit}&offset={IssuesUpdated.offset}&key={ApiKey}&{filter}";
                 resultModel.IsSuccess = false;
 
                 resultModel = Http.Get(url);
                 if (resultModel.IsSuccess)
                 {
-                    if (_IssuesUpdated.issue.Count > 0)
+                    if (IssuesUpdated.issue.Count > 0)
                     {
-                        XML.Deserialize<Issues>(resultModel.Results).issue.ForEach(p => _IssuesUpdated.issue.Add(p));
+                        XML.Deserialize<Issues>(resultModel.Results).issue.ForEach(p => IssuesUpdated.issue.Add(p));
                         retries = 0;
                     }
                     else
                     {
-                        _IssuesUpdated = XML.Deserialize<Issues>(resultModel.Results);
+                        IssuesUpdated = XML.Deserialize<Issues>(resultModel.Results);
                     } // IncOffset увеличивает offset на величину limit при каждом вызове.
-                    _IssuesUpdated.IncOffset();
+                    IssuesUpdated.IncOffset();
                 }
                 else
                 {// в случае если запрос к redmine не был успешным сделать повторный запрос с теми же параметрами
                     retries++;
                     if (retries == Retries)
                     {
-                        onError?.Invoke($"No reply from host. Fetched {_IssuesUpdated.issue.Count} issues");
+                        onError?.Invoke($"No reply from host. Fetched {IssuesUpdated.issue.Count} issues");
                         break;
                     }
                 }
             }// счётчик - tracker.ucs.ru возвращает максимум 100 элементов, если кол-во total_count больше, необходимо сделать повторные запросы со смещением
-            while (_IssuesUpdated.offset < _IssuesUpdated.total_count);
+            while (IssuesUpdated.offset < IssuesUpdated.total_count);
         }
 
         public void Update()

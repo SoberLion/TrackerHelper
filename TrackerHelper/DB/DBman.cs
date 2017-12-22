@@ -225,14 +225,21 @@ namespace TrackerHelper.DB
 
                 using (SQLiteCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = string.Format("CREATE TABLE IF NOT EXISTS Users({0},{1},{2},{3},{4},{5},{6},{7},{8});",
+                    cmd.CommandText = string.Format(@"CREATE TABLE IF NOT EXISTS Users({0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15});",
                                          "Id INTEGER PRIMARY KEY",
-                                         "Name TEXT",
+                                         "Firstname TEXT",
+                                         "Secondname TEXT",
+                                         "Lastname TEXT",
+                                         "EMail TEXT",
                                          "CompanyName TEXT",
+                                         "City TEXT",
+                                         "OfficeNo TEXT",
+                                         "PhoneNo TEXT",
+                                         "InternalPnoneNo TEXT",
+                                         "Department TEXT",
                                          "Position TEXT",
-                                         "Telephone TEXT",
-                                         "InternalPhone INTEGER",
-                                         "Language INTEGER",
+                                         "RK7Assesment TEXT",
+                                         "Language TEXT",
                                          "BaseAddress TEXT",
                                          "ApiKey TEXT");
                     try
@@ -363,6 +370,7 @@ namespace TrackerHelper.DB
             }
         }
 
+
         #endregion
 
         #region ------------------------- Modify methods ---------------------------
@@ -380,30 +388,46 @@ namespace TrackerHelper.DB
                     {
                         SQLiteTransaction transaction = conn.BeginTransaction();
 
-                        cmd.CommandText = "INSERT OR IGNORE INTO Users(id, Name, CompanyName, Position, Telephone, InternalPhone, Language, BaseAddress, APiKey) "
-                                           + "VALUES (@Id, @Name, @CompanyName, @Position, @Telephone, @InternalPhone, @Language, @BaseAddress, @ApiKey)";
-
+                        cmd.CommandText = @"INSERT OR IGNORE INTO Users(Id, Firstname, Secondname, Lastname, EMail, CompanyName, City, OfficeNo, 
+                                            PhoneNo, InternalPnoneNo, Department, Position, RK7Assesment, Language, BaseAddress, ApiKey) 
+                                          VALUES (@Id, @Firstname, @Secondname, @Lastname, @EMail, @CompanyName, @City, @OfficeNo, 
+                                            @PhoneNo, @InternalPnoneNo, @Department, @Position, @RK7Assesment, @Language, @BaseAddress, @ApiKey)";
 
                         // create command parameters
                         cmd.Parameters.AddWithValue("@Id", "");
-                        cmd.Parameters.AddWithValue("@Name", "");
+                        cmd.Parameters.AddWithValue("@Firstname", "");
+                        cmd.Parameters.AddWithValue("@Secondname", "");
+                        cmd.Parameters.AddWithValue("@Lastname", "");
+                        cmd.Parameters.AddWithValue("@EMail", "");
                         cmd.Parameters.AddWithValue("@CompanyName", "");
+                        cmd.Parameters.AddWithValue("@City", "");
+                        cmd.Parameters.AddWithValue("@OfficeNo", "");
+                        cmd.Parameters.AddWithValue("@PhoneNo", "");
+                        cmd.Parameters.AddWithValue("@InternalPnoneNo", "");
+                        cmd.Parameters.AddWithValue("@Department", "");
                         cmd.Parameters.AddWithValue("@Position", "");
-                        cmd.Parameters.AddWithValue("@Telephone", "");
-                        cmd.Parameters.AddWithValue("@InternalPhone", "");
+                        cmd.Parameters.AddWithValue("@RK7Assesment", "");
                         cmd.Parameters.AddWithValue("@Language", "");
                         cmd.Parameters.AddWithValue("@BaseAddress", "");
-                        cmd.Parameters.AddWithValue("@APiKey", "");
+                        cmd.Parameters.AddWithValue("@ApiKey", "");
+
 
                         try
                         {   // cycle writing data in table
                             cmd.Parameters["@Id"].Value = user.Id;
-                            cmd.Parameters["@Name"].Value = user.Name;
+                            cmd.Parameters["@Firstname"].Value = user.Firstname;
+                            cmd.Parameters["@Secondname"].Value = user.Secondname;
+                            cmd.Parameters["@Lastname"].Value = user.Lastname;
+                            cmd.Parameters["@EMail"].Value = user.EMail;
                             cmd.Parameters["@CompanyName"].Value = user.CompanyName;
+                            cmd.Parameters["@City"].Value = user.City;
+                            cmd.Parameters["@OfficeNo"].Value = user.OfficeNo;
+                            cmd.Parameters["@PhoneNo"].Value = user.PhoneNo;
+                            cmd.Parameters["@InternalPnoneNo"].Value = user.InternalPhoneNo;
+                            cmd.Parameters["@Department"].Value = user.Department;
                             cmd.Parameters["@Position"].Value = user.Position;
-                            cmd.Parameters["@Telephone"].Value = user.Telephone;
-                            cmd.Parameters["@InternalPhone"].Value = user.InternalPhone;
-                            //cmd.Parameters["@Language"].Value = user.Language;
+                            cmd.Parameters["@RK7Assesment"].Value = user.RK7Assessment;
+                            cmd.Parameters["@Language"].Value = user.Language;
                             cmd.Parameters["@BaseAddress"].Value = user.BaseAddress;
                             cmd.Parameters["@APiKey"].Value = user.ApiKey;
                             cmd.ExecuteNonQuery();
@@ -412,7 +436,10 @@ namespace TrackerHelper.DB
                         {
                             onError?.Invoke($"Error: {sqlex.Message}");
                         }
-                        transaction.Commit();
+                        catch (Exception ex)
+                        {
+                            onError?.Invoke($"Error: {ex.Message}");
+                        }                        
                     }
                 }
             }
@@ -949,43 +976,7 @@ namespace TrackerHelper.DB
         #endregion
 
         #region ------------------------ get/calc methods---------------------------
-        public static Person GetUserById(string UserId)
-        {
-            Person user = new Person();
-            using (SQLiteConnection conn = new SQLiteConnection($"Data Source={_dbName}; Version=3;"))
-            {
-                conn.Open();
 
-                using (SQLiteCommand cmd = conn.CreateCommand())
-                {
-                    cmd.CommandText = "SELECT * FROM Users WHERE Id = @UserId LIMIT 1";
-                    cmd.Parameters.AddWithValue("@UserId", UserId);
-
-                    try
-                    {
-                        SQLiteDataReader r = cmd.ExecuteReader();
-                        while (r.Read())
-                        {
-                            user.Id = r["Id"].ToString();
-                            user.Name = r["Name"].ToString();
-                            user.CompanyName = r["CompanyName"].ToString();
-                            user.Position = r["Position"].ToString();
-                            user.Telephone = r["Telephone"].ToString();
-                            user.InternalPhone = r["InternalPhone"].ToString();
-                            //    user.Language = (Language)r["Language"].ToString();
-                            user.BaseAddress = r["BaseAddress"].ToString();
-                            user.ApiKey = r["ApiKey"].ToString();
-                        }
-                        r.Close();
-                    }
-                    catch (SQLiteException sqlex)
-                    {
-                        onError?.Invoke($"Error: {sqlex.Message}");
-                    }
-                }
-            }
-            return (user.Name != string.Empty) ? user : null;
-        }
         public static void GetIssue(Issue issue)
         {
             SQLiteConnection conn = new SQLiteConnection($"Data Source={_dbName}; Version=3;");
